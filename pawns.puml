@@ -1,0 +1,73 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+abstract class piece
+
+class king{
+uchar info
+}
+class queen{
+uchar info
+}
+class bishop{
+uchar info
+}
+class rook{
+uchar info
+}
+class night{
+uchar info
+}
+class pawn{
+uchar info
+}
+
+
+piece<|--king
+
+piece<|--bishop
+
+piece<|--night
+
+piece<|--rook
+
+piece<|--pawn
+
+piece<|--queen
+
+
+
+
+class board {
+array<piece,64> plane
+std::vector<move> moves history
+}
+
+class move{
+int from
+int to
+int evaluation
+}
+class en_passant{
+int from
+int to
+int evaluation
+
+}
+class short_castle{
+int from
+int to
+int evaluation
+}
+class long_castle{
+int from
+int to
+int evaluation
+}
+
+move<--en_passant
+move<--short_castle
+move<--long_castle
+
+
+@enduml

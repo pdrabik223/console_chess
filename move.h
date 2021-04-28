@@ -10,7 +10,12 @@ class move {
 public:
     move() : from(0), to(0), evaluation(0.0) {};
 
-    move(int from, int to, double evaluation) : from(from), to(to), evaluation(evaluation) {};;
+    move(int from, int to, double evaluation) : from(from), to(to), evaluation(evaluation) {};
+   // move(unsigned from, unsigned to, double evaluation) : from(from), to(to), evaluation(evaluation) {};
+
+    move(int from, int to) : from(from), to(to), evaluation(0.0) {}
+   // move(unsigned from, unsigned to) : from(from), to(to), evaluation(0.0) {}
+
 
     /// \brief
     /// valid move is only that witch moves somewhere
@@ -26,9 +31,16 @@ public:
     double evaluation;
 
 
-    move(int from, int to) : from(from), to(to), evaluation(0.0) {}
 };
+
+class promote:public move{
+
+
+    char promotion;
+
+};
+
 // todo derive en_passant
 // todo derive castle
-
+// todo promote
 #endif //CONSOLE_CHESS_MOVE_H
