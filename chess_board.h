@@ -7,7 +7,7 @@
 
 
 #include <array>
-#include "piece.h"
+ #include "piece.h"
 
 #define B_HEIGHT 8
 #define B_WIDTH 8
@@ -32,8 +32,9 @@ public:
     double evaluate();
     void show_in_console();
 
-protected :
     std::array<piece*,64> plane;
+protected :
+
 
 private:
     bool white_king_in_check;

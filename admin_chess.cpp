@@ -6,7 +6,7 @@
 #include <vector>
 #include "chess_board.h"
 #include <Windows.h>
-#include "move.h"
+
 int chess_to_int(std::string coord) {
 
     switch (coord[0]) {
@@ -160,7 +160,7 @@ void run_task(chess_board &game, full_command input) {
 
                 if (game[i].color()) text_color = 11;
                 else text_color = 12;
-                game[i].gen_moves(game, i, move_buffer);
+                game[i].gen_moves(game.plane, i, move_buffer);
                 SetConsoleTextAttribute(hc, text_color + background_color * 16);
                 for (auto m:move_buffer) std::cout << (std::string) m;
 

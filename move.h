@@ -52,4 +52,4 @@ public:
 //// todo derive en_passant
 //// todo derive castle
 //// todo promote
-//#endif //CONSOLE_CHESS_MOVE_H
+#endif //CONSOLE_CHESS_MOVE_H
