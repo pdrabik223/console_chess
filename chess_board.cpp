@@ -1,8 +1,10 @@
 //
 // Created by pc on 23.04.2021.
 //
-
+// todo if windows defined console output must change
+//
 #include "chess_board.h"
+#include <Windows.h>
 
 chess_board::chess_board(const chess_board &other) {
 
@@ -81,14 +83,43 @@ double chess_board::evaluate() {
 }
 
 void chess_board::show_in_console() {
+    auto hc = GetStdHandle(STD_OUTPUT_HANDLE);
+    int text_color =0;
+    int background_color =0;
+
+
 
     for (int x = 0; x < B_HEIGHT; ++x) {
+        SetConsoleTextAttribute(hc, 13 + 0);
+        printf("%d ",B_HEIGHT-x);
         for (int y = 0; y < B_WIDTH; ++y) {
-            printf("%c ", (char) get_element(x, y));
 
+            if(y % 2 == 0 xor x %2 == 0  ) background_color =0;
+            else background_color = 8;
+
+            if(get_element(x, y).color()) text_color = 11;
+            else text_color = 12;
+
+            SetConsoleTextAttribute(hc, text_color + background_color * 16);
+            printf("%c ", (char) get_element(x, y));
         }
+        if(x == 0 ) {
+            if (evaluate()>0)text_color = 11;
+            else text_color = 12;
+
+            SetConsoleTextAttribute(hc, text_color + 0);
+            printf("  eval: %lf", evaluate());
+        }
+
+        background_color = 15;
+        SetConsoleTextAttribute(hc, text_color + background_color * 16);
         printf("\n");
     }
+    SetConsoleTextAttribute(hc, 13 + 0);
+    printf("  a b c d e f g h\n");
+
 
 }
+
+
 

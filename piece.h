@@ -23,7 +23,8 @@ public:
 
     piece(const piece &other) = default;
 
-    virtual explicit operator char() const { return 'e'; }
+    virtual explicit operator char() const { return ' '; }
+
 
 
     static bool is_empty() { return true; }
