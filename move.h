@@ -41,15 +41,15 @@ public:
 
 
 };
-
-class promote:public move{
-
-
-    char promotion;
-
-};
-// these we'll do later
-// todo derive en_passant
-// todo derive castle
-// todo promote
-#endif //CONSOLE_CHESS_MOVE_H
+//
+//class promote:public move{
+//
+//
+//    char promotion;
+//
+//};
+//// these we'll do later
+//// todo derive en_passant
+//// todo derive castle
+//// todo promote
+//#endif //CONSOLE_CHESS_MOVE_H
