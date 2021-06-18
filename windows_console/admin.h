@@ -18,6 +18,7 @@ private:
 
   void Help();
   void ShowPossible();
+  void ShowPossible(int position);
   void AddPiece(full_command input);
 
   ChessBoard game_;

@@ -34,10 +34,13 @@ struct full_command {
 
   full_command(Task t, std::vector<int> data)
       : comm(t), data(std::move(data)){};
+
   bool operator==(const Task &rhs) const { return comm == rhs; }
   bool operator!=(const Task &rhs) const { return rhs != comm; }
 
   friend std::istream &operator>>(std::istream &in, full_command &me);
+
+  void FromString(std::string line);
 
   Task comm;
   std::vector<int> data;

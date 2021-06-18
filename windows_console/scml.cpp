@@ -6,6 +6,14 @@
 #include <cassert>
 #include <string>
 
+int CountLines(const std::string& basic_string) {
+  int counter = 0;
+  for (int i : basic_string)
+    if (i == '\n')
+      counter++;
+  return counter;
+}
+
 Scml::Scml() {
 
   hc_ = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -30,6 +38,7 @@ Scml::Scml() {
   /// here when I wrote    buffer.emplace_back("  ", white, black);
   /// the clion didn't shout at me
   /// witch is odd
+  message_ = {};
   system("cls");
 }
 
@@ -40,6 +49,7 @@ Scml::Scml(const Scml &other) {
 
   buffer_ = other.buffer_;
   current_evaluation_ = other.current_evaluation_;
+  message_ = {};
   system("cls");
 }
 
@@ -52,7 +62,7 @@ Scml &Scml::operator=(const Scml &other) {
 
   buffer_ = other.buffer_;
   current_evaluation_ = other.current_evaluation_;
-  system("cls");
+  message_ = other.message_;
   return *this;
 }
 
@@ -64,6 +74,7 @@ void Scml::Clear() {
       j.background_color = col::BLACK;
     }
   }
+  message_ = {};
 }
 
 void Scml::SetPixel(unsigned px, unsigned py, icon new_pixel) {
@@ -73,7 +84,7 @@ void Scml::SetPixel(unsigned px, unsigned py, icon new_pixel) {
 wchar_t ToUnicode(char piece_icon) {
   switch (piece_icon) {
   case 'p':
- //   return 9817;
+    //   return 9817;
   case 'P':
     return 9823;
 
@@ -88,12 +99,12 @@ wchar_t ToUnicode(char piece_icon) {
     return 9821;
 
   case 'r':
-   // return 9814;
+    // return 9814;
   case 'R':
     return 9820;
 
   case 'q':
- //   return 9813;
+    //   return 9813;
   case 'Q':
     return 9819;
 
@@ -127,7 +138,6 @@ void Scml::UpdateScreen() {
       std::wcout << cc(text_color, background_color);
       /// don't forget that space brother
       std::wcout << ToUnicode(buffer_[x][y].image) << ' ';
-
     }
     std::wcout << "\n";
   }
@@ -135,6 +145,8 @@ void Scml::UpdateScreen() {
   SetConsoleCursorPosition(hc_, {(short)((w_ * 2) + 2), 0});
   std::wcout << current_evaluation_;
   SetConsoleCursorPosition(hc_, {0, 9});
+
+  std::cout << cc(col::WHITE, col::BLACK) << message_;
 }
 
 void Scml::UpdateDisplay(ChessBoard &board) {
@@ -151,4 +163,28 @@ void Scml::UpdateDisplay(ChessBoard &board) {
     }
   }
   current_evaluation_ = board.Evaluate();
+  SetConsoleCursorPosition(hc_, {0, 9});
+  for (int i = 0; i < CountLines(message_); i++)
+    std::cout << "                                                ";
+  message_ = {};
 }
+
+void Scml::SetBackgroundColor(unsigned int px, unsigned int py,
+                              Color background) {
+  buffer_[px][py].background_color = background;
+}
+
+void Scml::SetTextColor(unsigned int px, unsigned int py, Color text) {
+  buffer_[px][py].text_color = text;
+}
+
+std::string Scml::GetLine() {
+  std::string input;
+  getline(std::cin, input);
+  std::cout << "\r                                                ";
+  return input;
+}
+
+
+
+void Scml::SetMessage(const std::string &message) { message_ = message; }

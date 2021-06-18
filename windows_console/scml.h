@@ -46,8 +46,16 @@ public:
     system("cls");
   }
 
-private:
+  std::string GetLine();
+
   void SetPixel(unsigned px, unsigned py, icon new_pixel);
+
+  void SetBackgroundColor(unsigned px, unsigned py, Color background);
+  void SetTextColor(unsigned px, unsigned py, Color text);
+
+  void SetMessage(const std::string &message);
+
+private:
 
   const unsigned w_ = 8;
   const unsigned h_ = 8;
@@ -55,6 +63,8 @@ private:
   std::array<std::array<icon, 8>, 8> buffer_;
   double current_evaluation_;
   HANDLE hc_;
+  std::string message_;
+
 };
 
 #endif // BLOCK_O_AUTOMATA_SCML_H

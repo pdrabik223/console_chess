@@ -4,22 +4,7 @@
 
 #include "admin.h"
 
-int ChessToInt(std::string coord) {
 
-  switch (coord[0]) {
-  case 'a':
-  case 'b':
-  case 'c':
-  case 'd':
-  case 'e':
-  case 'f':
-  case 'g':
-  case 'h':
-    return (B_HEIGHT - coord[1] + 1) * B_HEIGHT + coord[3] - 1;
-  default:
-    return -1;
-  }
-}
 
 Admin::Admin() : game_(), console_handle_() {
 
@@ -28,7 +13,8 @@ Admin::Admin() : game_(), console_handle_() {
 
   while (1 < 2) {
     console_handle_.UpdateScreen();
-    std::cin >> user_input;
+    user_input.FromString(console_handle_.GetLine());
+
     switch (user_input.comm) {
     case QUIT:
       goto quit;
@@ -36,12 +22,15 @@ Admin::Admin() : game_(), console_handle_() {
     case MOVE:
       game_[user_input.data[1]] = game_[user_input.data[0]];
       game_[user_input.data[1]] = Piece();
+
       break;
     case ADD_PIECE:
       AddPiece(user_input);
+
       break;
     case ADD_ALL:
       game_ = ChessBoard();
+
       break;
     case DELETE_PIECE:
       game_[user_input.data[0]] = Piece();
@@ -69,7 +58,7 @@ quit:;
 }
 
 void Admin::Help() {
-  printf("help is coming\n"
+  console_handle_.SetMessage("help is coming\n"
          "add [color][piece][position]    : creates new [piece] in "
          "[position]\n"
          "add all                         : returns the chessboard to "
@@ -119,4 +108,13 @@ void Admin::AddPiece(full_command input) {
     game_[input.data[2]] = King(input.data[0]);
     break;
   }
+}
+void Admin::ShowPossible(int position) {
+  std::array<Move, 27> move_buffer;
+  game_[position].GenMoves(game_.plane_, position, move_buffer);
+  for (auto m : move_buffer) {
+    std::cout << (std::string)m;
+    console_handle_.SetBackgroundColor(m.to_ / 8, m.to_ % 8, col::LIGHT_AQUA);
+  }
+
 }
