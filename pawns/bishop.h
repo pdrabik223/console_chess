@@ -22,12 +22,15 @@ public:
 
   static bool Empty() { return false; }
 
-  explicit operator char() const override { return 'b'; }
+  explicit operator char() const override {
+    if (Color())
+      return 'b';
+    else
+      return 'B';
+  }
 
   void GenMoves(std::array<Piece *, 64> &board, unsigned int position,
                 std::array<Move, 27> &possible_moves) override;
 };
-
-
 
 #endif // CONSOLE_CHESS_PAWNS_BISHOP_H_

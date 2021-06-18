@@ -6,7 +6,6 @@
 #include <cassert>
 #include <string>
 
-
 Scml::Scml() {
 
   hc_ = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -16,11 +15,11 @@ Scml::Scml() {
 
     for (int x = 0; x < w_; x++) {
       col::Color background;
-      col::Color text = LIGHT_AQUA;
+      col::Color text = col::BLACK;
       if (y % 2 == 0 xor x % 2 == 0)
-        background = col::BLACK;
-      else
         background = col::GRAY;
+      else
+        background = col::WHITE;
 
       buffer_[y][x] = {' ', text, background};
     }
@@ -31,6 +30,7 @@ Scml::Scml() {
   /// here when I wrote    buffer.emplace_back("  ", white, black);
   /// the clion didn't shout at me
   /// witch is odd
+  system("cls");
 }
 
 Scml::Scml(const Scml &other) {
@@ -40,6 +40,7 @@ Scml::Scml(const Scml &other) {
 
   buffer_ = other.buffer_;
   current_evaluation_ = other.current_evaluation_;
+  system("cls");
 }
 
 Scml &Scml::operator=(const Scml &other) {
@@ -51,6 +52,7 @@ Scml &Scml::operator=(const Scml &other) {
 
   buffer_ = other.buffer_;
   current_evaluation_ = other.current_evaluation_;
+  system("cls");
   return *this;
 }
 
@@ -68,7 +70,44 @@ void Scml::SetPixel(unsigned px, unsigned py, icon new_pixel) {
   assert(py < h_ && px < w_);
   buffer_[py][px] = new_pixel;
 }
+wchar_t ToUnicode(char piece_icon) {
+  switch (piece_icon) {
+  case 'p':
+ //   return 9817;
+  case 'P':
+    return 9823;
 
+  case 'n':
+  //  return 9816;
+  case 'N':
+    return 9822;
+
+  case 'b':
+  //  return 9815;
+  case 'B':
+    return 9821;
+
+  case 'r':
+   // return 9814;
+  case 'R':
+    return 9820;
+
+  case 'q':
+ //   return 9813;
+  case 'Q':
+    return 9819;
+
+  case 'k':
+  //  return 9812;
+  case 'K':
+    return 9818;
+
+  case ' ':
+    return ' ';
+  }
+  assert(false);
+  return ';';
+}
 void Scml::UpdateScreen() {
 
   COORD c;
@@ -79,6 +118,7 @@ void Scml::UpdateScreen() {
   SetConsoleCursorPosition(hc_, c);
 
   for (int x = 0; x < h_; x++) {
+    std::wcout << cc(col::WHITE, col::BLACK) << x + 1 << " ";
     for (int y = 0; y < w_; y++) {
 
       auto text_color = buffer_[x][y].text_color;
@@ -86,21 +126,28 @@ void Scml::UpdateScreen() {
 
       std::wcout << cc(text_color, background_color);
       /// don't forget that space brother
-      std::wcout << buffer_[x][y].image << ' ';
-    }
-    std::wcout << " \n";
-  }
+      std::wcout << ToUnicode(buffer_[x][y].image) << ' ';
 
+    }
+    std::wcout << "\n";
+  }
+  std::wcout << cc(col::WHITE, col::BLACK) << "  a b c d e f g h\n";
   SetConsoleCursorPosition(hc_, {(short)((w_ * 2) + 2), 0});
   std::wcout << current_evaluation_;
+  SetConsoleCursorPosition(hc_, {0, 9});
 }
-void Scml::DisplayBoard(ChessBoard &board) {
+
+void Scml::UpdateDisplay(ChessBoard &board) {
 
   for (int x = 0; x < h_; x++) {
 
     for (int y = 0; y < w_; y++) {
 
       buffer_[x][y].image = (char)board.GetElement(x, y);
+      if (board.GetElement(x, y).Color())
+        buffer_[x][y].text_color = col::BRIGHT_WHITE;
+      else
+        buffer_[x][y].text_color = col::BLACK;
     }
   }
   current_evaluation_ = board.Evaluate();

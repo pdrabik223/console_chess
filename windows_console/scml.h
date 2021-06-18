@@ -37,7 +37,7 @@ public:
 
   void UpdateScreen();
 
-  void DisplayBoard(ChessBoard &board);
+  void UpdateDisplay(ChessBoard &board);
 
   void Clear();
 

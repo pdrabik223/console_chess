@@ -19,7 +19,7 @@ set(WIN_CONSOLE
         windows_console/icon.h windows_console/icon.cpp
         windows_console/win_colors.h windows_console/win_colors.cpp
         windows_console/scml.cpp windows_console/scml.h
-        )
+        windows_console/full_command.cpp windows_console/full_command.h)
 
 add_executable(admin executables/admin_chess.cpp
         chess_board.h chess_board.cpp
@@ -29,4 +29,4 @@ add_executable(admin executables/admin_chess.cpp
 
         ${PAWNS}
         ${WIN_CONSOLE}
-        admin.cpp admin.h)
+        windows_console/admin.cpp windows_console/admin.h)

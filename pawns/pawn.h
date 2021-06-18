@@ -22,7 +22,12 @@ public:
 
   static bool Empty() { return false; }
 
-  explicit operator char() const override { return 'p'; }
+  explicit operator char() const override {
+    if (Color())
+      return 'p';
+    else
+      return 'P';
+  }
 
   void GenMoves(std::array<Piece *, 64> &board, const unsigned int position,
                 std::array<Move, 27> &possible_moves) override;

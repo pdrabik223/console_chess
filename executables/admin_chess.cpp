@@ -6,26 +6,14 @@
 #include "chess_board.h"
 #include <vector>
 #include <windows.h>
-
+#include <windows_console/admin.h>
 
 int main() {
 
   std::cout << "welcome to admin chess\n";
 
-  ChessBoard game;
+  Admin game;
 
-  std::string command;
-  full_command buff = full_command(HELP);
-  while (2 > 1) {
-    game.ShowInConsole();
-    std::cin >> command;
-    buff = Decode(command);
-    if (buff.comm == QUIT)
-      break;
-    if (buff.comm == NONE)
-      continue;
-    RunTask(game, buff);
-  }
   return 0;
 }
 

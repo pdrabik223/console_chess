@@ -23,11 +23,15 @@ public:
 
   static bool Empty() { return false; }
 
-  explicit operator char() const override { return 'k'; }
+  explicit operator char() const override {
+    if (Color())
+      return 'k';
+    else
+      return 'K';
+  }
 
   void GenMoves(std::array<Piece *, 64> &board, unsigned position,
                 std::array<Move, 27> &possible_moves) override;
 };
 
 #endif // CONSOLE_CHESS_PAWNS_KING_H_
-
