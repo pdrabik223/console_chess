@@ -93,12 +93,12 @@ full_command Parse(std::string &line) {
   }
   return {NONE};
 }
-std::istream &operator>>(std::istream &in, full_command &me) {
-  std::string line;
-  getline(in, line);
-  me = Parse(line);
-  return in;
-}
+//std::istream &operator>>(std::istream &in, full_command &me) {
+//  std::string line;
+//  getline(in, line);
+//  me = Parse(line);
+//  return in;
+//}
 void full_command::FromString(std::string line) {
   *this = Parse(line);
 }

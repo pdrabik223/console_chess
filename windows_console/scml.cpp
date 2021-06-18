@@ -6,7 +6,7 @@
 #include <cassert>
 #include <string>
 
-int CountLines(const std::string& basic_string) {
+int CountLines(const std::wstring &basic_string) {
   int counter = 0;
   for (int i : basic_string)
     if (i == '\n')
@@ -81,6 +81,7 @@ void Scml::SetPixel(unsigned px, unsigned py, icon new_pixel) {
   assert(py < h_ && px < w_);
   buffer_[py][px] = new_pixel;
 }
+
 wchar_t ToUnicode(char piece_icon) {
   switch (piece_icon) {
   case 'p':
@@ -142,11 +143,21 @@ void Scml::UpdateScreen() {
     std::wcout << "\n";
   }
   std::wcout << cc(col::WHITE, col::BLACK) << "  a b c d e f g h\n";
+
   SetConsoleCursorPosition(hc_, {(short)((w_ * 2) + 2), 0});
+
   std::wcout << current_evaluation_;
   SetConsoleCursorPosition(hc_, {0, 9});
+  for (int i = 0; i < previous_message_length_; i++)
+    std::wcout
+        << L"                                                               "
+           "                            \n";
+  SetConsoleCursorPosition(hc_, {0, 9});
 
-  std::cout << cc(col::WHITE, col::BLACK) << message_;
+  std::wcout << cc(col::WHITE, col::BLACK) << message_;
+  previous_message_length_ = CountLines(message_);
+  message_ = L"";
+
 }
 
 void Scml::UpdateDisplay(ChessBoard &board) {
@@ -163,9 +174,6 @@ void Scml::UpdateDisplay(ChessBoard &board) {
     }
   }
   current_evaluation_ = board.Evaluate();
-  SetConsoleCursorPosition(hc_, {0, 9});
-  for (int i = 0; i < CountLines(message_); i++)
-    std::cout << "                                                ";
   message_ = {};
 }
 
@@ -180,11 +188,14 @@ void Scml::SetTextColor(unsigned int px, unsigned int py, Color text) {
 
 std::string Scml::GetLine() {
   std::string input;
+
+  std::wcout << L">";
   getline(std::cin, input);
-  std::cout << "\r                                                ";
+  SetConsoleCursorPosition(hc_, {0, (short)(9 + previous_message_length_)});
+  std::wcout << L"\r"
+             << L"                                               ";
+
   return input;
 }
 
-
-
-void Scml::SetMessage(const std::string &message) { message_ = message; }
+void Scml::SetMessage(const std::wstring &message) { message_ = message; }

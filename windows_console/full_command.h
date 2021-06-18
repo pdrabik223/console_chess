@@ -38,7 +38,7 @@ struct full_command {
   bool operator==(const Task &rhs) const { return comm == rhs; }
   bool operator!=(const Task &rhs) const { return rhs != comm; }
 
-  friend std::istream &operator>>(std::istream &in, full_command &me);
+//  friend std::istream &operator>>(std::istream &in, full_command &me);
 
   void FromString(std::string line);
 

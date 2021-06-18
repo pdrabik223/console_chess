@@ -20,27 +20,30 @@ Admin::Admin() : game_(), console_handle_() {
       goto quit;
 
     case MOVE:
+
       game_[user_input.data[1]] = game_[user_input.data[0]];
       game_[user_input.data[1]] = Piece();
-
+      console_handle_.UpdateDisplay(game_);
       break;
     case ADD_PIECE:
       AddPiece(user_input);
-
+      console_handle_.UpdateDisplay(game_);
       break;
     case ADD_ALL:
       game_ = ChessBoard();
-
+      console_handle_.UpdateDisplay(game_);
       break;
     case DELETE_PIECE:
       game_[user_input.data[0]] = Piece();
+      console_handle_.UpdateDisplay(game_);
       break;
     case DELL_ALL:
       for (int i = 0; i < 64; i++)
         game_[i] = Piece();
+      console_handle_.UpdateDisplay(game_);
       break;
     case SHOW_MOVES:
-
+      ShowPossible(user_input.data[0]);
       break;
     case SHOW_POSSIBLE:
       ShowPossible();
@@ -58,7 +61,7 @@ quit:;
 }
 
 void Admin::Help() {
-  console_handle_.SetMessage("help is coming\n"
+  console_handle_.SetMessage(L"help is coming\n"
          "add [color][piece][position]    : creates new [piece] in "
          "[position]\n"
          "add all                         : returns the chessboard to "

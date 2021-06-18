@@ -2,8 +2,8 @@
 // Created by studio25 on 26.05.2021.
 //
 
-#ifndef BLOCK_O_AUTOMATA_SCML_H
-#define BLOCK_O_AUTOMATA_SCML_H
+#ifndef CONSOLE_CHESS_WINDOWS_CONSOLE_SCML_H_
+#define CONSOLE_CHESS_WINDOWS_CONSOLE_SCML_H_
 
 #include "icon.h"
 #include "win_colors.h"
@@ -46,14 +46,14 @@ public:
     system("cls");
   }
 
-  std::string GetLine();
+   std::string GetLine();
 
   void SetPixel(unsigned px, unsigned py, icon new_pixel);
 
   void SetBackgroundColor(unsigned px, unsigned py, Color background);
   void SetTextColor(unsigned px, unsigned py, Color text);
 
-  void SetMessage(const std::string &message);
+  void SetMessage(const std::wstring &message);
 
 private:
 
@@ -63,8 +63,10 @@ private:
   std::array<std::array<icon, 8>, 8> buffer_;
   double current_evaluation_;
   HANDLE hc_;
-  std::string message_;
+  std::wstring message_;
+
+   unsigned previous_message_length_ = 0;
 
 };
 
-#endif // BLOCK_O_AUTOMATA_SCML_H
+#endif // CONSOLE_CHESS_WINDOWS_CONSOLE_SCML_H_
