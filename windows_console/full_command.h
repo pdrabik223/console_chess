@@ -18,7 +18,7 @@ enum Task {
   DELL_ALL, // todo finish them
   //  i have 6 h of sleep to cath
   SHOW_MOVES,
-  SHOW_POSSIBLE,
+  SHOW_ALL,
   NONE,
   HELP
 

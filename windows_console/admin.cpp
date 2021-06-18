@@ -30,12 +30,16 @@ Admin::Admin() : game_(), console_handle_() {
       console_handle_.UpdateDisplay(game_);
       break;
     case ADD_ALL:
+
       game_ = ChessBoard();
       console_handle_.UpdateDisplay(game_);
+
       break;
     case DELETE_PIECE:
+
       game_[user_input.data[0]] = Piece();
       console_handle_.UpdateDisplay(game_);
+
       break;
     case DELL_ALL:
       for (int i = 0; i < 64; i++)
@@ -45,7 +49,7 @@ Admin::Admin() : game_(), console_handle_() {
     case SHOW_MOVES:
       ShowPossible(user_input.data[0]);
       break;
-    case SHOW_POSSIBLE:
+    case SHOW_ALL:
       ShowPossible();
       break;
     case HELP:

@@ -3,13 +3,20 @@
 //
 
 #include "full_command.h"
+
+void EraseTillSpace(std::string &line){
+
+  while (line[0] != ' ')
+    line.erase(line.begin());
+  line.erase(line.begin());
+
+}
+
+
 int ChessToInt(std::string coord) {
 
-  if (coord[0] == ' ') {
-    while (coord[0] != ' ')
-      coord.erase(coord.begin());
-    coord.erase(coord.begin());
-  }
+  if(coord[0] == ' ')
+    EraseTillSpace(coord);
 
   auto cut = coord.substr(0, 2);
   coord.erase(0, 2);
@@ -45,9 +52,7 @@ full_command Parse(std::string &line) {
   }
   if (line.substr(0, 3) == "add") {
 
-    while (line[0] != ' ')
-      line.erase(line.begin());
-    line.erase(line.begin());
+    EraseTillSpace(line);
 
     // for simplification
     // king = 5
@@ -62,9 +67,7 @@ full_command Parse(std::string &line) {
 
   if (line.substr(0, 3) == "del") {
 
-    while (line[0] != ' ')
-      line.erase(line.begin());
-    line.erase(line.begin());
+    EraseTillSpace(line);
 
     if (line == "all")
       return {DELL_ALL};
@@ -75,8 +78,19 @@ full_command Parse(std::string &line) {
     return {DELETE_PIECE, data};
   }
 
-  if ((line[0] == 's' and line[1] == ' ') or
-      line.substr(0, 10) == "show moves") {
+  if (line.substr(0,4) == "show" ) {
+
+    EraseTillSpace(line);
+
+
+    if (line == "all")
+      return {SHOW_ALL};
+
+    std::vector<int> data;
+    data.push_back(ChessToInt(line));
+
+    return {SHOW_MOVES, data};
+
   }
 
   switch (line[0]) {
@@ -88,8 +102,9 @@ full_command Parse(std::string &line) {
   case 'f':
   case 'g':
   case 'h':
-    break;
- //   Show(ChessToInt(coord));
+    std::vector<int> moves ;
+    moves.push_back(ChessToInt(line));
+    return {SHOW_MOVES, moves};
   }
   return {NONE};
 }
