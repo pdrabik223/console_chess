@@ -4,11 +4,13 @@
 
 #include "night.h"
 
-void Night::GenMoves(std::array<Piece *, 64> &board, const int position,
-                     std::array<move, 27> &possible_moves) {
+void Night::GenMoves(std::array<Piece *, 64> &board,
+                     const unsigned int position,
+                     std::array<Move, 27> &possible_moves) {
 
   /// the x part of position
   const int px = position / B_WIDTH;
+
   /// the y part of position
   const int py = position % B_WIDTH;
 

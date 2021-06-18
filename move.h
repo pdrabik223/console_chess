@@ -2,47 +2,47 @@
 // Created by pc on 23.04.2021.
 //
 
-#ifndef CONSOLE_CHESS_MOVE_H
-#define CONSOLE_CHESS_MOVE_H
-
+#ifndef CONSOLE_CHESS__MOVE_H_
+#define CONSOLE_CHESS__MOVE_H_
 
 #include <string>
 
-class move {
+class Move {
 public:
-    move() : from(0), to(0), evaluation(0.0) {};
+  Move() : from_(0), to_(0), evaluation_(0.0){};
 
-    move(int from, int to, double evaluation) : from(from), to(to), evaluation(evaluation) {};
-   // move(unsigned from, unsigned to, double evaluation) : from(from), to(to), evaluation(evaluation) {};
+//  Move(int from, int to, double evaluation)\
+      : from_(from), to_(to), evaluation_(evaluation){};
 
-    move(int from, int to) : from(from), to(to), evaluation(0.0) {}
-   // move(unsigned from, unsigned to) : from(from), to(to), evaluation(0.0) {}
+  Move(unsigned from, unsigned to, double evaluation)
+      : from_(from), to_(to), evaluation_(evaluation){};
 
+ // Move(int from, int to) : from_(from), to_(to), evaluation_(0.0) {}
+  Move(unsigned from, unsigned to) : from_(from), to_(to), evaluation_(0.0) {}
 
-    /// \brief
-    /// valid move is only that witch moves somewhere
-    /// \return true if the move can be made, note that it doesn't check if the move is inside board
-    explicit operator bool() const { return from != to; }
+  /// \brief
+  /// valid move is only that witch moves somewhere
+  /// \return true if the move can be made, note that it doesn't check if the
+  /// move is inside board
+  explicit operator bool() const { return from_ != to_; }
 
-    explicit operator std::string() const {
-        std::string temp =  "from:\t";
-        temp+= std::to_string(from);
-        temp+= " to:\t";
-        temp+= std::to_string(to);
-        temp+= " evaluation:\t";
-        temp+= std::to_string(evaluation);
-        return temp;
-    }
+  explicit operator std::string() const {
+    std::string temp = "from:\t";
+    temp += std::to_string(from_);
+    temp += " to:\t";
+    temp += std::to_string(to_);
+    temp += " evaluation:\t";
+    temp += std::to_string(evaluation_);
+    return temp;
+  }
 
-    /// \note fields of the class are public!
-    int from;
-    int to;
-    double evaluation;
-
-
+  /// \note fields of the class are public!
+  unsigned from_;
+  unsigned to_;
+  double evaluation_;
 };
 //
-//class promote:public move{
+// class promote:public move{
 //
 //
 //    char promotion;
@@ -52,4 +52,4 @@ public:
 //// todo derive en_passant
 //// todo derive castle
 //// todo promote
-#endif //CONSOLE_CHESS_MOVE_H
+#endif // CONSOLE_CHESS__MOVE_H_

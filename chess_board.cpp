@@ -6,75 +6,76 @@
 #include "chess_board.h"
 #include <Windows.h>
 
-chess_board::chess_board(const chess_board &other) {
-
-    plane = other.plane;
+ChessBoard::ChessBoard(const ChessBoard &other) { plane_ = other.plane_;
 }
 
-chess_board::chess_board() {
+ChessBoard::ChessBoard() {
 
-    plane[0] = new Rook(BLACK);
-    plane[1] = new Night(BLACK);
-    plane[2] = new Bishop(BLACK);
-    plane[3] = new Queen(BLACK);
-    plane[4] = new King(BLACK);
-    plane[5] = new Bishop(BLACK);
-    plane[6] = new Night(BLACK);
-    plane[7] = new Rook(BLACK);
-    for(int i=8;i<16;++i) plane[i] = new Pawn(BLACK);
+  plane_[0] = new Rook(BLACK);
+  plane_[1] = new Night(BLACK);
+  plane_[2] = new Bishop(BLACK);
+  plane_[3] = new Queen(BLACK);
+  plane_[4] = new King(BLACK);
+  plane_[5] = new Bishop(BLACK);
+  plane_[6] = new Night(BLACK);
+  plane_[7] = new Rook(BLACK);
+    for(int i=8;i<16;++i)
+      plane_[i] = new Pawn(BLACK);
 
-    for(int i=16;i<48;++i) plane[i] = new Piece();
+    for(int i=16;i<48;++i)
+      plane_[i] = new Piece();
 
-    for(int i=48;i<56;++i) plane[i] = new Pawn(WHITE);
+    for(int i=48;i<56;++i)
+      plane_[i] = new Pawn(WHITE);
 
-    plane[56] = new Rook(WHITE);
-    plane[57] = new Night(WHITE);
-    plane[58] = new Bishop(WHITE);
-    plane[59] = new Queen(WHITE);
-    plane[60] = new King(WHITE);
-    plane[61] = new Bishop(WHITE);
-    plane[62] = new Night(WHITE);
-    plane[63] = new Rook(WHITE);
+    plane_[56] = new Rook(WHITE);
+    plane_[57] = new Night(WHITE);
+    plane_[58] = new Bishop(WHITE);
+    plane_[59] = new Queen(WHITE);
+    plane_[60] = new King(WHITE);
+    plane_[61] = new Bishop(WHITE);
+    plane_[62] = new Night(WHITE);
+    plane_[63] = new Rook(WHITE);
 
 }
 
 
-unsigned chess_board::size() {
+unsigned ChessBoard::Size() {
     return 64;
 }
 
-chess_board &chess_board::operator=(const chess_board &other) {
+ChessBoard &ChessBoard::operator=(const ChessBoard &other) {
     if (&other == this) return *this;
-    plane = other.plane;
+    plane_ = other.plane_;
     return *this;
 }
 
-Piece &chess_board::operator[](unsigned int position) {
-    return *plane[position];
+Piece &ChessBoard::operator[](unsigned int position) {
+    return *plane_[position];
 }
 
-Piece &chess_board::get_element(unsigned int x, unsigned int y) {
-    return *plane[x * B_WIDTH + y];
+Piece &ChessBoard::GetElement(unsigned int x, unsigned int y) {
+    return *plane_[x * B_WIDTH + y];
 }
 
-double chess_board::evaluate() {
+double ChessBoard::Evaluate() {
 
     double weight_of_move = 0.1;
-    std::array<move, 27> move_buffer;
+    std::array<Move, 27> move_buffer;
 
     double eva = 0.0;
 
     for (int i = 0; i < 64; i++) {
 
-      plane[i]->GenMoves(plane, i, move_buffer);
+      plane_[i]->GenMoves(plane_, i, move_buffer);
 
-        if (plane[i]->Color()) {
+        if (plane_[i]->Color()) {
             eva += (move_buffer.size() * weight_of_move);
         } else {
             eva -= (move_buffer.size() * weight_of_move);
         }
 
-        eva += plane[i]->Value();
+        eva += plane_[i]->Value();
 
     }
     return eva;
@@ -82,7 +83,7 @@ double chess_board::evaluate() {
 
 }
 
-void chess_board::show_in_console() {
+void ChessBoard::ShowInConsole() {
     auto hc = GetStdHandle(STD_OUTPUT_HANDLE);
     int text_color =0;
     int background_color =0;
@@ -97,18 +98,18 @@ void chess_board::show_in_console() {
             if(y % 2 == 0 xor x %2 == 0  ) background_color =0;
             else background_color = 8;
 
-            if(get_element(x, y).Color()) text_color = 11;
+            if(GetElement(x, y).Color()) text_color = 11;
             else text_color = 12;
 
             SetConsoleTextAttribute(hc, text_color + background_color * 16);
-            printf("%c ", (char) get_element(x, y));
+            printf("%c ", (char)GetElement(x, y));
         }
         if(x == 0 ) {
-            if (evaluate()>0)text_color = 11;
+            if (Evaluate()>0)text_color = 11;
             else text_color = 12;
 
             SetConsoleTextAttribute(hc, text_color + 0);
-            printf("  eval: %lf", evaluate());
+            printf("  eval: %lf", Evaluate());
         }
 
         background_color = 15;

@@ -21,8 +21,8 @@ public:
 
   explicit operator char() const override { return 'r'; }
 
-  void GenMoves(std::array<Piece *, 64> &board, int position,
-                std::array<move, 27> &possible_moves) override;
+  void GenMoves(std::array<Piece *, 64> &board, const unsigned int position,
+                std::array<Move, 27> &possible_moves) override;
 };
 
 #endif // CONSOLE_CHESS_PAWNS_ROOK_H_

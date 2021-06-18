@@ -3,12 +3,14 @@
 //
 
 #include "pawn.h"
+
 /// i've got new rule
 /// NEVER TEST ANYTHING
 /// that's what lammers do
 /// AND WE ARE PR06RAMM3R5
-void Pawn::GenMoves(std::array<Piece *, 64> &board, const int position,
-                    std::array<move, 27> &possible_moves) {
+
+void Pawn::GenMoves(std::array<Piece *, 64> &board, const unsigned int position,
+                    std::array<Move, 27> &possible_moves) {
   possible_moves.fill({0, 0});
 
   unsigned last_move = 0;

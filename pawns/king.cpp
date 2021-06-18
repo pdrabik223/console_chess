@@ -4,8 +4,8 @@
 
 #include "king.h"
 
-void King::GenMoves(std::array<Piece *, 64> &board, const int position,
-                    std::array<move, 27> &possible_moves) {
+void King::GenMoves(std::array<Piece *, 64> &board, const unsigned position,
+                    std::array<Move, 27> &possible_moves) {
 
   /// the x part of position
   const int px = position / B_WIDTH;

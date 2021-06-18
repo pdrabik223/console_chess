@@ -2,10 +2,15 @@
 // Created by pc on 23.04.2021.
 //
 
-#ifndef CONSOLE_CHESS_CHESS_BOARD_H
-#define CONSOLE_CHESS_CHESS_BOARD_H
+#ifndef CONSOLE_CHESS__CHESS_BOARD_H_
+#define CONSOLE_CHESS__CHESS_BOARD_H_
 
-#include "pawns/piece.h"
+#include "pawns/pawn.h"
+#include "pawns/night.h"
+#include "pawns/bishop.h"
+#include "pawns/rook.h"
+#include "pawns/queen.h"
+#include "pawns/king.h"
 #include <array>
 
 #define B_HEIGHT 8
@@ -13,33 +18,30 @@
 
 #define BLACK 0
 #define WHITE 1
+
 /// \brief
 /// by default white start on bottom
-class chess_board {
+class ChessBoard {
 public:
-    chess_board();
-    chess_board(const chess_board& other);
-    chess_board& operator=(const chess_board& other);
+  ChessBoard();
+  ChessBoard(const ChessBoard &other);
+  ChessBoard &operator=(const ChessBoard &other);
 
-    /// returns size of the chess board
-    static unsigned size();
+  /// returns Size of the chess board
+  static unsigned Size();
 
-    Piece & get_element(unsigned x,unsigned y);
-    Piece & operator[](unsigned position);
+  Piece &GetElement(unsigned x, unsigned y);
+  Piece &operator[](unsigned position);
 
-    double evaluate();
-    void show_in_console();
+  double Evaluate();
+  void ShowInConsole();
 
-    std::array<Piece *,64> plane;
-protected :
+  std::array<Piece *, 64> plane_;
 
-
+protected:
 private:
-    bool white_king_in_check;
-    bool black_king_in_check;
-
-
+  bool white_king_in_check_;
+  bool black_king_in_check_;
 };
 
-
-#endif //CONSOLE_CHESS_CHESS_BOARD_H
+#endif // CONSOLE_CHESS__CHESS_BOARD_H_
