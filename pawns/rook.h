@@ -1,0 +1,28 @@
+//
+// Created by studio25 on 18.06.2021.
+//
+
+#ifndef CONSOLE_CHESS_PAWNS_ROOK_H_
+#define CONSOLE_CHESS_PAWNS_ROOK_H_
+#include "piece.h"
+class Rook : public Piece {
+public:
+  Rook() { info_ = BLACK; }
+
+  explicit Rook(char color) { info_ = color; }
+
+  double Value() const override {
+    if (Color())
+      return 5;
+    else
+      return -5;
+  }
+  static bool Empty() { return false; }
+
+  explicit operator char() const override { return 'r'; }
+
+  void GenMoves(std::array<Piece *, 64> &board, int position,
+                std::array<move, 27> &possible_moves) override;
+};
+
+#endif // CONSOLE_CHESS_PAWNS_ROOK_H_

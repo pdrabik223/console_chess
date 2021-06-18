@@ -5,9 +5,8 @@
 #ifndef CONSOLE_CHESS_CHESS_BOARD_H
 #define CONSOLE_CHESS_CHESS_BOARD_H
 
-
+#include "pawns/piece.h"
 #include <array>
- #include "piece.h"
 
 #define B_HEIGHT 8
 #define B_WIDTH 8
@@ -25,14 +24,13 @@ public:
     /// returns size of the chess board
     static unsigned size();
 
-
-    piece& get_element(unsigned x,unsigned y);
-    piece& operator[](unsigned position);
+    Piece & get_element(unsigned x,unsigned y);
+    Piece & operator[](unsigned position);
 
     double evaluate();
     void show_in_console();
 
-    std::array<piece*,64> plane;
+    std::array<Piece *,64> plane;
 protected :
 
 

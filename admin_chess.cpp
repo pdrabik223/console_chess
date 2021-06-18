@@ -106,35 +106,35 @@ void run_task(chess_board &game, full_command input) {
 
         case move:
             game[input.data[1]] = game[input.data[0]];
-            game[input.data[1]] = piece();
+            game[input.data[1]] = Piece();
             break;
         case add_piece:
 
             switch (input.data[1]) {
                 case 0:
-                    game[input.data[2]] = pawn(input.data[0]);
+                    game[input.data[2]] = Pawn(input.data[0]);
                     break;
                 case 1:
-                    game[input.data[2]] = night(input.data[0]);
+                    game[input.data[2]] = Night(input.data[0]);
                     break;
                 case 2:
-                    game[input.data[2]] = bishop(input.data[0]);
+                    game[input.data[2]] = Bishop(input.data[0]);
                     break;
                 case 3:
-                    game[input.data[2]] = rook(input.data[0]);
+                    game[input.data[2]] = Rook(input.data[0]);
                     break;
                 case 4:
-                    game[input.data[2]] = queen(input.data[0]);
+                    game[input.data[2]] = Queen(input.data[0]);
                     break;
                 case 5:
-                    game[input.data[2]] = king(input.data[0]);
+                    game[input.data[2]] = King(input.data[0]);
                     break;
             }
 
             break;
         case delete_piece:
 
-            game[input.data[0]] = piece();
+            game[input.data[0]] = Piece();
 
             break;
 
@@ -144,9 +144,9 @@ void run_task(chess_board &game, full_command input) {
             int background_color = 0;
             std::array<move, 27> move_buffer;
 
-            if (game[input.data[0]].color()) text_color = 11;
+            if (game[input.data[0]].Color()) text_color = 11;
             else text_color = 12;
-            game[input.data[0]].gen_moves(game, input.data[0], move_buffer);
+            game[input.data[0]].GenMoves(game, input.data[0], move_buffer);
 
             SetConsoleTextAttribute(hc, text_color + background_color * 16);
             for (auto m:move_buffer) std::cout << (std::string) m;
@@ -158,9 +158,9 @@ void run_task(chess_board &game, full_command input) {
             std::array<move, 27> move_buffer;
             for (int i = 0; i < 64; i++) {
 
-                if (game[i].color()) text_color = 11;
+                if (game[i].Color()) text_color = 11;
                 else text_color = 12;
-                game[i].gen_moves(game.plane, i, move_buffer);
+                game[i].GenMoves(game.plane, i, move_buffer);
                 SetConsoleTextAttribute(hc, text_color + background_color * 16);
                 for (auto m:move_buffer) std::cout << (std::string) m;
 
@@ -169,7 +169,7 @@ void run_task(chess_board &game, full_command input) {
         }break;
         case help:
             printf("help is coming\n"
-                   "add [color][piece][position]    creates new [piece] in [position]\n"
+                   "add [Color][piece][position]    creates new [piece] in [position]\n"
                    "add all returns the chessboard to original [position]\n"
                    "del [position]  removes piece from [position]\n"
                    "del all removes all pieces\n"
