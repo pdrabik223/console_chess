@@ -14,7 +14,7 @@ void Pawn::GenMoves(std::array<Piece *, 64> &board, const unsigned int position,
   possible_moves.fill({0, 0});
 
   unsigned last_move = 0;
-  if (Color() == BLACK) {
+  if (Color() == P_BLACK) {
 
     if (board[position + B_WIDTH]->IsEmpty())
       possible_moves[last_move] = {position, position + B_WIDTH};

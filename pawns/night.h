@@ -7,7 +7,7 @@
 #include "piece.h"
 class Night : public Piece {
 public:
-  Night() { info_ = BLACK; }
+  Night() { info_ = P_BLACK; }
 
   explicit Night(char color) { info_ = color; }
 

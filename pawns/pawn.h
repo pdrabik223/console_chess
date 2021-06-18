@@ -7,7 +7,7 @@
 #include "piece.h"
 class Pawn : public Piece {
 public:
-  Pawn() { info_ = BLACK; }
+  Pawn() { info_ = P_BLACK; }
 
   explicit Pawn(char color) { info_ = color; }
 

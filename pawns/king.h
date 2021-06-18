@@ -8,7 +8,7 @@
 
 class King : public Piece {
 public:
-  King() { info_ = BLACK; }
+  King() { info_ = P_BLACK; }
 
   explicit King(char color) { info_ = color; }
 

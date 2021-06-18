@@ -8,7 +8,7 @@
 
 class Bishop : public Piece {
 public:
-  Bishop() { info_ = BLACK; }
+  Bishop() { info_ = P_BLACK; }
 
   explicit Bishop(char color) { info_ = color; }
 

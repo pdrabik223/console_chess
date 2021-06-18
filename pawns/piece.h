@@ -9,8 +9,8 @@
 #include <array>
 #include <iostream>
 
-#define BLACK 0
-#define WHITE 1
+#define P_BLACK 0
+#define P_WHITE 1
 
 #define B_HEIGHT 8
 #define B_WIDTH 8
@@ -18,7 +18,7 @@
 class Piece {
 
 public:
-  Piece() : info_(BLACK) {}
+  Piece() : info_(P_BLACK) {}
 
   Piece(const Piece &other) = default;
 

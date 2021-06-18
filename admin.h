@@ -1,29 +1,10 @@
 //
-// Created by pc on 23.04.2021.
+// Created by studio25 on 18.06.2021.
 //
-#include <iostream>
 
+#ifndef CONSOLE_CHESS__ADMIN_H_
+#define CONSOLE_CHESS__ADMIN_H_
 #include "chess_board.h"
-#include <Windows.h>
-#include <vector>
-
-int ChessToInt(std::string coord) {
-
-  switch (coord[0]) {
-  case 'a':
-  case 'b':
-  case 'c':
-  case 'd':
-  case 'e':
-  case 'f':
-  case 'g':
-  case 'h':
-    return (B_HEIGHT - coord[1] + 1) * B_HEIGHT + coord[3] - 1;
-  default:
-    return -1;
-  }
-}
-
 enum Task {
 
   QUIT,
@@ -32,7 +13,7 @@ enum Task {
   ADD_ALL,
   DELETE_PIECE,
   DELL_ALL, // todo finish them
-            //  i have 6 h of sleep to cath
+  //  i have 6 h of sleep to cath
   SHOW_MOVES,
   SHOW_POSSIBLE,
   NONE,
@@ -48,25 +29,21 @@ struct full_command {
 
   Task comm;
   std::vector<int> data;
+
 };
+class Admin {
+public:
+  Admin();
 
-int main() {
+  full_command Decode(std::string input);
 
-  std::cout << "welcome to admin chess\n";
 
-  ChessBoard game;
+private:
+  ChessBoard game_;
 
-  std::string command;
-  full_command buff = full_command(HELP);
-  while (2 > 1) {
-    game.ShowInConsole();
-    std::cin >> command;
 
-    if (buff.comm == QUIT)
-      break;
-  }
-  return 0;
-}
+
+};
 
 full_command Decode(std::string input) {
 
@@ -168,18 +145,21 @@ void RunTask(ChessBoard &game, full_command input) {
     }
   } break;
   case HELP:
-    printf("help is coming\n"
-           "add [Color][piece][position]    creates new [piece] in [position]\n"
-           "add all returns the chessboard to original [position]\n"
-           "del [position]  removes piece from [position]\n"
-           "del all removes all pieces\n"
-           "show moves [position]   shows moves that are possible to be made\n"
-           "                        by the piece under [position]\n"
-           "quit    quit the program\n"
-           "move [position_from][position_to]   moves chosen by "
-           "[position_from] piece"
-           "                                    to selected by [position_to] "
-           "square");
+
+    printf(
+        "help is coming\n"
+        "add [color][piece][position]    : creates new [piece] in [position]\n"
+        "add all                         : returns the chessboard to original "
+        "[position]\n"
+        "del [position]                  : removes piece from [position]\n"
+        "del all                         : removes all pieces\n"
+        "show moves [position]           : shows moves that are possible to be "
+        "made\n"
+        "                                  by the piece under [position]\n"
+        "quit                            : quit the program\n"
+        "move [from][to]                 : moves chosen by "
+        "[from] piece to square selected by [to] \n");
     break;
   }
 }
+#endif // CONSOLE_CHESS__ADMIN_H_

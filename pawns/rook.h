@@ -7,7 +7,7 @@
 #include "piece.h"
 class Rook : public Piece {
 public:
-  Rook() { info_ = BLACK; }
+  Rook() { info_ = P_BLACK; }
 
   explicit Rook(char color) { info_ = color; }
 

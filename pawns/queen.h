@@ -7,7 +7,7 @@
 #include "piece.h"
 class Queen : public Piece {
 public:
-  Queen() { info_ = BLACK; }
+  Queen() { info_ = P_BLACK; }
 
   explicit Queen(char color) { info_ = color; }
 

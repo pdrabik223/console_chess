@@ -13,13 +13,20 @@ set(PAWNS
         pawns/night.h pawns/night.cpp
         pawns/queen.h pawns/queen.cpp
         pawns/king.h pawns/king.cpp
+        windows_console/scml.cpp windows_console/scml.h)
+
+set(WIN_CONSOLE
+        windows_console/icon.h windows_console/icon.cpp
+        windows_console/win_colors.h windows_console/win_colors.cpp
+        windows_console/scml.cpp windows_console/scml.h
         )
 
-add_executable(admin admin_chess.cpp
+add_executable(admin executables/admin_chess.cpp
         chess_board.h chess_board.cpp
 
         move.h move.cpp
 
 
         ${PAWNS}
-       )
+        ${WIN_CONSOLE}
+        admin.cpp admin.h)
