@@ -4,40 +4,40 @@
 
 #include "full_command.h"
 
-void EraseTillSpace(std::string &line){
+void EraseTillSpace(std::string &line) {
 
   while (line[0] != ' ')
     line.erase(line.begin());
   line.erase(line.begin());
-
 }
-
 
 int ChessToInt(std::string coord) {
 
-  if(coord[0] == ' ')
-    EraseTillSpace(coord);
+  if (coord[0] == ' ')
+    coord.erase(0, 1);
 
   auto cut = coord.substr(0, 2);
   coord.erase(0, 2);
 
+  int x = (cut[1] - '0');
+
   switch (cut[0]) {
   case 'a':
-    return (B_HEIGHT - coord[1]) * B_HEIGHT + 0;
+    return (B_HEIGHT - x) * B_WIDTH + 0;
   case 'b':
-    return (B_HEIGHT - coord[1]) * B_HEIGHT + 1;
+    return (B_HEIGHT - x) * B_WIDTH + 1;
   case 'c':
-    return (B_HEIGHT - coord[1]) * B_HEIGHT + 2;
+    return (B_HEIGHT - x) * B_WIDTH + 2;
   case 'd':
-    return (B_HEIGHT - coord[1]) * B_HEIGHT + 3;
+    return (B_HEIGHT - x) * B_WIDTH + 3;
   case 'e':
-    return (B_HEIGHT - coord[1]) * B_HEIGHT + 4;
+    return (B_HEIGHT - x) * B_WIDTH + 4;
   case 'f':
-    return (B_HEIGHT - coord[1]) * B_HEIGHT + 5;
+    return (B_HEIGHT - x) * B_WIDTH + 5;
   case 'g':
-    return (B_HEIGHT - coord[1]) * B_HEIGHT + 6;
+    return (B_HEIGHT - x) * B_WIDTH + 6;
   case 'h':
-    return (B_HEIGHT - coord[1]) * B_HEIGHT + 7;
+    return (B_HEIGHT - x) * B_WIDTH + 7;
   default:
     return -1;
   }
@@ -47,22 +47,85 @@ full_command Parse(std::string &line) {
 
   if (line == "help")
     return {HELP};
-  if (line == "quit") {
+  if (line == "quit")
     return {QUIT};
-  }
-  if (line.substr(0, 3) == "add") {
 
+  if (line.substr(0, 3) == "add") {
+    line.erase(0, 3);
     EraseTillSpace(line);
+    std::vector<int> data;
+
+    data.push_back(ChessToInt(line));
+    switch (line[0]) {
+    case 'p':
+
+      data.push_back('p');
+      data.push_back(0);
+      return {ADD_PIECE, data};
+
+    case 'P':
+      data.push_back('p');
+      data.push_back(1);
+      return {ADD_PIECE, data};
+
+    case 'n':
+      data.push_back('n');
+      data.push_back(0);
+      return {ADD_PIECE, data};
+
+    case 'N':
+      data.push_back('n');
+      data.push_back(1);
+      return {ADD_PIECE, data};
+
+    case 'b':
+      data.push_back('b');
+      data.push_back(0);
+      return {ADD_PIECE, data};
+
+    case 'B':
+      data.push_back('b');
+      data.push_back(1);
+      return {ADD_PIECE, data};
+
+    case 'r':
+      data.push_back('r');
+      data.push_back(0);
+      return {ADD_PIECE, data};
+
+    case 'R':
+      data.push_back('r');
+      data.push_back(1);
+      return {ADD_PIECE, data};
+
+    case 'q':
+      data.push_back('q');
+      data.push_back(0);
+      return {ADD_PIECE, data};
+
+    case 'Q':
+      data.push_back('q');
+      data.push_back(1);
+      return {ADD_PIECE, data};
+
+    case 'k':
+      data.push_back('k');
+      data.push_back(0);
+      return {ADD_PIECE, data};
+
+    case 'K':
+      data.push_back('k');
+      data.push_back(1);
+      return {ADD_PIECE, data};
+    }
 
     // for simplification
-    // king = 5
-    // queen = 4
-    // rook = 3
-    // bishop = 2
-    // night = 1
-    // pawn = 0
-
-    // todo add all
+    // king = k
+    // queen = q
+    // rook = r
+    // bishop = b
+    // night = n
+    // pawn = p
   }
 
   if (line.substr(0, 3) == "del") {
@@ -78,10 +141,9 @@ full_command Parse(std::string &line) {
     return {DELETE_PIECE, data};
   }
 
-  if (line.substr(0,4) == "show" ) {
+  if (line.substr(0, 4) == "show") {
 
     EraseTillSpace(line);
-
 
     if (line == "all")
       return {SHOW_ALL};
@@ -90,7 +152,16 @@ full_command Parse(std::string &line) {
     data.push_back(ChessToInt(line));
 
     return {SHOW_MOVES, data};
+  }
 
+  if (line.substr(0, 4) == "move") {
+    EraseTillSpace(line);
+
+    std::vector<int> data;
+    data.push_back(ChessToInt(line));
+    data.push_back(ChessToInt(line));
+
+    return {MOVE, data};
   }
 
   switch (line[0]) {
@@ -102,18 +173,11 @@ full_command Parse(std::string &line) {
   case 'f':
   case 'g':
   case 'h':
-    std::vector<int> moves ;
+    std::vector<int> moves;
     moves.push_back(ChessToInt(line));
     return {SHOW_MOVES, moves};
   }
   return {NONE};
 }
-//std::istream &operator>>(std::istream &in, full_command &me) {
-//  std::string line;
-//  getline(in, line);
-//  me = Parse(line);
-//  return in;
-//}
-void full_command::FromString(std::string line) {
-  *this = Parse(line);
-}
+
+void full_command::FromString(std::string line) { *this = Parse(line); }

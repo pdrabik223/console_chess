@@ -10,7 +10,7 @@
 
 enum Task {
 
-  QUIT,
+  QUIT, // ok
   MOVE,
   ADD_PIECE,
   ADD_ALL,
@@ -20,7 +20,7 @@ enum Task {
   SHOW_MOVES,
   SHOW_ALL,
   NONE,
-  HELP
+  HELP // ok
 
 };
 
