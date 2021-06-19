@@ -8,11 +8,19 @@ Admin::Admin() : game_(), console_handle_() {
 
   console_handle_.UpdateDisplay(game_);
   full_command user_input;
-
+  int counter = 0;
+  std::vector<std::string> to_start_with;
+  to_start_with.push_back("show c7");
+  to_start_with.push_back("show c2");
   while (1 < 2) {
     console_handle_.UpdateScreen();
-    user_input.FromString(console_handle_.GetLine());
 
+    if (counter >= 2)
+      user_input.FromString(console_handle_.GetLine());
+    else
+      user_input.FromString(to_start_with[counter]);
+
+    counter ++;
     switch (user_input.comm) {
     case QUIT:
       goto quit;
@@ -95,7 +103,7 @@ void Admin::Help() {
 void Admin::ShowPossible() {
 
   std::array<Move, 27> move_buffer;
-    std::wstring message = L"";
+  std::wstring message = L"";
   for (int i = 0; i < 64; i++) {
 
     game_.GetElement(i).GenMoves(game_.plane_, i, move_buffer);
@@ -109,7 +117,7 @@ void Admin::ShowPossible() {
       }
     }
   }
-    console_handle_.SetMessage(message);
+  console_handle_.SetMessage(message);
 }
 void Admin::AddPiece(full_command input) {
 
@@ -146,7 +154,8 @@ void Admin::ShowPossible(int position) {
     if (move) {
       message += (std::wstring)move;
       message += L"\n";
-      console_handle_.SetBackgroundColor(move.to_ / 8, move.to_ % 8, col::LIGHT_AQUA);
+      console_handle_.SetBackgroundColor(move.to_ / 8, move.to_ % 8,
+                                         col::LIGHT_AQUA);
     }
   }
   console_handle_.SetMessage(message);
