@@ -8,6 +8,7 @@
 #include "move.h"
 #include <array>
 #include <iostream>
+#include <vector>
 
 #define P_BLACK 0
 #define P_WHITE 1
@@ -39,9 +40,9 @@ public:
   /// \param possible_moves output of this function
 
   virtual void GenMoves(std::array<Piece *, 64> &board,
-                        const unsigned int position,
-                        std::array<Move, 27> &possible_moves) {
-                         possible_moves.fill({0, 0});
+                        unsigned int position,
+                        std::vector<Move> &possible_moves) {
+
   };
 
   virtual Piece *Clone(){return new Piece(* this);};
@@ -50,14 +51,14 @@ public:
 protected:
   virtual void GenMovesForBlack(std::array<Piece *, 64> &board,
                                 const unsigned int position,
-                                std::array<Move, 27> &possible_moves) {
-    possible_moves.fill({0, 0});
+                                std::vector<Move> &possible_moves) {
+
   };
 
   virtual void GenMovesForWhite(std::array<Piece *, 64> &board,
                                 const unsigned int position,
-                                std::array<Move, 27> &possible_moves) {
-    possible_moves.fill({0, 0});
+                                std::vector<Move> &possible_moves) {
+
   };
 
   /// to save space and copy time, and we will do a lot of copying
@@ -69,9 +70,8 @@ protected:
   unsigned char info_;
 };
 
-bool AddMove(std::array<Piece *, 64> &board,
-             std::array<Move, 27> &possible_moves, bool color,
-             unsigned &last_move, const unsigned position, unsigned int target);
+bool AddMove(std::array<Piece *, 64> &board, std::vector<Move> &possible_moves,
+             bool color, const unsigned position, unsigned int target);
 
 
 unsigned CCord(const unsigned &x, const unsigned &y);

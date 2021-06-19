@@ -5,6 +5,7 @@
 #ifndef CONSOLE_CHESS_PAWNS_KING_H_
 #define CONSOLE_CHESS_PAWNS_KING_H_
 #include "piece.h"
+#include <vector>
 
 class King : public Piece {
 public:
@@ -35,7 +36,7 @@ public:
   bool Color() const override;
   bool Moved() const override;
   void GenMoves(std::array<Piece *, 64> &board, unsigned position,
-                std::array<Move, 27> &possible_moves) override;
+                std::vector<Move> &possible_moves) override;
 };
 
 #endif // CONSOLE_CHESS_PAWNS_KING_H_

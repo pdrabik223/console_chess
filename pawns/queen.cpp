@@ -3,10 +3,11 @@
 //
 
 #include "queen.h"
+#include <vector>
 
 void Queen::GenMoves(std::array<Piece *, 64> &board,
-                     const unsigned int position,
-                     std::array<Move, 27> &possible_moves) {
+                     unsigned int position,
+                     std::vector<Move> &possible_moves) {
 
   /// the x part of position
   const int px = position / B_WIDTH;
@@ -14,29 +15,25 @@ void Queen::GenMoves(std::array<Piece *, 64> &board,
   const int py = position % B_WIDTH;
 
   unsigned last_move = 0;
-  possible_moves.fill({0, 0});
+
 
   for (int z = px + 1; z < 8; ++z) { // up
-    if (AddMove(board, possible_moves, Color(), last_move, position,
-                z * 8 + py))
+    if (AddMove(board, possible_moves, Color(), position, z * 8 + py))
       break;
   }
 
   for (int z = px - 1; z >= 0; --z) { // down
-    if (AddMove(board, possible_moves, Color(), last_move, position,
-                z * 8 + py))
+    if (AddMove(board, possible_moves, Color(), position, z * 8 + py))
       break;
   }
 
   for (int z = py + 1; z < 8; ++z) { // right
-    if (AddMove(board, possible_moves, Color(), last_move, position,
-                px * 8 + z))
+    if (AddMove(board, possible_moves, Color(), position, px * 8 + z))
       break;
   }
 
   for (int z = py - 1; z >= 0; --z) { // left
-    if (AddMove(board, possible_moves, Color(), last_move, position,
-                px * 8 + z))
+    if (AddMove(board, possible_moves, Color(), position, px * 8 + z))
       break;
   }
 
@@ -50,8 +47,7 @@ void Queen::GenMoves(std::array<Piece *, 64> &board,
     if (nx == B_WIDTH or ny == B_WIDTH)
       break;
 
-    if (AddMove(board, possible_moves, Color(), last_move, position,
-                nx * 8 + ny))
+    if (AddMove(board, possible_moves, Color(), position, nx * 8 + ny))
       break;
   }
   nx = px;
@@ -62,8 +58,7 @@ void Queen::GenMoves(std::array<Piece *, 64> &board,
     if (nx < 0 or ny == B_WIDTH)
       break;
 
-    if (AddMove(board, possible_moves, Color(), last_move, position,
-                nx * 8 + ny))
+    if (AddMove(board, possible_moves, Color(), position, nx * 8 + ny))
 
       break;
   }
@@ -75,8 +70,7 @@ void Queen::GenMoves(std::array<Piece *, 64> &board,
     if (nx < 0 or ny < 0)
       break;
 
-    if (AddMove(board, possible_moves, Color(), last_move, position,
-                nx * 8 + ny))
+    if (AddMove(board, possible_moves, Color(), position, nx * 8 + ny))
       break;
   }
   nx = px;
@@ -87,8 +81,7 @@ void Queen::GenMoves(std::array<Piece *, 64> &board,
     if (nx == B_WIDTH or ny < 0)
       break;
 
-    if (AddMove(board, possible_moves, Color(), last_move, position,
-                nx * 8 + ny))
+    if (AddMove(board, possible_moves, Color(), position, nx * 8 + ny))
       break;
   }
 }

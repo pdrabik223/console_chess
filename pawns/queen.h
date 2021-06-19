@@ -33,7 +33,7 @@ public:
   bool Moved() const override;
   virtual Queen *Clone(){return new Queen(* this);};
   void GenMoves(std::array<Piece *, 64> &board, unsigned int position,
-                std::array<Move, 27> &possible_moves) override;
+                std::vector<Move> &possible_moves) override;
 };
 
 

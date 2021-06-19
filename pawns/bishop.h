@@ -5,6 +5,7 @@
 #ifndef CONSOLE_CHESS_PAWNS_BISHOP_H_
 #define CONSOLE_CHESS_PAWNS_BISHOP_H_
 #include "piece.h"
+#include <vector>
 
 class Bishop : public Piece {
 public:
@@ -34,7 +35,7 @@ public:
   }
 
   void GenMoves(std::array<Piece *, 64> &board, unsigned int position,
-                std::array<Move, 27> &possible_moves) override;
+                std::vector<Move> &possible_moves) override;
 };
 
 #endif // CONSOLE_CHESS_PAWNS_BISHOP_H_

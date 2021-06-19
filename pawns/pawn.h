@@ -5,6 +5,7 @@
 #ifndef CONSOLE_CHESS_PAWNS_PAWN_H_
 #define CONSOLE_CHESS_PAWNS_PAWN_H_
 #include "piece.h"
+#include <vector>
 class Pawn : public Piece {
 public:
   Pawn() { info_ = P_BLACK; }
@@ -31,7 +32,7 @@ public:
   virtual Pawn *Clone(){return new Pawn(* this);};
 
   void GenMoves(std::array<Piece *, 64> &board, unsigned int position,
-                std::array<Move, 27> &possible_moves) override;
+                std::vector<Move> &possible_moves) override;
   bool IsEmpty() override;
   bool Color() const override;
   bool Moved() const override;
@@ -39,10 +40,10 @@ public:
 protected:
   void GenMovesForBlack(std::array<Piece *, 64> &board,
                         const unsigned int position,
-                        std::array<Move, 27> &possible_moves) override;
+                        std::vector<Move> &possible_moves) override;
   void GenMovesForWhite(std::array<Piece *, 64> &board,
                         const unsigned int position,
-                        std::array<Move, 27> &possible_moves) override;
+                        std::vector<Move> &possible_moves) override;
 };
 
 #endif // CONSOLE_CHESS_PAWNS_PAWN_H_

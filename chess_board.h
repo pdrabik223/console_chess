@@ -5,13 +5,14 @@
 #ifndef CONSOLE_CHESS__CHESS_BOARD_H_
 #define CONSOLE_CHESS__CHESS_BOARD_H_
 
-#include "pawns/pawn.h"
-#include "pawns/night.h"
 #include "pawns/bishop.h"
-#include "pawns/rook.h"
-#include "pawns/queen.h"
 #include "pawns/king.h"
+#include "pawns/night.h"
+#include "pawns/pawn.h"
+#include "pawns/queen.h"
+#include "pawns/rook.h"
 #include <array>
+#include <vector>
 
 #define B_HEIGHT 8
 #define B_WIDTH 8
@@ -32,10 +33,12 @@ public:
 
   Piece &GetElement(unsigned x, unsigned y);
   Piece &GetElement(unsigned position);
-  Piece *& operator[](unsigned position);
+  Piece *&operator[](unsigned position);
 
-  double Evaluate();
-  void ShowInConsole();
+  void DoMove(const Move &target);
+  double EvaluatePosition();
+
+  void GenAllPossibleMoves(bool color, std::vector<Move> &possible_moves);
 
   std::array<Piece *, 64> plane_;
 

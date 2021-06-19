@@ -190,7 +190,7 @@ void Scml::UpdateDisplay(ChessBoard &board) {
         buffer_[x][y].text_color = col::BLACK;
     }
   }
-  current_evaluation_ = board.Evaluate();
+  current_evaluation_ = board.EvaluatePosition();
   message_ = {};
 }
 

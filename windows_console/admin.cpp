@@ -12,7 +12,7 @@ Admin::Admin() : game_(), console_handle_() {
   int counter = 0;
 
   int position_x = rand() % 8;
-  int position_y = rand() % 9 + 1;
+  int position_y = rand() % 8 + 1;
 
   std::string random_position = "";
   random_position.push_back((char)('a' + position_x));
@@ -163,7 +163,7 @@ void Admin::Help() {
 
 void Admin::ShowPossible() {
 
-  std::array<Move, 27> move_buffer;
+  std::vector<Move> move_buffer;
   std::wstring message = L"";
   for (int i = 0; i < 64; i++) {
 
@@ -206,7 +206,7 @@ void Admin::AddPiece(full_command input) {
 void Admin::ShowPossible(int position) {
   console_handle_.SetBackgroundColor(position / 8, position % 8,
                                      col::LIGHT_PURPLE);
-  std::array<Move, 27> move_buffer;
+  std::vector<Move> move_buffer;
 
   game_.GetElement(position).GenMoves(game_.plane_, position, move_buffer);
   std::wstring message;

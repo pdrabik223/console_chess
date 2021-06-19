@@ -5,6 +5,7 @@
 #ifndef CONSOLE_CHESS_PAWNS_NIGHT_H_
 #define CONSOLE_CHESS_PAWNS_NIGHT_H_
 #include "piece.h"
+#include <vector>
 class Night : public Piece {
 public:
   Night() { info_ = P_BLACK; }
@@ -35,8 +36,8 @@ public:
   bool Color() const override { return info_ bitand 1; }
   bool Moved() const override { return info_ bitand 2; }
 
-  void GenMoves(std::array<Piece *, 64> &board, const unsigned int position,
-                std::array<Move, 27> &possible_moves) override ;
+  void GenMoves(std::array<Piece *, 64> &board, unsigned int position,
+                std::vector<Move> &possible_moves) override ;
 
 };
 #endif // CONSOLE_CHESS_PAWNS_NIGHT_H_

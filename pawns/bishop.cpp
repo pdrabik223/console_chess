@@ -4,8 +4,8 @@
 
 #include "bishop.h"
 void Bishop::GenMoves(std::array<Piece *, 64> &board,
-                      const unsigned int position,
-                      std::array<Move, 27> &possible_moves) {
+                      unsigned int position,
+                      std::vector<Move> &possible_moves) {
 
   /// the x part of position
   const int px = position / B_WIDTH;
@@ -18,7 +18,6 @@ void Bishop::GenMoves(std::array<Piece *, 64> &board,
   int ny = py;
 
   unsigned last_move = 0;
-  possible_moves.fill({0, 0});
 
   for (;;) { // right and down
     ++nx;
@@ -26,8 +25,7 @@ void Bishop::GenMoves(std::array<Piece *, 64> &board,
     if (nx == B_WIDTH or ny == B_WIDTH)
       break;
 
-    if (AddMove(board, possible_moves, Color(), last_move, position,
-                nx * 8 + ny))
+    if (AddMove(board, possible_moves, Color(), position, nx * 8 + ny))
       break;
   }
   nx = px;
@@ -38,8 +36,7 @@ void Bishop::GenMoves(std::array<Piece *, 64> &board,
     if (nx < 0 or ny == B_WIDTH)
       break;
 
-    if (AddMove(board, possible_moves, Color(), last_move, position,
-                nx * 8 + ny))
+    if (AddMove(board, possible_moves, Color(), position, nx * 8 + ny))
       break;
   }
   nx = px;
@@ -50,8 +47,7 @@ void Bishop::GenMoves(std::array<Piece *, 64> &board,
     if (nx < 0 or ny < 0)
       break;
 
-    if (AddMove(board, possible_moves, Color(), last_move, position,
-                nx * 8 + ny))
+    if (AddMove(board, possible_moves, Color(), position, nx * 8 + ny))
       break;
   }
   nx = px;
@@ -62,8 +58,7 @@ void Bishop::GenMoves(std::array<Piece *, 64> &board,
     if (nx == B_WIDTH or ny < 0)
       break;
 
-    if (AddMove(board, possible_moves, Color(), last_move, position,
-                nx * 8 + ny))
+    if (AddMove(board, possible_moves, Color(), position, nx * 8 + ny))
       break;
   }
 }
