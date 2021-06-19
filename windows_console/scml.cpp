@@ -6,11 +6,24 @@
 #include <cassert>
 #include <string>
 
-int CountLines(const std::wstring &basic_string) {
+int Scml::CountLines( std::wstring &basic_string) {
   int counter = 0;
-  for (int i : basic_string)
-    if (i == '\n')
+  int wrap_counter = 0;
+
+  _CONSOLE_SCREEN_BUFFER_INFO info;
+  GetConsoleScreenBufferInfo(hc_, &info);
+
+  for (int i = 0; i < basic_string.size(); i++) {
+    if (basic_string[i] == '\n') {
       counter++;
+      wrap_counter = 0;
+    }
+    wrap_counter++;
+    if (wrap_counter > info.dwSize.X) {
+      counter++;
+      wrap_counter = 0;
+    }
+  }
   return counter;
 }
 
@@ -148,14 +161,15 @@ void Scml::UpdateScreen() {
 
   std::wcout << current_evaluation_;
   SetConsoleCursorPosition(hc_, {0, 9});
-  for (int i = 0; i <= previous_message_length_; i++)
-    std::wcout
-        << L"                                                               "
-           "                                                                \n";
 
+  _CONSOLE_SCREEN_BUFFER_INFO info;
+  GetConsoleScreenBufferInfo(hc_, &info);
 
-
-
+  for (int i = 0; i < previous_message_length_; i++) {
+    SetConsoleCursorPosition(hc_, {0, (short)(9 + i)});
+    for (int j = 0; j < info.dwSize.X; j++)
+      std::wcout << L" ";
+  }
   SetConsoleCursorPosition(hc_, {0, 9});
 
   std::wcout << cc(col::WHITE, col::BLACK) << message_;
@@ -216,3 +230,4 @@ void Scml::ClearHighlight() {
     }
   }
 }
+

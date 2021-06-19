@@ -57,7 +57,9 @@ public:
 
   void ClearHighlight();
 
-private:
+  private:
+
+  int CountLines( std::wstring &basic_string);
 
   const unsigned w_ = 8;
   const unsigned h_ = 8;
