@@ -28,23 +28,23 @@ public:
   ChessBoard(const ChessBoard &other);
   ChessBoard &operator=(const ChessBoard &other);
 
-  /// returns Size of the chess board
-  static unsigned Size();
-
   Piece &GetElement(unsigned x, unsigned y);
   Piece &GetElement(unsigned position);
   Piece *&operator[](unsigned position);
 
   void DoMove(const Move &target);
   double EvaluatePosition();
-
-  void EvaluateMove(Move& target);
-
+  void EvaluateMove(Move &target);
+  double MinMax(Move target, int depth, bool color);
 
   void GenAllPossibleMoves(bool color, std::vector<Move> &possible_moves);
 
   std::array<Piece *, 64> plane_;
-  unsigned move_counter_;
+
+  /// current move counter
+  /// white player moves when move_counter % 2 == 0
+  unsigned move_counter_ = 0;
+
 private:
   bool white_king_in_check_;
   bool black_king_in_check_;

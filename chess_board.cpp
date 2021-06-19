@@ -38,8 +38,6 @@ ChessBoard::ChessBoard() {
   plane_[63] = new Rook(P_WHITE);
 }
 
-unsigned ChessBoard::Size() { return 64; }
-
 ChessBoard &ChessBoard::operator=(const ChessBoard &other) {
   if (&other == this)
     return *this;
@@ -57,7 +55,15 @@ Piece &ChessBoard::GetElement(unsigned int x, unsigned int y) {
 
 double ChessBoard::EvaluatePosition() {
 
-  double weight_of_move = 0.1;
+  double white_weight_of_move = 0.1;
+  double black_weight_of_move = 0.1;
+
+  /// if next round is white to move we boost wite evaluation
+  if (move_counter_ % 2 == 0)
+    black_weight_of_move += 0.07;
+  else
+    white_weight_of_move += 0.07;
+
   std::vector<Move> white_move_buffer;
   std::vector<Move> black_move_buffer;
   double eva = 0.0;
@@ -77,8 +83,8 @@ double ChessBoard::EvaluatePosition() {
 
     eva += plane_[i]->Value();
   }
-  eva += white_move_buffer.size() * weight_of_move;
-  eva -= black_move_buffer.size() * weight_of_move;
+  eva += white_move_buffer.size() * white_weight_of_move;
+  eva -= black_move_buffer.size() * black_weight_of_move;
 
   return eva;
 }
@@ -88,12 +94,12 @@ Piece &ChessBoard::GetElement(unsigned int position) {
 }
 
 void ChessBoard::DoMove(const Move &target) {
-
   plane_[target.to_] = plane_[target.from_]->Clone();
   plane_[target.to_]->SetMoved();
 
   delete plane_[target.from_];
   plane_[target.from_] = new Piece();
+  move_counter_++;
 }
 
 /// todo debate over it
@@ -113,4 +119,22 @@ void ChessBoard::EvaluateMove(Move &target) {
   auto temp_board(*this);
   temp_board.DoMove(target);
   target.evaluation_ = temp_board.EvaluatePosition();
+}
+double ChessBoard::MinMax(Move target, int depth, bool color) {
+  EvaluateMove(target);
+  if (depth == 0)
+    return target.evaluation_;
+  if (color) {                    // for white
+    if (target.evaluation_ > 900) // if we just  mated fucker
+      return target.evaluation_;
+    double current_value = -1000;
+
+
+
+  } else {                         // for black
+    if (target.evaluation_ < -900) // same but with black
+      return target.evaluation_;
+
+
+  }
 }
