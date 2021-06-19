@@ -43,7 +43,7 @@ public:
 
   ~Scml() {
     std::wcout << cc(col::WHITE, col::BLACK);
-    system("cls");
+  //  system("cls");
   }
 
    std::string GetLine();

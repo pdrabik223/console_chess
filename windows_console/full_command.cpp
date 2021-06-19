@@ -60,6 +60,8 @@ Parse(std::string &line) {
     std::vector<int> data;
 
     data.push_back(ChessToInt(line));
+    EraseTillSpace(line);
+
     switch (line[0]) {
     case 'p':
 

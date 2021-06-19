@@ -9,11 +9,12 @@
 #include <windows_console/admin.h>
 
 int main() {
-
+  srand(time(NULL));
   std::cout << "welcome to admin chess\n";
 
-  Admin game;
-
+  for (int i = 0; i < 20; i++) {
+    Admin game;
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+  }
   return 0;
 }
-

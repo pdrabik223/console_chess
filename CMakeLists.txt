@@ -26,7 +26,6 @@ add_executable(admin executables/admin_chess.cpp
 
         move.h move.cpp
 
-
         ${PAWNS}
         ${WIN_CONSOLE}
         windows_console/admin.cpp windows_console/admin.h)

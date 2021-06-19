@@ -9,18 +9,90 @@ Admin::Admin() : game_(), console_handle_() {
   console_handle_.UpdateDisplay(game_);
   full_command user_input;
   int counter = 0;
+
+  int position_x = rand() % 8;
+  int position_y = rand() % 9 + 1;
+
+  std::string random_position = "";
+  random_position.push_back((char)('a' + position_x));
+  random_position+= std::to_string(position_y);
+
+  int piece = rand() % 8 + 1;
+  int color = rand() % 2;
+  if (color == 0)
+    color--;
+
+  std::string random_piece;
+
+  switch (piece * color) {
+  case 1:
+    random_piece = "p";
+    break;
+  case 2:
+    random_piece = "n";
+    break;
+  case 3:
+    random_piece = "b";
+    break;
+
+  case 4:
+    random_piece = "r";
+
+    break;
+  case 5:
+    random_piece = "q";
+
+    break;
+  case 6:
+    random_piece = "k";
+
+    break;
+  case -1:
+    random_piece = "P";
+
+    break;
+
+  case -2:
+    random_piece = "N";
+
+    break;
+  case -3:
+    random_piece = "B";
+
+    break;
+  case -4:
+    random_piece = "R";
+
+    break;
+  case -5:
+    random_piece = "Q";
+
+    break;
+  case -6:
+    random_piece = "K";
+
+    break;
+  }
+
   std::vector<std::string> to_start_with;
-  to_start_with.push_back("del h7");
-  to_start_with.push_back("show h8");
+  std::string complete_message =  random_position + " " + random_piece;
+  std::string add = "add " + complete_message;
+  std::string show = complete_message;
+
+ // to_start_with.push_back("del all");
+  to_start_with.push_back(add);
+  to_start_with.push_back(show);
+
   while (1 < 2) {
     console_handle_.UpdateScreen();
 
-    if (counter >= 2)
+    if (counter >= to_start_with.size()) {
+      goto quit;
       user_input.FromString(console_handle_.GetLine());
-    else
+    } else {
       user_input.FromString(to_start_with[counter]);
-
-    counter ++;
+      counter++;
+    }
     switch (user_input.comm) {
     case QUIT:
       goto quit;
