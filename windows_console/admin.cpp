@@ -10,8 +10,8 @@ Admin::Admin() : game_(), console_handle_() {
   full_command user_input;
   int counter = 0;
   std::vector<std::string> to_start_with;
-  to_start_with.push_back("show c7");
-  to_start_with.push_back("show c2");
+  to_start_with.push_back("del h7");
+  to_start_with.push_back("show h8");
   while (1 < 2) {
     console_handle_.UpdateScreen();
 

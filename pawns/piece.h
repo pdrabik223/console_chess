@@ -24,13 +24,13 @@ public:
 
   virtual explicit operator char() const { return ' '; }
 
-  static bool IsEmpty() { return true; }
+  virtual bool IsEmpty() { return true; }
 
   /// \return true if white
   /// \return false if black
-  bool Color() const { return info_ bitand 1; }
+  virtual bool Color() const { return info_ bitand 1; }
 
-  bool Moved() const { return info_ bitand 2; }
+  virtual bool Moved() const { return info_ bitand 2; }
 
   virtual double Value() const { return 0.0; }
   ///
@@ -70,8 +70,8 @@ protected:
 };
 
 bool AddMove(std::array<Piece *, 64> &board,
-             std::array<Move, 27> &possible_moves, Piece *me,
-             unsigned last_move, const unsigned position, int x, int y);
+             std::array<Move, 27> &possible_moves, bool color,
+             unsigned &last_move, const unsigned position, unsigned int target);
 
 
 unsigned CCord(const unsigned &x, const unsigned &y);

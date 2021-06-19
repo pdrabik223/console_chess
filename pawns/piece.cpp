@@ -4,21 +4,19 @@
 
 #include "pawns/piece.h"
 
-
 bool AddMove(std::array<Piece *, 64> &board,
-              std::array<Move, 27> &possible_moves, Piece *me,
-              unsigned last_move, const unsigned position, const int x,
-              const int y) {
+             std::array<Move, 27> &possible_moves, bool color,
+             unsigned &last_move, const unsigned position, unsigned int target) {
 
-  if (board[CCord(x, y)]->IsEmpty()) {
-    possible_moves[last_move++] = {position, CCord(x, y)};
+  if (board[target]->IsEmpty()) {
+    possible_moves[last_move++] = {position, target};
 
-  } else if (board[CCord(x, y)]->Color() != me->Color()) {
-    possible_moves[last_move++] = {position, CCord(x, y)};
-    return false;
+  } else if (board[target]->Color() != color) {
+    possible_moves[last_move++] = {position, target};
+    return true;
 
-  } else return false;
+  } else return true;
 
-  return true;
+  return false;
 }
 unsigned CCord(const unsigned int &x, const unsigned int &y) { return x * B_WIDTH + y; }

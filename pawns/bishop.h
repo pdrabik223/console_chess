@@ -22,9 +22,11 @@ public:
 
   virtual Bishop *Clone(){return new Bishop(* this);};
 
-  static bool Empty() { return false; }
-
-  explicit operator char() const override {
+ bool Empty() { return false; }
+ bool IsEmpty() override;
+ bool Color() const override;
+ bool Moved() const override;
+ explicit operator char() const override {
     if (Color())
       return 'b';
     else

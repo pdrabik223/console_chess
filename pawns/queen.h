@@ -28,6 +28,9 @@ public:
     else
       return 'Q';
   }
+  bool IsEmpty() override;
+  bool Color() const override;
+  bool Moved() const override;
   virtual Queen *Clone(){return new Queen(* this);};
   void GenMoves(std::array<Piece *, 64> &board, unsigned int position,
                 std::array<Move, 27> &possible_moves) override;

@@ -32,6 +32,9 @@ public:
 
   void GenMoves(std::array<Piece *, 64> &board, unsigned int position,
                 std::array<Move, 27> &possible_moves) override;
+  bool IsEmpty() override;
+  bool Color() const override;
+  bool Moved() const override;
 
 protected:
   void GenMovesForBlack(std::array<Piece *, 64> &board,

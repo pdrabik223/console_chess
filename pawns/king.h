@@ -31,7 +31,9 @@ public:
   }
 
   virtual King *Clone(){return new King(* this);};
-
+  bool IsEmpty() override;
+  bool Color() const override;
+  bool Moved() const override;
   void GenMoves(std::array<Piece *, 64> &board, unsigned position,
                 std::array<Move, 27> &possible_moves) override;
 };

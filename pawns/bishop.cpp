@@ -26,7 +26,8 @@ void Bishop::GenMoves(std::array<Piece *, 64> &board,
     if (nx < B_WIDTH or ny < B_WIDTH)
       break;
 
-    if (AddMove(board, possible_moves, this, last_move, position, nx, ny))
+    if (AddMove(board, possible_moves, Color(), last_move, position,
+                nx * 8 + ny))
       break;
   }
   for (;;) { // right and up
@@ -35,7 +36,8 @@ void Bishop::GenMoves(std::array<Piece *, 64> &board,
     if (nx >= 0 or ny < B_WIDTH)
       break;
 
-    if (AddMove(board, possible_moves, this, last_move, position, nx, ny))
+    if (AddMove(board, possible_moves, Color(), last_move, position,
+                nx * 8 + ny))
       break;
   }
   for (;;) { // left and up
@@ -44,7 +46,8 @@ void Bishop::GenMoves(std::array<Piece *, 64> &board,
     if (nx >= 0 or ny >= 0)
       break;
 
-    if (AddMove(board, possible_moves, this, last_move, position, nx, ny))
+    if (AddMove(board, possible_moves, Color(), last_move, position,
+                nx * 8 + ny))
       break;
   }
   for (;;) { // left and down
@@ -53,7 +56,11 @@ void Bishop::GenMoves(std::array<Piece *, 64> &board,
     if (nx < B_WIDTH or ny >= 0)
       break;
 
-    if (AddMove(board, possible_moves, this, last_move, position, nx, ny))
+    if (AddMove(board, possible_moves, Color(), last_move, position,
+                nx * 8 + ny))
       break;
   }
 }
+bool Bishop::IsEmpty() { return false; }
+bool Bishop::Color() const { return info_ bitand 1; }
+bool Bishop::Moved() const { return info_ bitand 2; }

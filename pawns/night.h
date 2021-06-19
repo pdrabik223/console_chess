@@ -28,9 +28,15 @@ public:
     else
       return 'N';
   }
-  virtual Night *Clone(){return new Night(* this);};
-  void GenMoves(std::array<Piece *, 64> &board, const unsigned int position,
-                std::array<Move, 27> &possible_moves) override;
-};
 
+  virtual Night *Clone() { return new Night(*this); };
+
+  bool IsEmpty() override { return false; }
+  bool Color() const override { return info_ bitand 1; }
+  bool Moved() const override { return info_ bitand 2; }
+
+  void GenMoves(std::array<Piece *, 64> &board, const unsigned int position,
+                std::array<Move, 27> &possible_moves) override ;
+
+};
 #endif // CONSOLE_CHESS_PAWNS_NIGHT_H_

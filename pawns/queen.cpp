@@ -17,22 +17,22 @@ void Queen::GenMoves(std::array<Piece *, 64> &board,
   possible_moves.fill({0, 0});
 
   for (int z = px + 1; z < 8; ++z) { // up
-    if (AddMove(board, possible_moves, this, last_move, position, z, py))
+    if (AddMove(board, possible_moves, Color(), last_move, position, px*8+py))
       break;
   }
 
   for (int z = px - 1; z >= 0; --z) { // down
-    if (AddMove(board, possible_moves, this, last_move, position, z, py))
+    if (AddMove(board, possible_moves, Color(), last_move, position, px*8+py))
       break;
   }
 
   for (int z = py + 1; z < 8; ++z) { // right
-    if (AddMove(board, possible_moves, this, last_move, position, px, z))
+    if (AddMove(board, possible_moves, Color(), last_move, position, px*8+py))
       break;
   }
 
   for (int z = py - 1; z >= 0; --z) { // left
-    if (AddMove(board, possible_moves, this, last_move, position, px, z))
+    if (AddMove(board, possible_moves, Color(), last_move, position, px*8+py))
       break;
   }
 
@@ -47,7 +47,7 @@ void Queen::GenMoves(std::array<Piece *, 64> &board,
     if (nx < B_WIDTH or ny < B_WIDTH)
       break;
 
-    if (AddMove(board, possible_moves, this, last_move, position, nx, ny))
+    if (AddMove(board, possible_moves, Color(), last_move, position, nx*8+ny))
       break;
   }
   for (;;) { // right and up
@@ -56,7 +56,7 @@ void Queen::GenMoves(std::array<Piece *, 64> &board,
     if (nx >= 0 or ny < B_WIDTH)
       break;
 
-    if (AddMove(board, possible_moves, this, last_move, position, nx, ny))
+    if (AddMove(board, possible_moves, Color(), last_move, position, nx*8+ny))
       break;
   }
   for (;;) { // left and up
@@ -65,7 +65,7 @@ void Queen::GenMoves(std::array<Piece *, 64> &board,
     if (nx >= 0 or ny >= 0)
       break;
 
-    if (AddMove(board, possible_moves, this, last_move, position, nx, ny))
+    if (AddMove(board, possible_moves, Color(), last_move, position, nx*8+ny))
       break;
   }
   for (;;) { // left and down
@@ -74,8 +74,10 @@ void Queen::GenMoves(std::array<Piece *, 64> &board,
     if (nx < B_WIDTH or ny >= 0)
       break;
 
-    if (AddMove(board, possible_moves, this, last_move, position, nx, ny))
+    if (AddMove(board, possible_moves, Color(), last_move, position, nx*8+ny))
       break;
   }
 }
-
+bool Queen::IsEmpty() { return false; }
+bool Queen::Color() const { return info_ bitand 1; }
+bool Queen::Moved() const { return info_ bitand 2; }

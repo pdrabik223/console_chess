@@ -15,23 +15,25 @@ void Rook::GenMoves(std::array<Piece *, 64> &board, const unsigned int position,
   possible_moves.fill({0, 0});
 
   for (int z = px + 1; z < 8; ++z) { // up
-    if (AddMove(board, possible_moves, this, last_move, position, z, py))
+    if (AddMove(board, possible_moves, Color(), last_move, position, z*8+py))
       break;
   }
 
   for (int z = px - 1; z >= 0; --z) { // down
-    if (AddMove(board, possible_moves, this, last_move, position, z, py))
+    if (AddMove(board, possible_moves, Color(), last_move, position, z*8+py))
       break;
   }
 
   for (int z = py + 1; z < 8; ++z) { // right
-    if (AddMove(board, possible_moves, this, last_move, position, px, z))
+    if (AddMove(board, possible_moves, Color(), last_move, position, px*8+z))
       break;
   }
 
   for (int z = py - 1; z >= 0; --z) { // left
-    if (AddMove(board, possible_moves, this, last_move, position, px, z))
+    if (AddMove(board, possible_moves, Color(), last_move, position, px*8+z))
       break;
   }
 }
-
+bool Rook::IsEmpty() { return false; }
+bool Rook::Color() const { return info_ bitand 1; }
+bool Rook::Moved() const { return info_ bitand 2; }
