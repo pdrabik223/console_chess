@@ -3,6 +3,7 @@
 //
 
 #include "admin.h"
+#include <cassert>
 
 Admin::Admin() : game_(), console_handle_() {
 
@@ -15,16 +16,13 @@ Admin::Admin() : game_(), console_handle_() {
 
   std::string random_position = "";
   random_position.push_back((char)('a' + position_x));
-  random_position+= std::to_string(position_y);
+  random_position += std::to_string(position_y);
 
-  int piece = rand() % 8 + 1;
-  int color = rand() % 2;
-  if (color == 0)
-    color--;
+  int piece = rand() % 12 + 1;
+
 
   std::string random_piece;
-
-  switch (piece * color) {
+  switch (piece) {
   case 1:
     random_piece = "p";
     break;
@@ -34,52 +32,43 @@ Admin::Admin() : game_(), console_handle_() {
   case 3:
     random_piece = "b";
     break;
-
   case 4:
     random_piece = "r";
-
     break;
   case 5:
     random_piece = "q";
-
     break;
   case 6:
     random_piece = "k";
-
     break;
-  case -1:
+  case 7:
     random_piece = "P";
-
     break;
-
-  case -2:
+  case 8:
     random_piece = "N";
-
     break;
-  case -3:
+  case 9:
     random_piece = "B";
-
     break;
-  case -4:
+  case 10:
     random_piece = "R";
-
     break;
-  case -5:
+  case 11:
     random_piece = "Q";
-
     break;
-  case -6:
+  case 12:
     random_piece = "K";
-
     break;
+  default:
+    assert(false);
   }
 
   std::vector<std::string> to_start_with;
-  std::string complete_message =  random_position + " " + random_piece;
+  std::string complete_message = random_position + " " + random_piece;
   std::string add = "add " + complete_message;
   std::string show = complete_message;
 
- // to_start_with.push_back("del all");
+  // to_start_with.push_back("del all");
   to_start_with.push_back(add);
   to_start_with.push_back(show);
 
