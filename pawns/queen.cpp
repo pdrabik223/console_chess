@@ -17,64 +17,78 @@ void Queen::GenMoves(std::array<Piece *, 64> &board,
   possible_moves.fill({0, 0});
 
   for (int z = px + 1; z < 8; ++z) { // up
-    if (AddMove(board, possible_moves, Color(), last_move, position, px*8+py))
+    if (AddMove(board, possible_moves, Color(), last_move, position,
+                z * 8 + py))
       break;
   }
 
   for (int z = px - 1; z >= 0; --z) { // down
-    if (AddMove(board, possible_moves, Color(), last_move, position, px*8+py))
+    if (AddMove(board, possible_moves, Color(), last_move, position,
+                z * 8 + py))
       break;
   }
 
   for (int z = py + 1; z < 8; ++z) { // right
-    if (AddMove(board, possible_moves, Color(), last_move, position, px*8+py))
+    if (AddMove(board, possible_moves, Color(), last_move, position,
+                px * 8 + z))
       break;
   }
 
   for (int z = py - 1; z >= 0; --z) { // left
-    if (AddMove(board, possible_moves, Color(), last_move, position, px*8+py))
+    if (AddMove(board, possible_moves, Color(), last_move, position,
+                px * 8 + z))
       break;
   }
 
   /// the temporary Value
   int nx = px;
-
   int ny = py;
 
   for (;;) { // right and down
     ++nx;
     ++ny;
-    if (nx < B_WIDTH or ny < B_WIDTH)
+    if (nx == B_WIDTH or ny == B_WIDTH)
       break;
 
-    if (AddMove(board, possible_moves, Color(), last_move, position, nx*8+ny))
+    if (AddMove(board, possible_moves, Color(), last_move, position,
+                nx * 8 + ny))
       break;
   }
+  nx = px;
+  ny = py;
   for (;;) { // right and up
     --nx;
     ++ny;
-    if (nx >= 0 or ny < B_WIDTH)
+    if (nx < 0 or ny == B_WIDTH)
       break;
 
-    if (AddMove(board, possible_moves, Color(), last_move, position, nx*8+ny))
+    if (AddMove(board, possible_moves, Color(), last_move, position,
+                nx * 8 + ny))
+
       break;
   }
+  nx = px;
+  ny = py;
   for (;;) { // left and up
     --nx;
     --ny;
-    if (nx >= 0 or ny >= 0)
+    if (nx < 0 or ny < 0)
       break;
 
-    if (AddMove(board, possible_moves, Color(), last_move, position, nx*8+ny))
+    if (AddMove(board, possible_moves, Color(), last_move, position,
+                nx * 8 + ny))
       break;
   }
+  nx = px;
+  ny = py;
   for (;;) { // left and down
     ++nx;
     --ny;
-    if (nx < B_WIDTH or ny >= 0)
+    if (nx == B_WIDTH or ny < 0)
       break;
 
-    if (AddMove(board, possible_moves, Color(), last_move, position, nx*8+ny))
+    if (AddMove(board, possible_moves, Color(), last_move, position,
+                nx * 8 + ny))
       break;
   }
 }
