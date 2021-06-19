@@ -43,8 +43,7 @@ public:
   void GenAllPossibleMoves(bool color, std::vector<Move> &possible_moves);
 
   std::array<Piece *, 64> plane_;
-
-protected:
+  unsigned move_counter_;
 private:
   bool white_king_in_check_;
   bool black_king_in_check_;

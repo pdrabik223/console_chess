@@ -10,8 +10,9 @@ Admin::Admin() : game_(), console_handle_() {
 
   console_handle_.UpdateDisplay(game_);
   full_command user_input;
+
   std::vector<std::string> commands;
-  commands.emplace_back("show all");
+  commands.emplace_back("c7");
 
   while (1 < 2) {
     console_handle_.UpdateScreen();
@@ -63,6 +64,7 @@ Admin::Admin() : game_(), console_handle_() {
 
       break;
     case SHOW_MOVES:
+
       ShowPossible(user_input.data[0]);
 
       break;

@@ -64,23 +64,21 @@ double ChessBoard::EvaluatePosition() {
 
   for (int i = 0; i < 64; i++) {
 
-
-
     if (plane_[i]->Color()) {
 
-    white_move_buffer.reserve( white_move_buffer.size() + 27);
+      white_move_buffer.reserve(white_move_buffer.size() + 27);
       plane_[i]->GenMoves(plane_, i, white_move_buffer);
 
     } else {
-      black_move_buffer.reserve( black_move_buffer.size() + 27);
+      black_move_buffer.reserve(black_move_buffer.size() + 27);
 
       plane_[i]->GenMoves(plane_, i, black_move_buffer);
     }
 
     eva += plane_[i]->Value();
   }
-  eva+= black_move_buffer.size() * weight_of_move;
-  eva-= black_move_buffer.size() * weight_of_move;
+  eva += white_move_buffer.size() * weight_of_move;
+  eva -= black_move_buffer.size() * weight_of_move;
 
   return eva;
 }
@@ -88,15 +86,15 @@ double ChessBoard::EvaluatePosition() {
 Piece &ChessBoard::GetElement(unsigned int position) {
   return *plane_[position];
 }
+
 void ChessBoard::DoMove(const Move &target) {
 
-  *plane_[target.to_] = *plane_[target.from_];
+  plane_[target.to_] = plane_[target.from_]->Clone();
   plane_[target.to_]->SetMoved();
+
   delete plane_[target.from_];
   plane_[target.from_] = new Piece();
 }
-
-
 
 /// todo debate over it
 void ChessBoard::GenAllPossibleMoves(bool color,
@@ -108,7 +106,6 @@ void ChessBoard::GenAllPossibleMoves(bool color,
       possible_moves.reserve(possible_moves.size() + 27);
 
       plane_[i]->GenMoves(plane_, i, possible_moves);
-
     }
   }
 }
