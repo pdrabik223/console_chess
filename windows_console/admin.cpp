@@ -16,11 +16,16 @@ Admin::Admin() : game_(), console_handle_() {
     switch (user_input.comm) {
     case QUIT:
       goto quit;
-
+    case CLEAR:
+      console_handle_.ClearHighlight();
+      break;
     case MOVE:
 
-      game_[user_input.data[1]] = game_[user_input.data[0]];
-      game_[user_input.data[1]] = Piece();
+      game_[user_input.data[1]] = game_[user_input.data[0]]->Clone();
+
+      delete game_[user_input.data[0]];
+      game_[user_input.data[0]] = new Piece();
+
       console_handle_.UpdateDisplay(game_);
 
       break;
@@ -38,13 +43,13 @@ Admin::Admin() : game_(), console_handle_() {
       break;
     case DELETE_PIECE:
 
-      game_[user_input.data[0]] = Piece();
+      game_[user_input.data[0]] =new  Piece();
       console_handle_.UpdateDisplay(game_);
 
       break;
     case DELL_ALL:
       for (int i = 0; i < 64; i++)
-        game_[i] = Piece();
+        game_[i] =  new Piece();
 
       console_handle_.UpdateDisplay(game_);
 
@@ -91,7 +96,7 @@ void Admin::ShowPossible() {
   std::array<Move, 27> move_buffer;
   for (int i = 0; i < 64; i++) {
 
-    game_[i].GenMoves(game_.plane_, i, move_buffer);
+    game_.GetElement(i).GenMoves(game_.plane_, i, move_buffer);
     for (auto m : move_buffer)
       std::cout << (std::string)m;
   }
@@ -100,29 +105,29 @@ void Admin::ShowPossible() {
 void Admin::AddPiece(full_command input) {
 
   switch (input.data[1]) {
-  case 0:
-    game_[input.data[2]] = Pawn(input.data[0]);
+  case 'p':
+    game_[input.data[0]] = new Pawn(input.data[2]);
     break;
-  case 1:
-    game_[input.data[2]] = Night(input.data[0]);
+  case 'n':
+    game_[input.data[0]] = new Night(input.data[2]);
     break;
-  case 2:
-    game_[input.data[2]] = Bishop(input.data[0]);
+  case 'b':
+    game_[input.data[0]] = new Bishop(input.data[2]);
     break;
-  case 3:
-    game_[input.data[2]] = Rook(input.data[0]);
+  case 'r':
+    game_[input.data[0]] = new Rook(input.data[2]);
     break;
-  case 4:
-    game_[input.data[2]] = Queen(input.data[0]);
+  case 'q':
+    game_[input.data[0]] = new Queen(input.data[2]);
     break;
-  case 5:
-    game_[input.data[2]] = King(input.data[0]);
+  case 'k':
+    game_[input.data[0]] = new King(input.data[2]);
     break;
   }
 }
 void Admin::ShowPossible(int position) {
   std::array<Move, 27> move_buffer;
-  game_[position].GenMoves(game_.plane_, position, move_buffer);
+  game_.GetElement(position).GenMoves(game_.plane_, position, move_buffer);
   for (auto m : move_buffer) {
     std::cout << (std::string)m;
     console_handle_.SetBackgroundColor(m.to_ / 8, m.to_ % 8, col::LIGHT_AQUA);

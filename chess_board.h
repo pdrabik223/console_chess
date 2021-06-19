@@ -31,7 +31,8 @@ public:
   static unsigned Size();
 
   Piece &GetElement(unsigned x, unsigned y);
-  Piece &operator[](unsigned position);
+  Piece &GetElement(unsigned position);
+  Piece *& operator[](unsigned position);
 
   double Evaluate();
   void ShowInConsole();

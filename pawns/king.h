@@ -30,6 +30,8 @@ public:
       return 'K';
   }
 
+  virtual King *Clone(){return new King(* this);};
+
   void GenMoves(std::array<Piece *, 64> &board, unsigned position,
                 std::array<Move, 27> &possible_moves) override;
 };

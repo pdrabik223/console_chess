@@ -20,6 +20,7 @@ enum Task {
   SHOW_MOVES,
   SHOW_ALL,
   NONE,
+  CLEAR,
   HELP // ok
 
 };

@@ -35,4 +35,3 @@ void Rook::GenMoves(std::array<Piece *, 64> &board, const unsigned int position,
   }
 }
 
-

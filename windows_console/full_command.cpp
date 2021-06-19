@@ -11,7 +11,7 @@ void EraseTillSpace(std::string &line) {
   line.erase(line.begin());
 }
 
-int ChessToInt(std::string coord) {
+int ChessToInt(std::string &coord) {
 
   if (coord[0] == ' ')
     coord.erase(0, 1);
@@ -23,32 +23,36 @@ int ChessToInt(std::string coord) {
 
   switch (cut[0]) {
   case 'a':
-    return (B_HEIGHT - x) * B_WIDTH + 0;
+    return ( x - 1 ) * B_WIDTH + 0;
   case 'b':
-    return (B_HEIGHT - x) * B_WIDTH + 1;
+    return ( x - 1 )  * B_WIDTH + 1;
   case 'c':
-    return (B_HEIGHT - x) * B_WIDTH + 2;
+    return ( x - 1 )  * B_WIDTH + 2;
   case 'd':
-    return (B_HEIGHT - x) * B_WIDTH + 3;
+    return ( x - 1 )  * B_WIDTH + 3;
   case 'e':
-    return (B_HEIGHT - x) * B_WIDTH + 4;
+    return ( x - 1 )  * B_WIDTH + 4;
   case 'f':
-    return (B_HEIGHT - x) * B_WIDTH + 5;
+    return ( x - 1 )  * B_WIDTH + 5;
   case 'g':
-    return (B_HEIGHT - x) * B_WIDTH + 6;
+    return ( x - 1 )  * B_WIDTH + 6;
   case 'h':
-    return (B_HEIGHT - x) * B_WIDTH + 7;
+    return ( x - 1 )  * B_WIDTH + 7;
   default:
     return -1;
   }
 }
 
-full_command Parse(std::string &line) {
+full_command
+Parse(std::string &line) {
 
   if (line == "help")
     return {HELP};
   if (line == "quit")
     return {QUIT};
+
+  if(line.substr(0,5) == "clear")
+    return {CLEAR};
 
   if (line.substr(0, 3) == "add") {
     line.erase(0, 3);
@@ -153,6 +157,9 @@ full_command Parse(std::string &line) {
 
     return {SHOW_MOVES, data};
   }
+
+
+
 
   if (line.substr(0, 4) == "move") {
     EraseTillSpace(line);

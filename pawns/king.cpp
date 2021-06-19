@@ -74,3 +74,4 @@ void King::GenMoves(std::array<Piece *, 64> &board, const unsigned position,
         board[CCord(nx, ny)]->Color() != Color())
       possible_moves[last_move++] = {position, CCord(nx, ny)};
 }
+

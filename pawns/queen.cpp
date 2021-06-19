@@ -78,3 +78,4 @@ void Queen::GenMoves(std::array<Piece *, 64> &board,
       break;
   }
 }
+

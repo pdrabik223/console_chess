@@ -25,6 +25,7 @@ public:
     else
       return 'R';
   }
+  virtual Rook *Clone(){return new Rook(* this);};
 
   void GenMoves(std::array<Piece *, 64> &board, const unsigned int position,
                 std::array<Move, 27> &possible_moves) override;

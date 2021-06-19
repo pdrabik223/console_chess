@@ -157,7 +157,6 @@ void Scml::UpdateScreen() {
   std::wcout << cc(col::WHITE, col::BLACK) << message_;
   previous_message_length_ = CountLines(message_);
   message_ = L"";
-
 }
 
 void Scml::UpdateDisplay(ChessBoard &board) {
@@ -192,10 +191,23 @@ std::string Scml::GetLine() {
   std::wcout << L">";
   getline(std::cin, input);
   SetConsoleCursorPosition(hc_, {0, (short)(9 + previous_message_length_)});
-  std::wcout << L"\r"
-             << L"                                               ";
+  std::wcout << L"\r" << L"                                               ";
 
   return input;
 }
 
 void Scml::SetMessage(const std::wstring &message) { message_ = message; }
+void Scml::ClearHighlight() {
+
+  col::Color background;
+  for (int y = 0; y < h_; y++) {
+
+    for (int x = 0; x < w_; x++) {
+      if (y % 2 == 0 xor x % 2 == 0)
+        background = col::GRAY;
+      else
+        background = col::WHITE;
+      buffer_[y][x].background_color = background;
+    }
+  }
+}

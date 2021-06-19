@@ -20,6 +20,8 @@ public:
       return -3.5;
   }
 
+  virtual Bishop *Clone(){return new Bishop(* this);};
+
   static bool Empty() { return false; }
 
   explicit operator char() const override {

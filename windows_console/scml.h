@@ -55,6 +55,8 @@ public:
 
   void SetMessage(const std::wstring &message);
 
+  void ClearHighlight();
+
 private:
 
   const unsigned w_ = 8;
@@ -66,7 +68,6 @@ private:
   std::wstring message_;
 
    unsigned previous_message_length_ = 0;
-
 };
 
 #endif // CONSOLE_CHESS_WINDOWS_CONSOLE_SCML_H_

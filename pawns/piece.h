@@ -47,6 +47,9 @@ public:
       GenMovesForBlack(board, position, possible_moves);
   };
 
+  virtual Piece *Clone(){return new Piece(* this);};
+
+
 protected:
   virtual void GenMovesForBlack(std::array<Piece *, 64> &board,
                                 const int position,

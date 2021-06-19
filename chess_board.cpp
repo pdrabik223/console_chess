@@ -50,8 +50,8 @@ ChessBoard &ChessBoard::operator=(const ChessBoard &other) {
     return *this;
 }
 
-Piece &ChessBoard::operator[](unsigned int position) {
-    return *plane_[position];
+Piece *&ChessBoard::operator[](unsigned int position) {
+    return plane_[position];
 }
 
 Piece &ChessBoard::GetElement(unsigned int x, unsigned int y) {
@@ -124,5 +124,6 @@ void ChessBoard::ShowInConsole() {
 
 }
 
-
-
+Piece &ChessBoard::GetElement(unsigned int position) {
+  return *plane_[position];
+}
