@@ -148,10 +148,14 @@ void Scml::UpdateScreen() {
 
   std::wcout << current_evaluation_;
   SetConsoleCursorPosition(hc_, {0, 9});
-  for (int i = 0; i < previous_message_length_; i++)
+  for (int i = 0; i <= previous_message_length_; i++)
     std::wcout
         << L"                                                               "
-           "                            \n";
+           "                                                                \n";
+
+
+
+
   SetConsoleCursorPosition(hc_, {0, 9});
 
   std::wcout << cc(col::WHITE, col::BLACK) << message_;
@@ -197,6 +201,7 @@ std::string Scml::GetLine() {
 }
 
 void Scml::SetMessage(const std::wstring &message) { message_ = message; }
+
 void Scml::ClearHighlight() {
 
   col::Color background;

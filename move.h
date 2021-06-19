@@ -7,18 +7,20 @@
 
 #include <string>
 
+
+
 class Move {
 public:
   Move() : from_(0), to_(0), evaluation_(0.0){};
 
-//  Move(int from, int to, double evaluation)\
-      : from_(from), to_(to), evaluation_(evaluation){};
 
   Move(unsigned from, unsigned to, double evaluation)
       : from_(from), to_(to), evaluation_(evaluation){};
 
- // Move(int from, int to) : from_(from), to_(to), evaluation_(0.0) {}
+
   Move(unsigned from, unsigned to) : from_(from), to_(to), evaluation_(0.0) {}
+
+  std::wstring IntToChess(unsigned position) const;
 
   /// \brief
   /// valid move is only that witch moves somewhere
@@ -36,6 +38,15 @@ public:
     return temp;
   }
 
+  explicit operator std::wstring() const {
+    std::wstring temp = L"from:\t";
+    temp += IntToChess(from_);
+    temp += L" to:\t";
+    temp += IntToChess(to_);
+    temp += L" evaluation:\t";
+    temp += std::to_wstring(evaluation_);
+    return temp;
+  }
   /// \note fields of the class are public!
   unsigned from_;
   unsigned to_;

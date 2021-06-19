@@ -43,19 +43,20 @@ Admin::Admin() : game_(), console_handle_() {
       break;
     case DELETE_PIECE:
 
-      game_[user_input.data[0]] =new  Piece();
+      game_[user_input.data[0]] = new Piece();
       console_handle_.UpdateDisplay(game_);
 
       break;
     case DELL_ALL:
       for (int i = 0; i < 64; i++)
-        game_[i] =  new Piece();
+        game_[i] = new Piece();
 
       console_handle_.UpdateDisplay(game_);
 
       break;
     case SHOW_MOVES:
       ShowPossible(user_input.data[0]);
+
       break;
     case SHOW_ALL:
       ShowPossible();
@@ -94,14 +95,22 @@ void Admin::Help() {
 void Admin::ShowPossible() {
 
   std::array<Move, 27> move_buffer;
+    std::wstring message = L"";
   for (int i = 0; i < 64; i++) {
 
     game_.GetElement(i).GenMoves(game_.plane_, i, move_buffer);
-    for (auto m : move_buffer)
-      std::cout << (std::string)m;
-  }
-}
 
+    for (auto &move : move_buffer) {
+      if (move) {
+        message += (std::wstring)move;
+        message += L"\n";
+        console_handle_.SetBackgroundColor(move.to_ / 8, move.to_ % 8,
+                                           col::LIGHT_AQUA);
+      }
+    }
+  }
+    console_handle_.SetMessage(message);
+}
 void Admin::AddPiece(full_command input) {
 
   switch (input.data[1]) {
@@ -126,10 +135,19 @@ void Admin::AddPiece(full_command input) {
   }
 }
 void Admin::ShowPossible(int position) {
+  console_handle_.SetBackgroundColor(position / 8, position % 8,
+                                     col::LIGHT_PURPLE);
   std::array<Move, 27> move_buffer;
+
   game_.GetElement(position).GenMoves(game_.plane_, position, move_buffer);
-  for (auto m : move_buffer) {
-    std::cout << (std::string)m;
-    console_handle_.SetBackgroundColor(m.to_ / 8, m.to_ % 8, col::LIGHT_AQUA);
+  std::wstring message;
+
+  for (auto &move : move_buffer) {
+    if (move) {
+      message += (std::wstring)move;
+      message += L"\n";
+      console_handle_.SetBackgroundColor(move.to_ / 8, move.to_ % 8, col::LIGHT_AQUA);
+    }
   }
+  console_handle_.SetMessage(message);
 }
