@@ -9,7 +9,12 @@ class Rook : public Piece {
 public:
   Rook() { info_ = P_BLACK; }
 
-  explicit Rook(char color) { info_ = color; }
+  explicit Rook(bool color) {
+    if (color)
+      info_ = 1;
+    else
+      info_ = 0;
+  }
 
   double Value() const override {
     if (Color())
@@ -17,7 +22,6 @@ public:
     else
       return -5;
   }
-  static bool Empty() { return false; }
 
   explicit operator char() const override {
     if (Color())
@@ -25,7 +29,7 @@ public:
     else
       return 'R';
   }
-  virtual Rook *Clone(){return new Rook(* this);};
+  virtual Rook *Clone() { return new Rook(*this); };
   bool IsEmpty() override;
   bool Color() const override;
   bool Moved() const override;

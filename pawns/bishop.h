@@ -11,7 +11,12 @@ class Bishop : public Piece {
 public:
   Bishop() { info_ = P_BLACK; }
 
-  explicit Bishop(char color) { info_ = color; }
+  explicit Bishop(bool color) {
+    if (color)
+      info_ = 1;
+    else
+      info_ = 0;
+  }
 
   Bishop(const Bishop &other) = default;
   double Value() const override {
@@ -21,14 +26,12 @@ public:
       return -3.5;
   }
 
-  virtual Bishop *Clone(){return new Bishop(* this);};
-
- bool Empty() { return false; }
- bool IsEmpty() override;
- bool Color() const override;
- bool Moved() const override;
- void SetMoved() override;
- explicit operator char() const override {
+  virtual Bishop *Clone() { return new Bishop(*this); };
+  bool IsEmpty() override;
+  bool Color() const override;
+  bool Moved() const override;
+  void SetMoved() override;
+  explicit operator char() const override {
     if (Color())
       return 'b';
     else

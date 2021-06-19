@@ -10,7 +10,12 @@ class Night : public Piece {
 public:
   Night() { info_ = P_BLACK; }
 
-  explicit Night(char color) { info_ = color; }
+  explicit Night(bool color) {
+    if (color)
+      info_ = 1;
+    else
+      info_ = 0;
+  }
 
   double Value() const override {
     if (Color())
@@ -20,8 +25,6 @@ public:
   }
 
   Night(const Night &other) = default;
-
-  static bool Empty() { return false; }
 
   explicit operator char() const override {
     if (Color())
@@ -37,7 +40,6 @@ public:
   bool Moved() const override { return info_ bitand 2; }
   void SetMoved() override;
   void GenMoves(std::array<Piece *, 64> &board, unsigned int position,
-                std::vector<Move> &possible_moves) override ;
-
+                std::vector<Move> &possible_moves) override;
 };
 #endif // CONSOLE_CHESS_PAWNS_NIGHT_H_

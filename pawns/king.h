@@ -11,7 +11,11 @@ class King : public Piece {
 public:
   King() { info_ = P_BLACK; }
 
-  explicit King(char color) { info_ = color; }
+  explicit King(bool color) {
+    if (color)
+      info_ = 1;
+    else
+      info_ = 0; }
 
   King(const King &other) = default;
 
@@ -21,8 +25,6 @@ public:
     else
       return -999;
   }
-
-  static bool Empty() { return false; }
 
   explicit operator char() const override {
     if (Color())

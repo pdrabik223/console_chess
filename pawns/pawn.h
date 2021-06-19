@@ -10,7 +10,12 @@ class Pawn : public Piece {
 public:
   Pawn() { info_ = P_BLACK; }
 
-  explicit Pawn(char color) { info_ = color; }
+  explicit Pawn(bool color) {
+    if (color)
+      info_ = 1;
+    else
+      info_ = 0;
+  }
 
   Pawn(const Pawn &other) = default;
 
@@ -20,8 +25,6 @@ public:
     else
       return -1;
   }
-
-  static bool Empty() { return false; }
 
   explicit operator char() const override {
     if (Color())

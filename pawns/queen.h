@@ -9,7 +9,12 @@ class Queen : public Piece {
 public:
   Queen() { info_ = P_BLACK; }
 
-  explicit Queen(char color) { info_ = color; }
+  explicit Queen(bool color) {
+    if (color)
+      info_ = 1;
+    else
+      info_ = 0;
+  }
 
   Queen(const Queen &other) = default;
 
@@ -19,8 +24,6 @@ public:
     else
       return -9;
   }
-
-  static bool Empty() { return false; }
 
   explicit operator char() const override {
     if (Color())

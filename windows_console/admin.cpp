@@ -12,7 +12,7 @@ Admin::Admin() : game_(), console_handle_() {
   full_command user_input;
 
   std::vector<std::string> commands;
-  commands.emplace_back("c7");
+ //   commands.emplace_back("c7");
 
   while (1 < 2) {
     console_handle_.UpdateScreen();
