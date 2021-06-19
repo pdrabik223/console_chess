@@ -3,6 +3,7 @@
 //
 
 #include "admin.h"
+#include <algorithm>
 #include <cassert>
 
 Admin::Admin() : game_(), console_handle_() {
@@ -19,7 +20,6 @@ Admin::Admin() : game_(), console_handle_() {
   random_position += std::to_string(position_y);
 
   int piece = rand() % 12 + 1;
-
 
   std::string random_piece;
   switch (piece) {
@@ -163,20 +163,33 @@ void Admin::Help() {
 
 void Admin::ShowPossible() {
 
-  std::vector<Move> move_buffer;
+  std::vector<Move> white_move_buffer;
+  game_.GenAllPossibleMoves(P_BLACK, white_move_buffer);
+    std::sort(white_move_buffer.begin(), white_move_buffer.end());
+
+
+  std::vector<Move> black_move_buffer;
+  game_.GenAllPossibleMoves(P_WHITE, black_move_buffer);
+  std::sort(black_move_buffer.begin(), black_move_buffer.end());
+
   std::wstring message = L"";
-  for (int i = 0; i < 64; i++) {
+  message += L" white moves count: ";
+  message += std::to_wstring(white_move_buffer.size());
+  message += L" \n";
+  for (auto &move : white_move_buffer) {
 
-    game_.GetElement(i).GenMoves(game_.plane_, i, move_buffer);
-
-    for (auto &move : move_buffer) {
-      if (move) {
         message += (std::wstring)move;
         message += L"\n";
-        console_handle_.SetBackgroundColor(move.to_ / 8, move.to_ % 8,
-                                           col::LIGHT_AQUA);
-      }
+
     }
+  message += L" black moves count: ";
+  message += std::to_wstring(black_move_buffer.size());
+  message += L" \n";
+  for (auto &move : black_move_buffer) {
+
+    message += (std::wstring)move;
+    message += L"\n";
+
   }
   console_handle_.SetMessage(message);
 }
@@ -210,14 +223,14 @@ void Admin::ShowPossible(int position) {
 
   game_.GetElement(position).GenMoves(game_.plane_, position, move_buffer);
   std::wstring message;
-
+  std::sort(move_buffer.begin(), move_buffer.end());
   for (auto &move : move_buffer) {
-    if (move) {
+
       message += (std::wstring)move;
       message += L"\n";
       console_handle_.SetBackgroundColor(move.to_ / 8, move.to_ % 8,
                                          col::LIGHT_AQUA);
-    }
+
   }
   console_handle_.SetMessage(message);
 }

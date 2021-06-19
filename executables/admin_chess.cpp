@@ -14,7 +14,7 @@ int main() {
 
   for (int i = 0; i < 20; i++) {
     Admin game;
-    std::this_thread::sleep_for(std::chrono::seconds(1));
+    std::this_thread::sleep_for(std::chrono::seconds(3));
   }
   return 0;
 }

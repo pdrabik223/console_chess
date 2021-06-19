@@ -7,16 +7,12 @@
 
 #include <string>
 
-
-
 class Move {
 public:
   Move() : from_(0), to_(0), evaluation_(0.0){};
 
-
   Move(unsigned from, unsigned to, double evaluation)
       : from_(from), to_(to), evaluation_(evaluation){};
-
 
   Move(unsigned from, unsigned to) : from_(from), to_(to), evaluation_(0.0) {}
 
@@ -27,6 +23,13 @@ public:
   /// \return true if the move can be made, note that it doesn't check if the
   /// move is inside board
   explicit operator bool() const { return from_ != to_; }
+
+  bool operator==(const Move &rhs) const;
+  bool operator!=(const Move &rhs) const;
+  bool operator<(const Move &rhs) const;
+  bool operator>(const Move &rhs) const;
+  bool operator<=(const Move &rhs) const;
+  bool operator>=(const Move &rhs) const;
 
   explicit operator std::string() const {
     std::string temp = "from:\t";
