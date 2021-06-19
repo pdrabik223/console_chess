@@ -27,6 +27,7 @@ public:
  bool IsEmpty() override;
  bool Color() const override;
  bool Moved() const override;
+ void SetMoved() override;
  explicit operator char() const override {
     if (Color())
       return 'b';

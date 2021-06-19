@@ -33,6 +33,8 @@ public:
 
   virtual bool Moved() const { return info_ bitand 2; }
 
+  virtual void SetMoved() { info_ |= 2;}
+
   virtual double Value() const { return 0.0; }
   ///
   /// \param board current state of chess board

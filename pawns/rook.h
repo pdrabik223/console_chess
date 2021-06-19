@@ -29,6 +29,7 @@ public:
   bool IsEmpty() override;
   bool Color() const override;
   bool Moved() const override;
+  void SetMoved() override;
   void GenMoves(std::array<Piece *, 64> &board, unsigned int position,
                 std::vector<Move> &possible_moves) override;
 };

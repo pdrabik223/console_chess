@@ -36,6 +36,7 @@ public:
   bool IsEmpty() override;
   bool Color() const override;
   bool Moved() const override;
+  void SetMoved() override;
 
 protected:
   void GenMovesForBlack(std::array<Piece *, 64> &board, unsigned int position,

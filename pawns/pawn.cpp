@@ -57,3 +57,4 @@ void Pawn::GenMovesForWhite(std::array<Piece *, 64> &board,
 bool Pawn::IsEmpty() { return false; }
 bool Pawn::Color() const { return info_ bitand 1; }
 bool Pawn::Moved() const { return info_ bitand 2; }
+void Pawn::SetMoved() { info_ |=  2; }

@@ -88,3 +88,4 @@ void Queen::GenMoves(std::array<Piece *, 64> &board,
 bool Queen::IsEmpty() { return false; }
 bool Queen::Color() const { return info_ bitand 1; }
 bool Queen::Moved() const { return info_ bitand 2; }
+void Queen::SetMoved() { info_ |= 2; }

@@ -35,7 +35,7 @@ public:
   bool IsEmpty() override { return false; }
   bool Color() const override { return info_ bitand 1; }
   bool Moved() const override { return info_ bitand 2; }
-
+  void SetMoved() override;
   void GenMoves(std::array<Piece *, 64> &board, unsigned int position,
                 std::vector<Move> &possible_moves) override ;
 

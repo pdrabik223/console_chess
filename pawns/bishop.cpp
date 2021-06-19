@@ -65,3 +65,4 @@ void Bishop::GenMoves(std::array<Piece *, 64> &board,
 bool Bishop::IsEmpty() { return false; }
 bool Bishop::Color() const { return info_ bitand 1; }
 bool Bishop::Moved() const { return info_ bitand 2; }
+void Bishop::SetMoved() { info_ |= 2; }

@@ -38,6 +38,8 @@ public:
   void DoMove(const Move &target);
   double EvaluatePosition();
 
+  void EvaluateMove(Move& target);
+
   void GenAllPossibleMoves(bool color, std::vector<Move> &possible_moves);
 
   std::array<Piece *, 64> plane_;

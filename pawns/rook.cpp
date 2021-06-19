@@ -38,3 +38,4 @@ void Rook::GenMoves(std::array<Piece *, 64> &board, unsigned int position,
 bool Rook::IsEmpty() { return false; }
 bool Rook::Color() const { return info_ bitand 1; }
 bool Rook::Moved() const { return info_ bitand 2; }
+void Rook::SetMoved() { info_ |= 2; }

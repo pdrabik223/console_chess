@@ -91,6 +91,7 @@ Piece &ChessBoard::GetElement(unsigned int position) {
 void ChessBoard::DoMove(const Move &target) {
 
   *plane_[target.to_] = *plane_[target.from_];
+  plane_[target.to_]->SetMoved();
   delete plane_[target.from_];
   plane_[target.from_] = new Piece();
 }
@@ -110,4 +111,9 @@ void ChessBoard::GenAllPossibleMoves(bool color,
 
     }
   }
+}
+void ChessBoard::EvaluateMove(Move &target) {
+  auto temp_board(*this);
+  temp_board.DoMove(target);
+  target.evaluation_ = temp_board.EvaluatePosition();
 }

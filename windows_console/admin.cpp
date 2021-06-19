@@ -10,11 +10,17 @@ Admin::Admin() : game_(), console_handle_() {
 
   console_handle_.UpdateDisplay(game_);
   full_command user_input;
-
+  std::vector<std::string> commands;
+  commands.emplace_back("show all");
 
   while (1 < 2) {
     console_handle_.UpdateScreen();
-    user_input.FromString(console_handle_.GetLine());
+    if (!commands.empty()) {
+      user_input.FromString(commands.front());
+      commands.erase(commands.begin());
+    } else
+      user_input.FromString(console_handle_.GetLine());
+
     switch (user_input.comm) {
     case QUIT:
       goto quit;
@@ -98,10 +104,16 @@ void Admin::ShowPossible() {
 
   std::vector<Move> white_move_buffer;
   game_.GenAllPossibleMoves(P_WHITE, white_move_buffer);
+  for (auto &i : white_move_buffer)
+    game_.EvaluateMove(i);
+
   std::sort(white_move_buffer.begin(), white_move_buffer.end());
 
   std::vector<Move> black_move_buffer;
   game_.GenAllPossibleMoves(P_BLACK, black_move_buffer);
+  for (auto &i : black_move_buffer)
+    game_.EvaluateMove(i);
+
   std::sort(black_move_buffer.begin(), black_move_buffer.end());
 
   std::wstring message = L"";
@@ -152,6 +164,9 @@ void Admin::ShowPossible(int position) {
   std::vector<Move> move_buffer;
 
   game_.GetElement(position).GenMoves(game_.plane_, position, move_buffer);
+  for (auto &i : move_buffer)
+    game_.EvaluateMove(i);
+
   std::wstring message;
   std::sort(move_buffer.begin(), move_buffer.end());
   for (auto &move : move_buffer) {

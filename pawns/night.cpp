@@ -81,4 +81,4 @@ void Night::GenMoves(std::array<Piece *, 64> &board,
         board[CCord(nx, ny)]->Color() != Color())
       possible_moves.emplace_back(position, CCord(nx, ny));
 }
-
+void Night::SetMoved() { info_ |= 2; }
