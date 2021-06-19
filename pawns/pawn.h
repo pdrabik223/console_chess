@@ -29,7 +29,7 @@ public:
     else
       return 'P';
   }
-  virtual Pawn *Clone(){return new Pawn(* this);};
+  virtual Pawn *Clone() { return new Pawn(*this); };
 
   void GenMoves(std::array<Piece *, 64> &board, unsigned int position,
                 std::vector<Move> &possible_moves) override;
@@ -38,11 +38,9 @@ public:
   bool Moved() const override;
 
 protected:
-  void GenMovesForBlack(std::array<Piece *, 64> &board,
-                        const unsigned int position,
+  void GenMovesForBlack(std::array<Piece *, 64> &board, unsigned int position,
                         std::vector<Move> &possible_moves) override;
-  void GenMovesForWhite(std::array<Piece *, 64> &board,
-                        const unsigned int position,
+  void GenMovesForWhite(std::array<Piece *, 64> &board, unsigned int position,
                         std::vector<Move> &possible_moves) override;
 };
 

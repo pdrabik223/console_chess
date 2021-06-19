@@ -10,78 +10,11 @@ Admin::Admin() : game_(), console_handle_() {
 
   console_handle_.UpdateDisplay(game_);
   full_command user_input;
-  int counter = 0;
 
-  int position_x = rand() % 8;
-  int position_y = rand() % 8 + 1;
-
-  std::string random_position = "";
-  random_position.push_back((char)('a' + position_x));
-  random_position += std::to_string(position_y);
-
-  int piece = rand() % 12 + 1;
-
-  std::string random_piece;
-  switch (piece) {
-  case 1:
-    random_piece = "p";
-    break;
-  case 2:
-    random_piece = "n";
-    break;
-  case 3:
-    random_piece = "b";
-    break;
-  case 4:
-    random_piece = "r";
-    break;
-  case 5:
-    random_piece = "q";
-    break;
-  case 6:
-    random_piece = "k";
-    break;
-  case 7:
-    random_piece = "P";
-    break;
-  case 8:
-    random_piece = "N";
-    break;
-  case 9:
-    random_piece = "B";
-    break;
-  case 10:
-    random_piece = "R";
-    break;
-  case 11:
-    random_piece = "Q";
-    break;
-  case 12:
-    random_piece = "K";
-    break;
-  default:
-    assert(false);
-  }
-
-  std::vector<std::string> to_start_with;
-  std::string complete_message = random_position + " " + random_piece;
-  std::string add = "add " + complete_message;
-  std::string show = complete_message;
-
-  // to_start_with.push_back("del all");
-  to_start_with.push_back(add);
-  to_start_with.push_back(show);
 
   while (1 < 2) {
     console_handle_.UpdateScreen();
-
-    if (counter >= to_start_with.size()) {
-      goto quit;
-      user_input.FromString(console_handle_.GetLine());
-    } else {
-      user_input.FromString(to_start_with[counter]);
-      counter++;
-    }
+    user_input.FromString(console_handle_.GetLine());
     switch (user_input.comm) {
     case QUIT:
       goto quit;
@@ -164,12 +97,11 @@ void Admin::Help() {
 void Admin::ShowPossible() {
 
   std::vector<Move> white_move_buffer;
-  game_.GenAllPossibleMoves(P_BLACK, white_move_buffer);
-    std::sort(white_move_buffer.begin(), white_move_buffer.end());
-
+  game_.GenAllPossibleMoves(P_WHITE, white_move_buffer);
+  std::sort(white_move_buffer.begin(), white_move_buffer.end());
 
   std::vector<Move> black_move_buffer;
-  game_.GenAllPossibleMoves(P_WHITE, black_move_buffer);
+  game_.GenAllPossibleMoves(P_BLACK, black_move_buffer);
   std::sort(black_move_buffer.begin(), black_move_buffer.end());
 
   std::wstring message = L"";
@@ -178,10 +110,9 @@ void Admin::ShowPossible() {
   message += L" \n";
   for (auto &move : white_move_buffer) {
 
-        message += (std::wstring)move;
-        message += L"\n";
-
-    }
+    message += (std::wstring)move;
+    message += L"\n";
+  }
   message += L" black moves count: ";
   message += std::to_wstring(black_move_buffer.size());
   message += L" \n";
@@ -189,7 +120,6 @@ void Admin::ShowPossible() {
 
     message += (std::wstring)move;
     message += L"\n";
-
   }
   console_handle_.SetMessage(message);
 }
@@ -226,11 +156,10 @@ void Admin::ShowPossible(int position) {
   std::sort(move_buffer.begin(), move_buffer.end());
   for (auto &move : move_buffer) {
 
-      message += (std::wstring)move;
-      message += L"\n";
-      console_handle_.SetBackgroundColor(move.to_ / 8, move.to_ % 8,
-                                         col::LIGHT_AQUA);
-
+    message += (std::wstring)move;
+    message += L"\n";
+    console_handle_.SetBackgroundColor(move.to_ / 8, move.to_ % 8,
+                                       col::LIGHT_AQUA);
   }
   console_handle_.SetMessage(message);
 }

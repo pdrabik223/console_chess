@@ -17,8 +17,8 @@
 #define B_HEIGHT 8
 #define B_WIDTH 8
 
-#define P_BLACK 0
-#define P_WHITE 1
+#define P_BLACK false
+#define P_WHITE true
 
 /// \brief
 /// by default white start on bottom
