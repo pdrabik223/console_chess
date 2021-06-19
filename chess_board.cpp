@@ -7,7 +7,9 @@
 #include <Windows.h>
 #include <vector>
 
-ChessBoard::ChessBoard(const ChessBoard &other) { plane_ = other.plane_; }
+ChessBoard::ChessBoard(const ChessBoard &other) {
+  plane_ = other.plane_;
+  move_counter_ = other.move_counter_;}
 
 ChessBoard::ChessBoard() {
 
@@ -42,6 +44,7 @@ ChessBoard &ChessBoard::operator=(const ChessBoard &other) {
   if (&other == this)
     return *this;
   plane_ = other.plane_;
+  move_counter_ = other.move_counter_;
   return *this;
 }
 
@@ -59,10 +62,10 @@ double ChessBoard::EvaluatePosition() {
   double black_weight_of_move = 0.1;
 
   /// if next round is white to move we boost wite evaluation
-  if (move_counter_ % 2 == 0)
-    black_weight_of_move += 0.07;
-  else
-    white_weight_of_move += 0.07;
+//  if (move_counter_ % 2 == 0)
+//    black_weight_of_move += 0.07;
+//  else
+//    white_weight_of_move += 0.07;
 
   std::vector<Move> white_move_buffer;
   std::vector<Move> black_move_buffer;
@@ -97,7 +100,7 @@ void ChessBoard::DoMove(const Move &target) {
   plane_[target.to_] = plane_[target.from_]->Clone();
   plane_[target.to_]->SetMoved();
 
-  delete plane_[target.from_];
+  //delete plane_[target.from_];
   plane_[target.from_] = new Piece();
   move_counter_++;
 }

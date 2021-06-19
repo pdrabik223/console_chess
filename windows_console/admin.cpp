@@ -83,7 +83,6 @@ Admin::Admin() : game_(), console_handle_() {
     case MINMAX_ALL:
       MinMaxAll(user_input.data[1], user_input.data[0]);
       break;
-
     }
   }
 
@@ -131,6 +130,7 @@ void Admin::ShowPossible() {
   message += L" white moves count: ";
   message += std::to_wstring(white_move_buffer.size());
   message += L" \n";
+
   for (auto &move : white_move_buffer) {
 
     message += (std::wstring)move;
@@ -139,6 +139,7 @@ void Admin::ShowPossible() {
   message += L" black moves count: ";
   message += std::to_wstring(black_move_buffer.size());
   message += L" \n";
+
   for (auto &move : black_move_buffer) {
 
     message += (std::wstring)move;
@@ -180,7 +181,8 @@ void Admin::ShowPossible(int position) {
 
   std::wstring message;
   std::sort(move_buffer.begin(), move_buffer.end());
-  for (auto &move : move_buffer) {
+
+  for (auto &move : move_buffer){
 
     message += (std::wstring)move;
     message += L"\n";
@@ -199,12 +201,16 @@ void Admin::MinMax(int depth, int position) {
   game_.GetElement(position).GenMoves(game_.plane_, position, move_buffer);
 
   for (auto &i : move_buffer)
-    game_.MinMax(i,depth,game_.GetElement(position).Color());
-  double elapsed_time = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - t_1).count();
+  i.evaluation_ =   game_.MinMax(i, depth, game_.GetElement(position).Color());
+
+
+  double elapsed_time = std::chrono::duration_cast<std::chrono::milliseconds>(
+                            std::chrono::steady_clock::now() - t_1)
+                            .count();
 
   std::wstring message = L"elapsed time: ";
   message += std::to_wstring(elapsed_time);
-  message+=L" ms\n";
+  message += L" ms\n";
 
   std::sort(move_buffer.begin(), move_buffer.end());
   for (auto &move : move_buffer) {
@@ -223,15 +229,15 @@ void Admin::MinMaxAll(int depth, bool color) {
   game_.GenAllPossibleMoves(color, move_buffer);
 
   for (auto &i : move_buffer)
-    game_.MinMax(i,depth,color);
+    i.evaluation_ =  game_.MinMax(i, depth, color);
 
-
-  double elapsed_time = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - t_1).count();
+  double elapsed_time = std::chrono::duration_cast<std::chrono::milliseconds>(
+                            std::chrono::steady_clock::now() - t_1)
+                            .count();
 
   std::wstring message = L"elapsed time: ";
   message += std::to_wstring(elapsed_time);
-  message+=L" ms\n";
-
+  message += L" ms\n";
 
   std::sort(move_buffer.begin(), move_buffer.end());
   for (auto &move : move_buffer) {
@@ -242,5 +248,4 @@ void Admin::MinMaxAll(int depth, bool color) {
                                        col::LIGHT_AQUA);
   }
   console_handle_.SetMessage(message);
-
 }

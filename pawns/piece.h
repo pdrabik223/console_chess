@@ -19,7 +19,7 @@
 class Piece {
 
 public:
-  Piece() : info_(P_BLACK) {}
+  Piece() : info_(0) {}
 
   Piece(const Piece &other) = default;
 
