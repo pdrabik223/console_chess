@@ -41,10 +41,7 @@ public:
   virtual void GenMoves(std::array<Piece *, 64> &board,
                         const unsigned int position,
                         std::array<Move, 27> &possible_moves) {
-    if (Color())
-      GenMovesForWhite(board, position, possible_moves);
-    else
-      GenMovesForBlack(board, position, possible_moves);
+                         possible_moves.fill({0, 0});
   };
 
   virtual Piece *Clone(){return new Piece(* this);};
@@ -52,13 +49,13 @@ public:
 
 protected:
   virtual void GenMovesForBlack(std::array<Piece *, 64> &board,
-                                const int position,
+                                const unsigned int position,
                                 std::array<Move, 27> &possible_moves) {
     possible_moves.fill({0, 0});
   };
 
   virtual void GenMovesForWhite(std::array<Piece *, 64> &board,
-                                const int position,
+                                const unsigned int position,
                                 std::array<Move, 27> &possible_moves) {
     possible_moves.fill({0, 0});
   };
