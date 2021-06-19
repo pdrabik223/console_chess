@@ -15,7 +15,8 @@ public:
   Admin();
 
 private:
-
+  void MinMaxAll(int depth, bool color);
+  void MinMax(int depth, int position);
   void Help();
   void ShowPossible();
   void ShowPossible(int position);

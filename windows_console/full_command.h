@@ -19,6 +19,8 @@ enum Task {
   //  i have 6 h of sleep to cath
   SHOW_MOVES,
   SHOW_ALL,
+  MINMAX,
+  MINMAX_ALL,
   NONE,
   CLEAR,
   HELP // ok

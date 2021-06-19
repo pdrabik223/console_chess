@@ -120,21 +120,42 @@ void ChessBoard::EvaluateMove(Move &target) {
   temp_board.DoMove(target);
   target.evaluation_ = temp_board.EvaluatePosition();
 }
+
 double ChessBoard::MinMax(Move target, int depth, bool color) {
+
   EvaluateMove(target);
   if (depth == 0)
     return target.evaluation_;
+
   if (color) {                    // for white
     if (target.evaluation_ > 900) // if we just  mated fucker
       return target.evaluation_;
     double current_value = -1000;
 
+    std::vector<Move> move_buffer;
+    GenAllPossibleMoves(P_WHITE, move_buffer);
 
+    for (auto &i : move_buffer) {
+      i.evaluation_ = MinMax(i, depth - 1, P_BLACK);
+      if (i.evaluation_ > current_value)
+        current_value = i.evaluation_;
+    }
+
+    return current_value;
 
   } else {                         // for black
     if (target.evaluation_ < -900) // same but with black
       return target.evaluation_;
 
+    std::vector<Move> move_buffer;
+    double current_value = 1000;
+    GenAllPossibleMoves(P_WHITE, move_buffer);
 
+    for (auto &i : move_buffer) {
+      i.evaluation_ = MinMax(i, depth - 1, P_WHITE);
+      if (i.evaluation_ < current_value)
+        current_value = i.evaluation_;
+    }
+    return current_value;
   }
 }

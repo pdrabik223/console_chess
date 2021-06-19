@@ -12,7 +12,7 @@ Admin::Admin() : game_(), console_handle_() {
   full_command user_input;
 
   std::vector<std::string> commands;
- //   commands.emplace_back("c7");
+  //   commands.emplace_back("c7");
 
   while (1 < 2) {
     console_handle_.UpdateScreen();
@@ -77,6 +77,13 @@ Admin::Admin() : game_(), console_handle_() {
 
     case NONE:
       break;
+    case MINMAX:
+      MinMax(user_input.data[1], user_input.data[0]);
+      break;
+    case MINMAX_ALL:
+      MinMaxAll(user_input.data[1], user_input.data[0]);
+      break;
+
     }
   }
 
@@ -99,7 +106,9 @@ void Admin::Help() {
       "                                  by the piece under [position]\n"
       "quit                            : quit the program\n"
       "move [from][to]                 : moves chosen by "
-      "[from] piece to square selected by [to] \n");
+      "[from] piece to square selected by [to] \n"
+      "minmax all [color][depth]       : minmax\n"
+      "minmax [position][depth]        : minmax but with target\n");
 }
 
 void Admin::ShowPossible() {
@@ -179,4 +188,59 @@ void Admin::ShowPossible(int position) {
                                        col::LIGHT_AQUA);
   }
   console_handle_.SetMessage(message);
+}
+void Admin::MinMax(int depth, int position) {
+
+  console_handle_.SetBackgroundColor(position / 8, position % 8,
+                                     col::LIGHT_PURPLE);
+  auto t_1 = std::chrono::steady_clock::now();
+
+  std::vector<Move> move_buffer;
+  game_.GetElement(position).GenMoves(game_.plane_, position, move_buffer);
+
+  for (auto &i : move_buffer)
+    game_.MinMax(i,depth,game_.GetElement(position).Color());
+  double elapsed_time = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - t_1).count();
+
+  std::wstring message = L"elapsed time: ";
+  message += std::to_wstring(elapsed_time);
+  message+=L" ms\n";
+
+  std::sort(move_buffer.begin(), move_buffer.end());
+  for (auto &move : move_buffer) {
+
+    message += (std::wstring)move;
+    message += L"\n";
+    console_handle_.SetBackgroundColor(move.to_ / 8, move.to_ % 8,
+                                       col::LIGHT_AQUA);
+  }
+  console_handle_.SetMessage(message);
+}
+void Admin::MinMaxAll(int depth, bool color) {
+
+  auto t_1 = std::chrono::steady_clock::now();
+  std::vector<Move> move_buffer;
+  game_.GenAllPossibleMoves(color, move_buffer);
+
+  for (auto &i : move_buffer)
+    game_.MinMax(i,depth,color);
+
+
+  double elapsed_time = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - t_1).count();
+
+  std::wstring message = L"elapsed time: ";
+  message += std::to_wstring(elapsed_time);
+  message+=L" ms\n";
+
+
+  std::sort(move_buffer.begin(), move_buffer.end());
+  for (auto &move : move_buffer) {
+
+    message += (std::wstring)move;
+    message += L"\n";
+    console_handle_.SetBackgroundColor(move.to_ / 8, move.to_ % 8,
+                                       col::LIGHT_AQUA);
+  }
+  console_handle_.SetMessage(message);
+
 }

@@ -23,35 +23,34 @@ int ChessToInt(std::string &coord) {
 
   switch (cut[0]) {
   case 'a':
-    return ( x - 1 ) * B_WIDTH + 0;
+    return (x - 1) * B_WIDTH + 0;
   case 'b':
-    return ( x - 1 )  * B_WIDTH + 1;
+    return (x - 1) * B_WIDTH + 1;
   case 'c':
-    return ( x - 1 )  * B_WIDTH + 2;
+    return (x - 1) * B_WIDTH + 2;
   case 'd':
-    return ( x - 1 )  * B_WIDTH + 3;
+    return (x - 1) * B_WIDTH + 3;
   case 'e':
-    return ( x - 1 )  * B_WIDTH + 4;
+    return (x - 1) * B_WIDTH + 4;
   case 'f':
-    return ( x - 1 )  * B_WIDTH + 5;
+    return (x - 1) * B_WIDTH + 5;
   case 'g':
-    return ( x - 1 )  * B_WIDTH + 6;
+    return (x - 1) * B_WIDTH + 6;
   case 'h':
-    return ( x - 1 )  * B_WIDTH + 7;
+    return (x - 1) * B_WIDTH + 7;
   default:
     return -1;
   }
 }
 
-full_command
-Parse(std::string &line) {
+full_command Parse(std::string &line) {
 
   if (line == "help")
     return {HELP};
   if (line == "quit")
     return {QUIT};
 
-  if(line.substr(0,5) == "clear")
+  if (line.substr(0, 5) == "clear")
     return {CLEAR};
 
   if (line.substr(0, 3) == "add") {
@@ -160,8 +159,34 @@ Parse(std::string &line) {
     return {SHOW_MOVES, data};
   }
 
+  if (line.substr(0, 6) == "minmax") {
+    EraseTillSpace(line);
+    full_command temp;
+    std::vector<int> data;
+
+    if (line == "all") {
+
+      temp.comm = MINMAX_ALL;
+      EraseTillSpace(line);
+      if (line[0] == 'b')
+        data.push_back(1);
+      else
+        data.push_back(0);
+
+    } else {
+      temp.comm = MINMAX;
+      data.push_back(ChessToInt(line));
+    }
+
+    EraseTillSpace(line);
+    data.push_back(std::stoi(line));
+    temp.data = data;
 
 
+    temp.data = data;
+
+    return temp;
+  }
 
   if (line.substr(0, 4) == "move") {
     EraseTillSpace(line);
