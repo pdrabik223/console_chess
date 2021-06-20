@@ -274,6 +274,10 @@ full_command Parse(std::string &line) {
     return {EPIC_COMPUTER_FIGHT, data};
   }
 
+  if(line.substr(0,4) == "load"){
+      return {LOAD};
+  }
+
   switch (line[0]) {
   case 'a':
   case 'b':

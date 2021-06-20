@@ -133,6 +133,7 @@ wchar_t ToUnicode(char piece_icon) {
   assert(false);
   return ';';
 }
+
 void Scml::UpdateScreen() {
 
   COORD c;
@@ -240,4 +241,3 @@ void Scml::ClearHighlight() {
   }
   message_ = L"";
 }
-

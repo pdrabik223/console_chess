@@ -32,6 +32,7 @@ private:
 
   ChessBoard game_;
   Scml console_handle_;
+  void Load();
 };
 
 #endif // CONSOLE_CHESS_WINDOWS_CONSOLE_ADMIN_H_

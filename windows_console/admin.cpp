@@ -30,14 +30,8 @@ Admin::Admin() : game_(), console_handle_() {
       console_handle_.ClearHighlight();
       break;
     case MOVE:
-
-      game_[user_input.data[1]] = game_[user_input.data[0]]->Clone();
-
-      delete game_[user_input.data[0]];
-      game_[user_input.data[0]] = new Piece();
-
+      game_.DoMove({(unsigned)user_input.data[0],(unsigned)user_input.data[1]});
       console_handle_.UpdateDisplay(game_);
-
       break;
     case ADD_PIECE:
 
@@ -62,12 +56,9 @@ Admin::Admin() : game_(), console_handle_() {
         game_[i] = new Piece();
 
       console_handle_.UpdateDisplay(game_);
-
       break;
     case SHOW_MOVES:
-
       ShowPossible(user_input.data[0]);
-
       break;
     case SHOW_ALL:
       ShowPossible();
@@ -76,7 +67,8 @@ Admin::Admin() : game_(), console_handle_() {
       Help();
       break;
 
-    case NONE:
+    case LOAD:
+      Load();
       break;
     case MINMAX:
       MinMax(user_input.data[1], user_input.data[0], 1);
@@ -93,6 +85,9 @@ Admin::Admin() : game_(), console_handle_() {
     case EPIC_COMPUTER_FIGHT:
       MakeEmFight(user_input.data);
       break;
+    case NONE:
+      break;
+
     }
   }
 
@@ -388,4 +383,9 @@ void Admin::DisplayBestMoves(std::vector<Move> &move_buffer, bool color) {
                                          col::LIGHT_AQUA);
     else return;
   }
+}
+
+void Admin::Load() {
+
+
 }

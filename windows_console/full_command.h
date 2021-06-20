@@ -25,6 +25,7 @@ enum Task {
   ALFA_BETA_MINMAX_ALL,
   NONE,
   CLEAR,
+  LOAD,
   EPIC_COMPUTER_FIGHT,
   HELP // ok
 
