@@ -244,10 +244,7 @@ Move Admin::MinMaxAll(int depth, bool color) {
   console_handle_.message_ += std::to_wstring(elapsed_time) + L" ms\n";
 
 
-  std::sort(move_buffer.begin(), move_buffer.end());
-  if (color)
-    std::reverse(move_buffer.begin(), move_buffer.end());
-  DisplayBestMoves(move_buffer, color);
+  DisplayBestMoves(move_buffer, color); // he sorts move_buffer
   return move_buffer.front();
 }
 
@@ -304,7 +301,7 @@ Move Admin::AlfaBetaMinMaxAll(int depth, bool color) {
   std::vector<Move> move_buffer;
   game_.GenAllPossibleMoves(color, move_buffer);
 
-//  DisplayMoves(move_buffer, color);
+  DisplayMoves(move_buffer, color);
 
   for (auto &i : move_buffer) {
     ChessBoard i_board(game_);
@@ -319,7 +316,6 @@ Move Admin::AlfaBetaMinMaxAll(int depth, bool color) {
   console_handle_.message_ = L"elapsed time: ";
   console_handle_.message_ += std::to_wstring(elapsed_time) + L" ms\n";
 
-  DisplayMoves(move_buffer, color);
   DisplayBestMoves(move_buffer, color); // he sorts move_buffer
   return move_buffer.front();
 

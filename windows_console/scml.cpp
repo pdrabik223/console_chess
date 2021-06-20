@@ -200,7 +200,7 @@ void Scml::UpdateDisplay(ChessBoard &board) {
   }
   current_evaluation_ = board.EvaluatePosition();
   current_move_ =  board.move_counter_;
-  message_ = {};
+//  message_ = {};
 }
 
 void Scml::SetBackgroundColor(unsigned int px, unsigned int py,
