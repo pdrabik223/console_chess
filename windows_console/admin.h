@@ -17,12 +17,18 @@ public:
 private:
   Move MinMaxAll(int depth, bool color);
   void MinMax(int depth, int position);
+
+  Move AlfaBetaMinMaxAll(int depth, bool color);
+  void AlfaBetaMinMax(int depth, int position);
+
   void Help();
   void ShowPossible();
   void ShowPossible(int position);
   void AddPiece(full_command input);
   void DisplayMoves( std::vector<Move> &move_buffer, bool color);
-  void MakeEmFight(int depth);
+  void DisplayBestMoves(std::vector<Move> &move_buffer, bool color);
+
+  void MakeEmFight(Task white_algorytm, int white_depth,Task black_algorytm, int black_depth);
 
   ChessBoard game_;
   Scml console_handle_;

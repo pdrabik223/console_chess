@@ -1,15 +1,25 @@
-//
-// Created by pc on 23.04.2021.
-//
-// todo if windows defined console output must change
-//
+
 #include "chess_board.h"
 #include <Windows.h>
 #include <vector>
 
+double &Max(double &x, double &y) {
+  if (x > y)
+    return x;
+  else
+    return y;
+}
+double &Min(double &x, double &y) {
+  if (x < y)
+    return x;
+  else
+    return y;
+}
+
 ChessBoard::ChessBoard(const ChessBoard &other) {
   plane_ = other.plane_;
-  move_counter_ = other.move_counter_;}
+  move_counter_ = other.move_counter_;
+}
 
 ChessBoard::ChessBoard() {
 
@@ -62,10 +72,10 @@ double ChessBoard::EvaluatePosition() {
   double black_weight_of_move = 0.1;
 
   /// if next round is white to move we boost wite evaluation
-//  if (move_counter_ % 2 == 0)
-//    black_weight_of_move += 0.07;
-//  else
-//    white_weight_of_move += 0.07;
+  //  if (move_counter_ % 2 == 0)
+  //    black_weight_of_move += 0.07;
+  //  else
+  //    white_weight_of_move += 0.07;
 
   std::vector<Move> white_move_buffer;
   std::vector<Move> black_move_buffer;
@@ -100,23 +110,21 @@ void ChessBoard::DoMove(const Move &target) {
   plane_[target.to_] = plane_[target.from_]->Clone();
   plane_[target.to_]->SetMoved();
 
-  //delete plane_[target.from_];
+  // delete plane_[target.from_];
   plane_[target.from_] = new Piece();
   move_counter_++;
 }
 
-
-void ChessBoard::TransposeChessboard(ChessBoard &new_board,const Move &target) {
+void ChessBoard::TransposeChessboard(ChessBoard &new_board,
+                                     const Move &target) {
 
   new_board[target.to_] = new_board[target.from_]->Clone();
   new_board[target.to_]->SetMoved();
 
-  //delete plane_[target.from_];
+  // delete plane_[target.from_];
   new_board[target.from_] = new Piece();
   new_board.move_counter_++;
-
 }
-
 
 /// todo debate over it
 void ChessBoard::GenAllPossibleMoves(bool color,
@@ -153,13 +161,13 @@ double ChessBoard::MinMax(ChessBoard &target, int depth, bool color) {
     std::vector<Move> move_buffer;
     GenAllPossibleMoves(P_WHITE, move_buffer);
 
-    for (auto &i : move_buffer) {
-      ChessBoard i_board(*this);
-      TransposeChessboard(i_board,i);
+    for (auto &move : move_buffer) {
+      ChessBoard m_board(*this);
+      TransposeChessboard(m_board, move);
 
-      i.evaluation_ = target.MinMax(i_board, depth - 1, P_BLACK);
-      if (i.evaluation_ > current_evaluation)
-        current_evaluation = i.evaluation_;
+      move.evaluation_ = target.MinMax(m_board, depth - 1, P_BLACK);
+
+      current_evaluation = Max(move.evaluation_, current_evaluation);
     }
 
     return current_evaluation;
@@ -173,14 +181,70 @@ double ChessBoard::MinMax(ChessBoard &target, int depth, bool color) {
 
     GenAllPossibleMoves(P_WHITE, move_buffer);
 
-    for (auto &i : move_buffer) {
-      ChessBoard i_board(*this);
-      TransposeChessboard(i_board,i);
+    for (auto &move : move_buffer) {
+      ChessBoard m_board(*this);
+      TransposeChessboard(m_board, move);
 
-      i.evaluation_ = target.MinMax(i_board, depth - 1, P_WHITE);
+      move.evaluation_ = target.MinMax(m_board, depth - 1, P_WHITE);
 
-      if (i.evaluation_ < current_evaluation)
-        current_evaluation = i.evaluation_;
+      current_evaluation = Min(move.evaluation_, current_evaluation);
+    }
+    return current_evaluation;
+  }
+}
+
+double ChessBoard::AlfaBetaMinMax(ChessBoard &target, int depth, double alfa,
+                                  double beta, bool color) {
+
+  double current_evaluation = EvaluatePosition();
+  if (depth == 0)
+    return current_evaluation;
+
+  if (color) {                    // for white
+    if (current_evaluation > 900) // if we just  mated fucker
+      return current_evaluation;
+
+    current_evaluation = -1000;
+
+    std::vector<Move> move_buffer;
+    GenAllPossibleMoves(P_WHITE, move_buffer);
+
+    for (auto &move : move_buffer) {
+      ChessBoard m_board(*this);
+      TransposeChessboard(m_board, move);
+
+      move.evaluation_ =
+          target.AlfaBetaMinMax(m_board, depth - 1, alfa, beta, P_BLACK);
+
+      current_evaluation = Max(move.evaluation_, current_evaluation);
+
+      if (current_evaluation >= beta)
+        break;
+
+      alfa = Max(current_evaluation, alfa);
+    }
+    return current_evaluation;
+  } else { // for black
+
+    if (current_evaluation < -900) // same but with black
+      return current_evaluation;
+
+    std::vector<Move> move_buffer;
+    current_evaluation = 1000;
+
+    GenAllPossibleMoves(P_WHITE, move_buffer);
+
+    for (auto &move : move_buffer) {
+      ChessBoard m_board(*this);
+      TransposeChessboard(m_board, move);
+
+      move.evaluation_ =
+          target.AlfaBetaMinMax(m_board, depth - 1, alfa, beta, P_WHITE);
+
+      current_evaluation = Min(move.evaluation_, current_evaluation);
+      if (current_evaluation <= alfa)
+        break;
+      beta = Min(beta, current_evaluation);
     }
     return current_evaluation;
   }

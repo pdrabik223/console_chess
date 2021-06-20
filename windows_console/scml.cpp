@@ -165,7 +165,7 @@ void Scml::UpdateScreen() {
   if(current_move_%2 == 0)
     std::wcout <<cc(col::BRIGHT_WHITE,col::GRAY)<<" "<< (current_move_/2) + 1;
   else  std::wcout <<cc(col::BLACK,col::GRAY)<<" "<< (current_move_/2) + 1;
-
+  std::wcout <<cc(col::WHITE,col::BLACK);
 
   SetConsoleCursorPosition(hc_, {0, 9});
   _CONSOLE_SCREEN_BUFFER_INFO info;
