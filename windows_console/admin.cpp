@@ -269,9 +269,9 @@ void Admin::MakeEmFight(Task white_algorytm, int white_depth,Task black_algorytm
       break;
     }
 
+    console_handle_.UpdateDisplay(game_);
     console_handle_.UpdateScreen();
     console_handle_.ClearHighlight();
-    console_handle_.UpdateDisplay(game_);
 
     if (game_.EvaluatePosition() > 900 )
       break;
@@ -288,11 +288,11 @@ void Admin::MakeEmFight(Task white_algorytm, int white_depth,Task black_algorytm
       break;
     }
 
+    console_handle_.UpdateDisplay(game_);
     console_handle_.UpdateScreen();
     console_handle_.ClearHighlight();
-    console_handle_.UpdateDisplay(game_);
 
-    if (game_.EvaluatePosition() > 900 )
+    if (game_.EvaluatePosition() < -900 )
       break;
 
 
@@ -304,12 +304,12 @@ Move Admin::AlfaBetaMinMaxAll(int depth, bool color) {
   std::vector<Move> move_buffer;
   game_.GenAllPossibleMoves(color, move_buffer);
 
-  DisplayMoves(move_buffer, color);
+//  DisplayMoves(move_buffer, color);
 
   for (auto &i : move_buffer) {
     ChessBoard i_board(game_);
     game_.TransposeChessboard(i_board, i);
-    i.evaluation_ = game_.AlfaBetaMinMax(i_board,-1000,1000, depth, color);
+    i.evaluation_ = game_.AlfaBetaMinMax(i_board,depth,-1000,1000, color);
   }
 
   double elapsed_time = std::chrono::duration_cast<std::chrono::milliseconds>(
@@ -319,12 +319,8 @@ Move Admin::AlfaBetaMinMaxAll(int depth, bool color) {
   console_handle_.message_ = L"elapsed time: ";
   console_handle_.message_ += std::to_wstring(elapsed_time) + L" ms\n";
 
-
-  std::sort(move_buffer.begin(), move_buffer.end());
-  if (color)
-    std::reverse(move_buffer.begin(), move_buffer.end());
-
-  DisplayBestMoves(move_buffer, color);
+  DisplayMoves(move_buffer, color);
+  DisplayBestMoves(move_buffer, color); // he sorts move_buffer
   return move_buffer.front();
 
 }
@@ -350,8 +346,7 @@ void Admin::AlfaBetaMinMax(int depth, int position) {
       .count();
 
   console_handle_.message_ = L"elapsed time: ";
-  console_handle_.message_ += std::to_wstring(elapsed_time);
-  console_handle_.message_ += L" ms\n";
+  console_handle_.message_ += std::to_wstring(elapsed_time) + L" ms\n";
 
   DisplayMoves(move_buffer, game_.GetElement(position).Color());
   DisplayBestMoves(move_buffer, game_.GetElement(position).Color());
@@ -372,7 +367,6 @@ void Admin::DisplayMoves(std::vector<Move> &move_buffer, bool color) {
      console_handle_.SetBackgroundColor(move.to_ / 8, move.to_ % 8, col::AQUA);
   }
 }
-
 
 void Admin::DisplayBestMoves(std::vector<Move> &move_buffer, bool color) {
   std::sort(move_buffer.begin(), move_buffer.end());
