@@ -50,6 +50,8 @@ public:
   /// white player moves when move_counter % 2 == 0
   unsigned move_counter_ = 0;
 
+  void LoadPosition(const std::string &path);
+
 private:
   bool white_king_in_check_;
   bool black_king_in_check_;

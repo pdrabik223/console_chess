@@ -1,6 +1,8 @@
 
 #include "chess_board.h"
 #include <Windows.h>
+#include <cassert>
+#include <fstream>
 #include <vector>
 
 double &Max(double &x, double &y) {
@@ -15,9 +17,11 @@ double &Min(double &x, double &y) {
   else
     return y;
 }
-double Abs(double x){
-  if(x < 0) return -x;
-  else return x;
+double Abs(double x) {
+  if (x < 0)
+    return -x;
+  else
+    return x;
 }
 
 ChessBoard::ChessBoard(const ChessBoard &other) {
@@ -156,11 +160,10 @@ double ChessBoard::MinMax(ChessBoard &target, int depth, bool color) {
   if (depth == 0)
     return current_evaluation;
 
-  if(Abs(current_evaluation) > 900)
+  if (Abs(current_evaluation) > 900)
     return current_evaluation;
 
-  if (color) {                    // for white
-
+  if (color) { // for white
 
     current_evaluation = -1000;
 
@@ -178,8 +181,7 @@ double ChessBoard::MinMax(ChessBoard &target, int depth, bool color) {
 
     return current_evaluation;
 
-  } else {                         // for black
-
+  } else { // for black
 
     std::vector<Move> move_buffer;
     current_evaluation = 1000;
@@ -253,4 +255,87 @@ double ChessBoard::AlfaBetaMinMax(ChessBoard &target, int depth, double alfa,
     }
     return current_evaluation;
   }
+}
+
+void ChessBoard::LoadPosition(const std::string &path) {
+
+  for(auto &i:plane_)
+    delete i;
+
+
+  std::ifstream file;
+  file.open(path);
+  std::string moves;
+  while (moves.substr(0, 4) != "[FEN")
+    getline(file, moves);
+  // ok example board state :
+  // [FEN "6k1/ppp2pp1/1q4b1/5rQp/8/1P6/PBP2PPP/3R2K1 w - - 0 1"]
+
+  moves.erase(0, 6); // remove [FEN "
+
+  int current_square = 0;
+  char input;
+
+  for (int i = 0; i < 8;) {
+
+    input = moves[0];
+    moves.erase(0,1);
+    if (input >= '1' and input <= '9') {
+      int j;
+      for (j = current_square; j< current_square + (int)(input - '0');j++)
+        plane_[j] = new Piece();
+      current_square = j;
+      continue;
+    }
+
+    switch (input) {
+    case 'p':
+      plane_[current_square++] = new Pawn(P_BLACK);
+      break;
+    case 'n':
+      plane_[current_square++] = new Night(P_BLACK);
+      break;
+    case 'b':
+      plane_[current_square++] = new Bishop(P_BLACK);
+      break;
+    case 'r':
+      plane_[current_square++] = new Rook(P_BLACK);
+      break;
+    case 'q':
+      plane_[current_square++] = new Queen(P_BLACK);
+      break;
+    case 'k':
+      plane_[current_square++] = new King(P_BLACK);
+      break;
+    case 'P':
+      plane_[current_square++] = new Pawn(P_WHITE);
+      break;
+    case 'N':
+      plane_[current_square++] = new Night(P_WHITE);
+      break;
+    case 'B':
+      plane_[current_square++] = new Bishop(P_WHITE);
+      break;
+    case 'R':
+      plane_[current_square++] = new Rook(P_WHITE);
+      break;
+    case 'Q':
+      plane_[current_square++] = new Queen(P_WHITE);
+      break;
+    case 'K':
+      plane_[current_square++] = new King(P_WHITE);
+      break;
+    case '/':
+      ++i;
+    break;
+    case ' ':
+      goto end;
+    default:
+      assert(false);
+    }
+    assert(current_square<64);
+  }
+end:
+
+  file.close();
 }

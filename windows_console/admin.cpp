@@ -69,6 +69,7 @@ Admin::Admin() : game_(), console_handle_() {
 
     case LOAD:
       Load();
+      console_handle_.UpdateDisplay(game_);
       break;
     case MINMAX:
       MinMax(user_input.data[1], user_input.data[0], 1);
@@ -322,6 +323,7 @@ Move Admin::AlfaBetaMinMaxAll(int depth, bool color, int threads) {
   console_handle_.message_ = L"elapsed time: ";
   console_handle_.message_ += std::to_wstring(elapsed_time) + L" ms\n";
 
+  DisplayMoves(move_buffer, color);
   DisplayBestMoves(move_buffer, color); // he sorts move_buffer
   return move_buffer.front();
 
@@ -385,7 +387,8 @@ void Admin::DisplayBestMoves(std::vector<Move> &move_buffer, bool color) {
   }
 }
 
+
 void Admin::Load() {
-
-
+std::string path = console_handle_.GetLine();
+game_.LoadPosition(path);
 }

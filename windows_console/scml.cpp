@@ -216,7 +216,7 @@ void Scml::SetTextColor(unsigned int px, unsigned int py, Color text) {
 std::string Scml::GetLine() {
   std::string input;
 
-  std::wcout << L">";
+  std::wcout << L"\r>";
   getline(std::cin, input);
   SetConsoleCursorPosition(hc_, {0, (short)(9 + previous_message_length_)});
   std::wcout << L"\r" << L"                                               ";
