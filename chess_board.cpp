@@ -105,6 +105,19 @@ void ChessBoard::DoMove(const Move &target) {
   move_counter_++;
 }
 
+
+void ChessBoard::TransposeChessboard(ChessBoard &new_board,const Move &target) {
+
+  new_board[target.to_] = new_board[target.from_]->Clone();
+  new_board[target.to_]->SetMoved();
+
+  //delete plane_[target.from_];
+  new_board[target.from_] = new Piece();
+  new_board.move_counter_++;
+
+}
+
+
 /// todo debate over it
 void ChessBoard::GenAllPossibleMoves(bool color,
                                      std::vector<Move> &possible_moves) {
@@ -118,47 +131,57 @@ void ChessBoard::GenAllPossibleMoves(bool color,
     }
   }
 }
+
 void ChessBoard::EvaluateMove(Move &target) {
   auto temp_board(*this);
   temp_board.DoMove(target);
   target.evaluation_ = temp_board.EvaluatePosition();
 }
 
-double ChessBoard::MinMax(Move target, int depth, bool color) {
+double ChessBoard::MinMax(ChessBoard &target, int depth, bool color) {
 
-  EvaluateMove(target);
+  double current_evaluation = EvaluatePosition();
   if (depth == 0)
-    return target.evaluation_;
+    return current_evaluation;
 
   if (color) {                    // for white
-    if (target.evaluation_ > 900) // if we just  mated fucker
-      return target.evaluation_;
-    double current_value = -1000;
+    if (current_evaluation > 900) // if we just  mated fucker
+      return current_evaluation;
+
+    current_evaluation = -1000;
 
     std::vector<Move> move_buffer;
     GenAllPossibleMoves(P_WHITE, move_buffer);
 
     for (auto &i : move_buffer) {
-      i.evaluation_ = MinMax(i, depth - 1, P_BLACK);
-      if (i.evaluation_ > current_value)
-        current_value = i.evaluation_;
+      ChessBoard i_board(*this);
+      TransposeChessboard(i_board,i);
+
+      i.evaluation_ = target.MinMax(i_board, depth - 1, P_BLACK);
+      if (i.evaluation_ > current_evaluation)
+        current_evaluation = i.evaluation_;
     }
 
-    return current_value;
+    return current_evaluation;
 
   } else {                         // for black
-    if (target.evaluation_ < -900) // same but with black
-      return target.evaluation_;
+    if (current_evaluation < -900) // same but with black
+      return current_evaluation;
 
     std::vector<Move> move_buffer;
-    double current_value = 1000;
+    current_evaluation = 1000;
+
     GenAllPossibleMoves(P_WHITE, move_buffer);
 
     for (auto &i : move_buffer) {
-      i.evaluation_ = MinMax(i, depth - 1, P_WHITE);
-      if (i.evaluation_ < current_value)
-        current_value = i.evaluation_;
+      ChessBoard i_board(*this);
+      TransposeChessboard(i_board,i);
+
+      i.evaluation_ = target.MinMax(i_board, depth - 1, P_WHITE);
+
+      if (i.evaluation_ < current_evaluation)
+        current_evaluation = i.evaluation_;
     }
-    return current_value;
+    return current_evaluation;
   }
 }

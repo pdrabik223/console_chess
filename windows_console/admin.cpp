@@ -121,31 +121,31 @@ void Admin::ShowPossible() {
 
   std::vector<Move> black_move_buffer;
   game_.GenAllPossibleMoves(P_BLACK, black_move_buffer);
+
   for (auto &i : black_move_buffer)
     game_.EvaluateMove(i);
 
   std::sort(black_move_buffer.begin(), black_move_buffer.end());
 
-  std::wstring message = L"";
-  message += L" white moves count: ";
-  message += std::to_wstring(white_move_buffer.size());
-  message += L" \n";
+  console_handle_.message_ += L" white moves count: ";
+  console_handle_.message_ += std::to_wstring(white_move_buffer.size());
+  console_handle_.message_ += L" \n";
 
   for (auto &move : white_move_buffer) {
 
-    message += (std::wstring)move;
-    message += L"\n";
+    console_handle_.message_ += (std::wstring)move;
+    console_handle_.message_ += L"\n";
   }
-  message += L" black moves count: ";
-  message += std::to_wstring(black_move_buffer.size());
-  message += L" \n";
+
+  console_handle_.message_ += L" black moves count: ";
+  console_handle_.message_ += std::to_wstring(black_move_buffer.size());
+  console_handle_.message_ += L" \n";
 
   for (auto &move : black_move_buffer) {
 
-    message += (std::wstring)move;
-    message += L"\n";
+    console_handle_.message_ += (std::wstring)move;
+    console_handle_.message_ += L"\n";
   }
-  console_handle_.SetMessage(message);
 }
 void Admin::AddPiece(full_command input) {
 
@@ -170,6 +170,7 @@ void Admin::AddPiece(full_command input) {
     break;
   }
 }
+
 void Admin::ShowPossible(int position) {
   console_handle_.SetBackgroundColor(position / 8, position % 8,
                                      col::LIGHT_PURPLE);
@@ -179,17 +180,7 @@ void Admin::ShowPossible(int position) {
   for (auto &i : move_buffer)
     game_.EvaluateMove(i);
 
-  std::wstring message;
-  std::sort(move_buffer.begin(), move_buffer.end());
-
-  for (auto &move : move_buffer){
-
-    message += (std::wstring)move;
-    message += L"\n";
-    console_handle_.SetBackgroundColor(move.to_ / 8, move.to_ % 8,
-                                       col::LIGHT_AQUA);
-  }
-  console_handle_.SetMessage(message);
+  DisplayMoves(move_buffer, game_.GetElement(position).Color());
 }
 void Admin::MinMax(int depth, int position) {
 
@@ -200,27 +191,22 @@ void Admin::MinMax(int depth, int position) {
   std::vector<Move> move_buffer;
   game_.GetElement(position).GenMoves(game_.plane_, position, move_buffer);
 
-  for (auto &i : move_buffer)
-  i.evaluation_ =   game_.MinMax(i, depth, game_.GetElement(position).Color());
-
+  for (auto &i : move_buffer) {
+    ChessBoard i_board(game_);
+    game_.TransposeChessboard(i_board, i);
+    i.evaluation_ =
+        game_.MinMax(i_board, depth, game_.GetElement(position).Color());
+  }
 
   double elapsed_time = std::chrono::duration_cast<std::chrono::milliseconds>(
                             std::chrono::steady_clock::now() - t_1)
                             .count();
 
-  std::wstring message = L"elapsed time: ";
-  message += std::to_wstring(elapsed_time);
-  message += L" ms\n";
+  console_handle_.message_ = L"elapsed time: ";
+  console_handle_.message_ += std::to_wstring(elapsed_time);
+  console_handle_.message_ += L" ms\n";
 
-  std::sort(move_buffer.begin(), move_buffer.end());
-  for (auto &move : move_buffer) {
-
-    message += (std::wstring)move;
-    message += L"\n";
-    console_handle_.SetBackgroundColor(move.to_ / 8, move.to_ % 8,
-                                       col::LIGHT_AQUA);
-  }
-  console_handle_.SetMessage(message);
+  DisplayMoves(move_buffer, game_.GetElement(position).Color());
 }
 void Admin::MinMaxAll(int depth, bool color) {
 
@@ -228,24 +214,37 @@ void Admin::MinMaxAll(int depth, bool color) {
   std::vector<Move> move_buffer;
   game_.GenAllPossibleMoves(color, move_buffer);
 
-  for (auto &i : move_buffer)
-    i.evaluation_ =  game_.MinMax(i, depth, color);
+  for (auto &i : move_buffer) {
+    ChessBoard i_board(game_);
+    game_.TransposeChessboard(i_board, i);
+    i.evaluation_ = game_.MinMax(i_board, depth, color);
+  }
 
   double elapsed_time = std::chrono::duration_cast<std::chrono::milliseconds>(
                             std::chrono::steady_clock::now() - t_1)
                             .count();
 
-  std::wstring message = L"elapsed time: ";
-  message += std::to_wstring(elapsed_time);
-  message += L" ms\n";
+  console_handle_.message_ = L"elapsed time: ";
+  console_handle_.message_ += std::to_wstring(elapsed_time) + L" ms\n";
+
+  DisplayMoves(move_buffer, color);
+}
+void Admin::DisplayMoves( std::vector<Move> &move_buffer, bool color) {
 
   std::sort(move_buffer.begin(), move_buffer.end());
+
+  if (color)
+    std::reverse(move_buffer.begin(), move_buffer.end());
+
   for (auto &move : move_buffer) {
 
-    message += (std::wstring)move;
-    message += L"\n";
-    console_handle_.SetBackgroundColor(move.to_ / 8, move.to_ % 8,
-                                       col::LIGHT_AQUA);
+    console_handle_.message_ += (std::wstring)move;
+    console_handle_.message_ += L"\n";
+
+    if (move == move_buffer.front())
+      console_handle_.SetBackgroundColor(move.to_ / 8, move.to_ % 8, col::LIGHT_AQUA);
+    else
+      console_handle_.SetBackgroundColor(move.to_ / 8, move.to_ % 8,
+                                         col::AQUA);
   }
-  console_handle_.SetMessage(message);
 }

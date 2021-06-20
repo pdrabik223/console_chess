@@ -21,6 +21,8 @@ private:
   void ShowPossible();
   void ShowPossible(int position);
   void AddPiece(full_command input);
+  void DisplayMoves( std::vector<Move> &move_buffer, bool color);
+
 
   ChessBoard game_;
   Scml console_handle_;

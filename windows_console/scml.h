@@ -43,10 +43,10 @@ public:
 
   ~Scml() {
     std::wcout << cc(col::WHITE, col::BLACK);
-  //  system("cls");
+    //  system("cls");
   }
 
-   std::string GetLine();
+  std::string GetLine();
 
   void SetPixel(unsigned px, unsigned py, icon new_pixel);
 
@@ -56,10 +56,10 @@ public:
   void SetMessage(const std::wstring &message);
 
   void ClearHighlight();
+  std::wstring message_;
 
-  private:
-
-  int CountLines( std::wstring &basic_string);
+private:
+  int CountLines(std::wstring &basic_string);
 
   const unsigned w_ = 8;
   const unsigned h_ = 8;
@@ -67,9 +67,8 @@ public:
   std::array<std::array<icon, 8>, 8> buffer_;
   double current_evaluation_;
   HANDLE hc_;
-  std::wstring message_;
 
-   unsigned previous_message_length_ = 0;
+  unsigned previous_message_length_ = 0;
 };
 
 #endif // CONSOLE_CHESS_WINDOWS_CONSOLE_SCML_H_

@@ -33,9 +33,11 @@ public:
   Piece *&operator[](unsigned position);
 
   void DoMove(const Move &target);
+  void TransposeChessboard(ChessBoard &output_board, const Move &target);
+
   double EvaluatePosition();
   void EvaluateMove(Move &target);
-  double MinMax(Move target, int depth, bool color);
+  double MinMax(ChessBoard &target, int depth, bool color);
 
   void GenAllPossibleMoves(bool color, std::vector<Move> &possible_moves);
 
