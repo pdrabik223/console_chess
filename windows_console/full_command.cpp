@@ -6,9 +6,11 @@
 
 void EraseTillSpace(std::string &line) {
 
-  while (line[0] != ' ')
+  while (line[0] != ' ' && !line.empty())
     line.erase(line.begin());
-  line.erase(line.begin());
+
+  if (!line.empty())
+    line.erase(line.begin());
 }
 
 int ChessToInt(std::string &coord) {
@@ -161,29 +163,33 @@ full_command Parse(std::string &line) {
 
   if (line.substr(0, 6) == "minmax") {
     EraseTillSpace(line);
+
     full_command temp;
     std::vector<int> data;
 
-    if (line == "all") {
+    if (line.substr(0, 3) == "all") {
 
       temp.comm = MINMAX_ALL;
+
       EraseTillSpace(line);
-      if (line[0] == 'b')
+
+      if (line.substr(0, 5) == "white")
         data.push_back(1);
-      else
+      else if (line.substr(0, 5) == "black")
         data.push_back(0);
+
+      EraseTillSpace(line);
+      data.push_back(std::stoi(line));
+      temp.data = data;
 
     } else {
       temp.comm = MINMAX;
       data.push_back(ChessToInt(line));
+
+      EraseTillSpace(line);
+      data.push_back(std::stoi(line));
+      temp.data = data;
     }
-
-    EraseTillSpace(line);
-    data.push_back(std::stoi(line));
-    temp.data = data;
-
-
-    temp.data = data;
 
     return temp;
   }
