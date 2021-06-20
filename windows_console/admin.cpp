@@ -218,6 +218,8 @@ Move Admin::MinMaxAll(int depth, bool color) {
   std::vector<Move> move_buffer;
   game_.GenAllPossibleMoves(color, move_buffer);
 
+  DisplayMoves(move_buffer, color);
+
   for (auto &i : move_buffer) {
     ChessBoard i_board(game_);
     game_.TransposeChessboard(i_board, i);
@@ -231,7 +233,12 @@ Move Admin::MinMaxAll(int depth, bool color) {
   console_handle_.message_ = L"elapsed time: ";
   console_handle_.message_ += std::to_wstring(elapsed_time) + L" ms\n";
 
-  DisplayMoves(move_buffer, color);
+
+  std::sort(move_buffer.begin(), move_buffer.end());
+
+  if (color)
+    std::reverse(move_buffer.begin(), move_buffer.end());
+
   return move_buffer.front();
 }
 void Admin::DisplayMoves(std::vector<Move> &move_buffer, bool color) {
@@ -259,10 +266,12 @@ void Admin::MakeEmFight(int depth) {
 
   while (1 < 2) {
 
+
     game_.DoMove(MinMaxAll(depth, current_color));
+    console_handle_.UpdateScreen();
+
     console_handle_.ClearHighlight();
     console_handle_.UpdateDisplay(game_);
-    console_handle_.UpdateScreen();
     current_color = !current_color;
     if (game_.EvaluatePosition() > 900 or game_.EvaluatePosition() < -900)
       break;

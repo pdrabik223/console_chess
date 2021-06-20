@@ -159,9 +159,15 @@ void Scml::UpdateScreen() {
 
   SetConsoleCursorPosition(hc_, {(short)((w_ * 2) + 2), 0});
 
-  std::wcout << current_evaluation_;
-  SetConsoleCursorPosition(hc_, {0, 9});
+  std::wcout <<" "<< current_evaluation_;
 
+  SetConsoleCursorPosition(hc_, {(short)((w_ * 2) + 2), 1});
+  if(current_move_%2 == 0)
+    std::wcout <<cc(col::BRIGHT_WHITE,col::GRAY)<<" "<< (current_move_/2) + 1;
+  else  std::wcout <<cc(col::BLACK,col::GRAY)<<" "<< (current_move_/2) + 1;
+
+
+  SetConsoleCursorPosition(hc_, {0, 9});
   _CONSOLE_SCREEN_BUFFER_INFO info;
   GetConsoleScreenBufferInfo(hc_, &info);
 
@@ -170,6 +176,8 @@ void Scml::UpdateScreen() {
     for (int j = 0; j < info.dwSize.X; j++)
       std::wcout << L" ";
   }
+
+
   SetConsoleCursorPosition(hc_, {0, 9});
 
   std::wcout << cc(col::WHITE, col::BLACK) << message_;
@@ -191,6 +199,7 @@ void Scml::UpdateDisplay(ChessBoard &board) {
     }
   }
   current_evaluation_ = board.EvaluatePosition();
+  current_move_ =  board.move_counter_;
   message_ = {};
 }
 

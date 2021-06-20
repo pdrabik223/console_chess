@@ -66,6 +66,7 @@ private:
 
   std::array<std::array<icon, 8>, 8> buffer_;
   double current_evaluation_;
+  int current_move_ = 0;
   HANDLE hc_;
 
   unsigned previous_message_length_ = 0;
