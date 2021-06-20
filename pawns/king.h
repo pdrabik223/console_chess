@@ -21,9 +21,9 @@ public:
 
   double Value() const override {
     if (Color())
-      return 999;
+      return 1000;
     else
-      return -999;
+      return -1000;
   }
 
   explicit operator char() const override {

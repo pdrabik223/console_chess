@@ -238,5 +238,6 @@ void Scml::ClearHighlight() {
       buffer_[y][x].background_color = background;
     }
   }
+  message_ = L"";
 }
 

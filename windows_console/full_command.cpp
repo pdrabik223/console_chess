@@ -225,67 +225,69 @@ full_command Parse(std::string &line) {
     }
 
     return temp;
-}
-
-if (line.substr(0, 4) == "move") {
-  EraseTillSpace(line);
-
-  std::vector<int> data;
-  data.push_back(ChessToInt(line));
-  data.push_back(ChessToInt(line));
-
-  return {MOVE, data};
-}
-
-if (line.substr(0, 6) == "fight!") {
-
-  EraseTillSpace(line);
-  std::vector<int> data ;
-
-  /// white brain
-  if (line.substr(0, 6) == "minmax"){
-    EraseTillSpace(line);
-    data.push_back(MINMAX);
-    data.push_back(std::stoi(line));
-    EraseTillSpace(line);
-  }else if (line.substr(0, 8) == "abminmax") {
-    EraseTillSpace(line);
-    data.push_back(ALFA_BETA_MINMAX);
-    data.push_back(std::stoi(line));
-    EraseTillSpace(line);
-
-  }
-  /// black brain
-  if (line.substr(0, 6) == "minmax"){
-    EraseTillSpace(line);
-    data.push_back(MINMAX);
-    data.push_back(std::stoi(line));
-    EraseTillSpace(line);
-  }else if (line.substr(0, 8) == "abminmax") {
-    EraseTillSpace(line);
-    data.push_back(ALFA_BETA_MINMAX);
-    data.push_back(std::stoi(line));
-    EraseTillSpace(line);
-
   }
 
-  return {EPIC_COMPUTER_FIGHT, data};
-}
+  if (line.substr(0, 4) == "move") {
+    EraseTillSpace(line);
 
-switch (line[0]) {
-case 'a':
-case 'b':
-case 'c':
-case 'd':
-case 'e':
-case 'f':
-case 'g':
-case 'h':
-  std::vector<int> moves;
-  moves.push_back(ChessToInt(line));
-  return {SHOW_MOVES, moves};
-}
-return {NONE};
+    std::vector<int> data;
+    data.push_back(ChessToInt(line));
+    data.push_back(ChessToInt(line));
+
+    return {MOVE, data};
+  }
+
+  if (line.substr(0, 6) == "fight!") {
+
+    EraseTillSpace(line);
+    std::vector<int> data;
+
+    /// white brain
+    if (line.substr(0, 6) == "minmax") {
+      EraseTillSpace(line);
+      data.push_back(MINMAX);
+      data.push_back(std::stoi(line));
+      EraseTillSpace(line);
+    } else if (line.substr(0, 8) == "abminmax") {
+      EraseTillSpace(line);
+      data.push_back(ALFA_BETA_MINMAX);
+      data.push_back(std::stoi(line));
+      EraseTillSpace(line);
+    }
+    data.push_back(1); // threads
+    /// black brain
+    if (line.substr(0, 6) == "minmax") {
+      EraseTillSpace(line);
+      data.push_back(MINMAX);
+      data.push_back(std::stoi(line));
+      EraseTillSpace(line);
+    } else if (line.substr(0, 8) == "abminmax") {
+      EraseTillSpace(line);
+      data.push_back(ALFA_BETA_MINMAX);
+      data.push_back(std::stoi(line));
+      EraseTillSpace(line);
+    }
+
+
+    data.push_back(1); // threads
+
+    return {EPIC_COMPUTER_FIGHT, data};
+  }
+
+  switch (line[0]) {
+  case 'a':
+  case 'b':
+  case 'c':
+  case 'd':
+  case 'e':
+  case 'f':
+  case 'g':
+  case 'h':
+    std::vector<int> moves;
+    moves.push_back(ChessToInt(line));
+    return {SHOW_MOVES, moves};
+  }
+  return {NONE};
 }
 
 void full_command::FromString(std::string line) { *this = Parse(line); }

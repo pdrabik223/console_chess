@@ -15,11 +15,11 @@ public:
   Admin();
 
 private:
-  Move MinMaxAll(int depth, bool color);
-  void MinMax(int depth, int position);
+  Move MinMaxAll(int depth, bool color, int threads);
+  void MinMax(int depth, int position, int threads);
 
-  Move AlfaBetaMinMaxAll(int depth, bool color);
-  void AlfaBetaMinMax(int depth, int position);
+  Move AlfaBetaMinMaxAll(int depth, bool color, int threads);
+  void AlfaBetaMinMax(int depth, int position, int threads);
 
   void Help();
   void ShowPossible();
@@ -28,7 +28,7 @@ private:
   void DisplayMoves( std::vector<Move> &move_buffer, bool color);
   void DisplayBestMoves(std::vector<Move> &move_buffer, bool color);
 
-  void MakeEmFight(Task white_algorytm, int white_depth,Task black_algorytm, int black_depth);
+  void MakeEmFight(std::vector<int> settings);
 
   ChessBoard game_;
   Scml console_handle_;

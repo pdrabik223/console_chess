@@ -79,19 +79,19 @@ Admin::Admin() : game_(), console_handle_() {
     case NONE:
       break;
     case MINMAX:
-      MinMax(user_input.data[1], user_input.data[0]);
+      MinMax(user_input.data[1], user_input.data[0], 1);
       break;
     case MINMAX_ALL:
-      MinMaxAll(user_input.data[1], user_input.data[0]);
+      MinMaxAll(user_input.data[1], user_input.data[0], 1);
       break;
     case ALFA_BETA_MINMAX:
-      AlfaBetaMinMax(user_input.data[1], user_input.data[0]);
+      AlfaBetaMinMax(user_input.data[1], user_input.data[0], 1);
       break;
     case ALFA_BETA_MINMAX_ALL:
-      AlfaBetaMinMaxAll(user_input.data[1], user_input.data[0]);
+      AlfaBetaMinMaxAll(user_input.data[1], user_input.data[0], 1);
       break;
     case EPIC_COMPUTER_FIGHT:
-      MakeEmFight((Task)user_input.data[0],user_input.data[1],(Task)user_input.data[2],user_input.data[3]);
+      MakeEmFight(user_input.data);
       break;
     }
   }
@@ -194,7 +194,7 @@ void Admin::ShowPossible(int position) {
   DisplayMoves(move_buffer, game_.GetElement(position).Color());
 }
 
-void Admin::MinMax(int depth, int position) {
+void Admin::MinMax(int depth, int position, int threads) {
 
   console_handle_.SetBackgroundColor(position / 8, position % 8,
                                      col::LIGHT_PURPLE);
@@ -222,13 +222,14 @@ void Admin::MinMax(int depth, int position) {
   DisplayBestMoves(move_buffer, game_.GetElement(position).Color());
 }
 
-Move Admin::MinMaxAll(int depth, bool color) {
+Move Admin::MinMaxAll(int depth, bool color, int threads) {
 
   auto t_1 = std::chrono::steady_clock::now();
   std::vector<Move> move_buffer;
   game_.GenAllPossibleMoves(color, move_buffer);
 
   DisplayMoves(move_buffer, color);
+
 
   for (auto &i : move_buffer) {
     ChessBoard i_board(game_);
@@ -248,19 +249,28 @@ Move Admin::MinMaxAll(int depth, bool color) {
   return move_buffer.front();
 }
 
-void Admin::MakeEmFight(Task white_algorytm, int white_depth,Task black_algorytm, int black_depth) {
+void Admin::MakeEmFight(std::vector<int> settings) {
 
- // white is true
+  int white_algorytm = settings[0];
+  int black_algorytm = settings[3];
+
+  int white_depth = settings[1];
+  int black_depth = settings[4];
+
+  int white_threads = settings[2];
+  int black_threads = settings[5];
+
+  // white is true
  // black is false
 
   while (1 < 2) {
     /// white is first
     switch(white_algorytm) {
     case MINMAX:
-      game_.DoMove(MinMaxAll(white_depth, true));
+      game_.DoMove(MinMaxAll(white_depth, true, white_threads));
       break;
     case ALFA_BETA_MINMAX:
-      game_.DoMove(AlfaBetaMinMaxAll(white_depth, true));
+      game_.DoMove(AlfaBetaMinMaxAll(white_depth, true, white_threads));
       break;
     default:
       break;
@@ -272,14 +282,15 @@ void Admin::MakeEmFight(Task white_algorytm, int white_depth,Task black_algorytm
 
     if (game_.EvaluatePosition() > 900 )
       break;
-    /// black is first
+
+    /// black is second
 
     switch(black_algorytm) {
     case MINMAX:
-      game_.DoMove(MinMaxAll(black_depth, false));
+      game_.DoMove(MinMaxAll(black_depth, false, black_threads));
       break;
     case ALFA_BETA_MINMAX:
-      game_.DoMove(AlfaBetaMinMaxAll(black_depth, false));
+      game_.DoMove(AlfaBetaMinMaxAll(black_depth, false, black_threads));
       break;
     default:
       break;
@@ -296,7 +307,7 @@ void Admin::MakeEmFight(Task white_algorytm, int white_depth,Task black_algorytm
   }
 }
 
-Move Admin::AlfaBetaMinMaxAll(int depth, bool color) {
+Move Admin::AlfaBetaMinMaxAll(int depth, bool color, int threads) {
   auto t_1 = std::chrono::steady_clock::now();
   std::vector<Move> move_buffer;
   game_.GenAllPossibleMoves(color, move_buffer);
@@ -321,7 +332,7 @@ Move Admin::AlfaBetaMinMaxAll(int depth, bool color) {
 
 }
 
-void Admin::AlfaBetaMinMax(int depth, int position) {
+void Admin::AlfaBetaMinMax(int depth, int position, int threads) {
 
   console_handle_.SetBackgroundColor(position / 8, position % 8,
                                      col::LIGHT_PURPLE);

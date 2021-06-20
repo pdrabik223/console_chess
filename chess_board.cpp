@@ -15,6 +15,10 @@ double &Min(double &x, double &y) {
   else
     return y;
 }
+double Abs(double x){
+  if(x < 0) return -x;
+  else return x;
+}
 
 ChessBoard::ChessBoard(const ChessBoard &other) {
   plane_ = other.plane_;
@@ -152,9 +156,11 @@ double ChessBoard::MinMax(ChessBoard &target, int depth, bool color) {
   if (depth == 0)
     return current_evaluation;
 
+  if(Abs(current_evaluation) > 900)
+    return current_evaluation;
+
   if (color) {                    // for white
-    if (current_evaluation > 900) // if we just  mated fucker
-      return current_evaluation;
+
 
     current_evaluation = -1000;
 
@@ -173,8 +179,7 @@ double ChessBoard::MinMax(ChessBoard &target, int depth, bool color) {
     return current_evaluation;
 
   } else {                         // for black
-    if (current_evaluation < -900) // same but with black
-      return current_evaluation;
+
 
     std::vector<Move> move_buffer;
     current_evaluation = 1000;
@@ -232,7 +237,7 @@ double ChessBoard::AlfaBetaMinMax(ChessBoard &target, int depth, double alfa,
     std::vector<Move> move_buffer;
     current_evaluation = 1000;
 
-    GenAllPossibleMoves(P_WHITE, move_buffer);
+    GenAllPossibleMoves(P_BLACK, move_buffer);
 
     for (auto &move : move_buffer) {
       ChessBoard m_board(*this);
