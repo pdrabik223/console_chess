@@ -204,6 +204,12 @@ full_command Parse(std::string &line) {
     return {MOVE, data};
   }
 
+  if(line.substr(0,6) == "fight!"){
+
+    EraseTillSpace(line);
+    return {EPIC_COMPUTER_FIGHT, {std::stoi(line)}};
+  }
+
   switch (line[0]) {
   case 'a':
   case 'b':

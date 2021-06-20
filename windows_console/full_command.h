@@ -23,6 +23,7 @@ enum Task {
   MINMAX_ALL,
   NONE,
   CLEAR,
+  EPIC_COMPUTER_FIGHT,
   HELP // ok
 
 };

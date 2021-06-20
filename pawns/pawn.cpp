@@ -21,40 +21,55 @@ void Pawn::GenMoves(std::array<Piece *, 64> &board, unsigned int position,
 void Pawn::GenMovesForBlack(std::array<Piece *, 64> &board,
                             const unsigned int position,
                             std::vector<Move> &possible_moves) {
+  if (position / B_WIDTH < 7)
+    if (board[position + B_WIDTH]->IsEmpty()) {
+      possible_moves.emplace_back(position, position + B_WIDTH);
 
-  if (board[position + B_WIDTH]->IsEmpty())
-    possible_moves.emplace_back(position, position + B_WIDTH);
+      if (!Moved() and board[position + (B_WIDTH * 2)]->IsEmpty())
+        possible_moves.emplace_back(position, position + B_WIDTH * 2);
+    }
 
-  if (position % B_WIDTH != 0)
-    if (!board[position + B_WIDTH - 1]->IsEmpty() and
-        board[position + B_WIDTH - 1])
-      possible_moves.emplace_back(position, position + B_WIDTH - 1);
-  if (position % B_WIDTH != 7)
-    if (!board[position + B_WIDTH + 1]->IsEmpty() and
-        board[position + B_WIDTH + 1])
-      possible_moves.emplace_back(position, position + B_WIDTH + 1);
 
-  if (!Moved())
-    possible_moves.emplace_back(position, position + B_WIDTH * 2);
+  if (position / B_WIDTH < 7)
+    if (position % B_WIDTH != 0)
+      if (!board[position + B_WIDTH - 1]->IsEmpty() and
+          board[position + B_WIDTH - 1]->Color() == P_WHITE)
+        possible_moves.emplace_back(position, position + B_WIDTH - 1);
+
+
+  if (position / B_WIDTH < 7)
+    if (position % B_WIDTH != 7)
+      if (!board[position + B_WIDTH + 1]->IsEmpty() and
+          board[position + B_WIDTH + 1]->Color() == P_WHITE)
+        possible_moves.emplace_back(position, position + B_WIDTH + 1);
 }
 void Pawn::GenMovesForWhite(std::array<Piece *, 64> &board,
                             const unsigned int position,
                             std::vector<Move> &possible_moves) {
-  if (board[position - B_WIDTH]->IsEmpty())
-    possible_moves.emplace_back(position, position - B_WIDTH);
-  if (position % B_WIDTH != 0)
-    if (!board[position - B_WIDTH - 1]->IsEmpty() and
-        !board[position - B_WIDTH - 1])
-      possible_moves.emplace_back(position, position - B_WIDTH - 1);
-  if (position % B_WIDTH != 7)
-    if (!board[position - B_WIDTH + 1]->IsEmpty() and
-        !board[position - B_WIDTH + 1])
-      possible_moves.emplace_back(position, position - B_WIDTH + 1);
+  if (position / B_WIDTH > 1)
+    if (board[position - B_WIDTH]->IsEmpty()) {
+      possible_moves.emplace_back(position, position - B_WIDTH);
 
-  if (!Moved())
-    possible_moves.emplace_back(position, position - B_WIDTH * 2);
+      if (!Moved() and board[position - (B_WIDTH * 2)]->IsEmpty())
+        possible_moves.emplace_back(position, position - B_WIDTH * 2);
+    }
+
+
+  if (position / B_WIDTH > 1)
+    if (position % B_WIDTH != 0)
+      if (!board[position - B_WIDTH - 1]->IsEmpty() and
+          board[position - B_WIDTH - 1]->Color() == P_BLACK)
+        possible_moves.emplace_back(position, position - B_WIDTH - 1);
+
+
+
+  if (position / B_WIDTH > 1)
+    if (position % B_WIDTH != 7)
+      if (!board[position - B_WIDTH + 1]->IsEmpty() and
+          board[position - B_WIDTH + 1]->Color() == P_BLACK)
+        possible_moves.emplace_back(position, position - B_WIDTH + 1);
 }
 bool Pawn::IsEmpty() { return false; }
 bool Pawn::Color() const { return info_ bitand 1; }
 bool Pawn::Moved() const { return info_ bitand 2; }
-void Pawn::SetMoved() { info_ |=  2; }
+void Pawn::SetMoved() { info_ |= 2; }

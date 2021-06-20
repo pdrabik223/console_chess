@@ -15,14 +15,14 @@ public:
   Admin();
 
 private:
-  void MinMaxAll(int depth, bool color);
+  Move MinMaxAll(int depth, bool color);
   void MinMax(int depth, int position);
   void Help();
   void ShowPossible();
   void ShowPossible(int position);
   void AddPiece(full_command input);
   void DisplayMoves( std::vector<Move> &move_buffer, bool color);
-
+  void MakeEmFight(int depth);
 
   ChessBoard game_;
   Scml console_handle_;
