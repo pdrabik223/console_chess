@@ -21,9 +21,6 @@ private:
   Move AlfaBetaMinMaxAll(int depth, bool color, int threads);
   void AlfaBetaMinMax(int depth, int position, int threads);
 
-  Move AlfaBetaNegaMaxAll(int depth, bool color, int threads);
-  void AlfaBetaNegaMax(int depth, int position, int threads);
-
   void Help();
   void ShowPossible();
   void ShowPossible(int position);

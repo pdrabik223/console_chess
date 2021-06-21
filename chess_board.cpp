@@ -337,33 +337,4 @@ double ChessBoard::AlfaBetaMinMax(ChessBoard &target, int depth, double alfa,
   }
 }
 
-double ChessBoard::AlfaBetaNegaMax(ChessBoard &target, int depth, double alfa,
-                                   double beta, bool color) {
 
-  double current_evaluation = EvaluatePosition();
-  if (depth == 0 ||
-      Abs(current_evaluation) > 900) // abs(current_evaluation) is > 900 when
-                                     // someone mated the other player
-    return current_evaluation;
-
-  current_evaluation = -1000;
-
-  std::vector<Move> move_buffer;
-  GenAllPossibleMoves(P_WHITE, move_buffer);
-
-  for (auto &move : move_buffer) {
-    ChessBoard m_board(*this);
-    TransposeChessboard(m_board, move);
-
-    move.evaluation_ =
-        target.AlfaBetaNegaMax(m_board, depth - 1, -beta, -alfa, !color);
-
-    current_evaluation = Max(move.evaluation_, current_evaluation);
-
-    alfa = Max(current_evaluation, alfa);
-
-    if (alfa >= beta)
-      break;
-  }
-return current_evaluation;
-}
