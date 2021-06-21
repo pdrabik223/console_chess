@@ -84,13 +84,6 @@ Admin::Admin() : game_(), console_handle_() {
     case ALFA_BETA_MINMAX_ALL:
       AlfaBetaMinMaxAll(user_input.data[1], user_input.data[0], 1);
       break;
-    case ALFA_BETA_NEGAMAX:
-      AlfaBetaMinMax(user_input.data[1], user_input.data[0], 1);
-      break;
-    case ALFA_BETA_NEGAMAX_ALL:
-      AlfaBetaMinMaxAll(user_input.data[1], user_input.data[0], 1);
-      break;
-
 
     case EPIC_COMPUTER_FIGHT:
       MakeEmFight(user_input.data);
