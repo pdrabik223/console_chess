@@ -34,7 +34,7 @@ public:
   }
 
   virtual Night *Clone() { return new Night(*this); };
-
+  unsigned char Hash() const { if(Color()) return 2; else return 8;};
   bool IsEmpty() override { return false; }
   bool Color() const override { return info_ bitand 1; }
   bool Moved() const override { return info_ bitand 2; }

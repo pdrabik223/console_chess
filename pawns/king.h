@@ -38,6 +38,9 @@ public:
   bool Color() const override;
   bool Moved() const override;
   void SetMoved() override;
+
+  unsigned char Hash() const { if(Color()) return 6; else return 12;};
+
   void GenMoves(std::array<Piece *, 64> &board, unsigned position,
                 std::vector<Move> &possible_moves) override;
 };

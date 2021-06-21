@@ -36,6 +36,8 @@ public:
   bool Moved() const override;
   void SetMoved() override;
   virtual Queen *Clone(){return new Queen(* this);};
+  unsigned char Hash() override;
+
   void GenMoves(std::array<Piece *, 64> &board, unsigned int position,
                 std::vector<Move> &possible_moves) override;
 };

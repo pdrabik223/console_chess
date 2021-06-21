@@ -48,8 +48,12 @@ public:
   };
 
   virtual Piece *Clone(){return new Piece(* this);};
-
-
+  /// for a hash function piece order is as in unicode so pawn to king, first white than black
+  /// so these are weights:
+  /// p = 1 n = 2 b = 3 r = 4 q = 5 k = 6
+  /// P = 7 N = 8 B = 9 R = 10 Q = 11 K = 12
+  /// empty square is 0
+  virtual unsigned char Hash(){return 0;};
 protected:
   virtual void GenMovesForBlack(std::array<Piece *, 64> &board,
                                 const unsigned int position,

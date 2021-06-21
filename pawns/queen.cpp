@@ -89,3 +89,4 @@ bool Queen::IsEmpty() { return false; }
 bool Queen::Color() const { return info_ bitand 1; }
 bool Queen::Moved() const { return info_ bitand 2; }
 void Queen::SetMoved() { info_ |= 2; }
+unsigned char Queen::Hash() { if(Color()) return 5; else return 11; }

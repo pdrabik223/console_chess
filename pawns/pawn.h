@@ -41,6 +41,10 @@ public:
   bool Moved() const override;
   void SetMoved() override;
 
+
+
+  unsigned char Hash() const { if(Color()) return 1; else return 7;};
+
 protected:
   void GenMovesForBlack(std::array<Piece *, 64> &board, unsigned int position,
                         std::vector<Move> &possible_moves) override;

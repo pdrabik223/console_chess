@@ -34,6 +34,7 @@ public:
   bool Color() const override;
   bool Moved() const override;
   void SetMoved() override;
+  unsigned char Hash() const { if(Color()) return 4; else return 10;};
   void GenMoves(std::array<Piece *, 64> &board, unsigned int position,
                 std::vector<Move> &possible_moves) override;
 };

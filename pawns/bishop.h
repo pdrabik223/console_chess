@@ -37,6 +37,7 @@ public:
     else
       return 'B';
   }
+  unsigned char Hash() const { if(Color()) return 3; else return 9;};
 
   void GenMoves(std::array<Piece *, 64> &board, unsigned int position,
                 std::vector<Move> &possible_moves) override;
