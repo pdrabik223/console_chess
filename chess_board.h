@@ -37,12 +37,17 @@ public:
 
   double EvaluatePosition();
   void EvaluateMove(Move &target);
+
   double MinMax(ChessBoard &target, int depth, bool color);
-  double AlfaBetaMinMax(ChessBoard &target, int depth,double alfa, double beta, bool color);
 
-
+  double AlfaBetaMinMax(ChessBoard &target, int depth, double alfa, double beta,
+                        bool color);
+  double AlfaBetaNegaMax(ChessBoard &target, int depth, double alfa, double beta,
+                         bool color);
 
   void GenAllPossibleMoves(bool color, std::vector<Move> &possible_moves);
+
+
 
   std::array<Piece *, 64> plane_;
 

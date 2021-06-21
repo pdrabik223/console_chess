@@ -30,7 +30,8 @@ Admin::Admin() : game_(), console_handle_() {
       console_handle_.ClearHighlight();
       break;
     case MOVE:
-      game_.DoMove({(unsigned)user_input.data[0],(unsigned)user_input.data[1]});
+      game_.DoMove(
+          {(unsigned)user_input.data[0], (unsigned)user_input.data[1]});
       console_handle_.UpdateDisplay(game_);
       break;
     case ADD_PIECE:
@@ -83,12 +84,19 @@ Admin::Admin() : game_(), console_handle_() {
     case ALFA_BETA_MINMAX_ALL:
       AlfaBetaMinMaxAll(user_input.data[1], user_input.data[0], 1);
       break;
+    case ALFA_BETA_NEGAMAX:
+      AlfaBetaMinMax(user_input.data[1], user_input.data[0], 1);
+      break;
+    case ALFA_BETA_NEGAMAX_ALL:
+      AlfaBetaMinMaxAll(user_input.data[1], user_input.data[0], 1);
+      break;
+
+
     case EPIC_COMPUTER_FIGHT:
       MakeEmFight(user_input.data);
       break;
     case NONE:
       break;
-
     }
   }
 
@@ -226,7 +234,6 @@ Move Admin::MinMaxAll(int depth, bool color, int threads) {
 
   DisplayMoves(move_buffer, color);
 
-
   for (auto &i : move_buffer) {
     ChessBoard i_board(game_);
     game_.TransposeChessboard(i_board, i);
@@ -239,7 +246,6 @@ Move Admin::MinMaxAll(int depth, bool color, int threads) {
 
   console_handle_.message_ = L"elapsed time: ";
   console_handle_.message_ += std::to_wstring(elapsed_time) + L" ms\n";
-
 
   DisplayBestMoves(move_buffer, color); // he sorts move_buffer
   return move_buffer.front();
@@ -257,11 +263,11 @@ void Admin::MakeEmFight(std::vector<int> settings) {
   int black_threads = settings[5];
 
   // white is true
- // black is false
+  // black is false
 
   while (1 < 2) {
     /// white is first
-    switch(white_algorytm) {
+    switch (white_algorytm) {
     case MINMAX:
       game_.DoMove(MinMaxAll(white_depth, true, white_threads));
       break;
@@ -276,12 +282,12 @@ void Admin::MakeEmFight(std::vector<int> settings) {
     console_handle_.UpdateScreen();
     console_handle_.ClearHighlight();
 
-    if (game_.EvaluatePosition() > 900 )
+    if (game_.EvaluatePosition() > 900)
       break;
 
     /// black is second
-
-    switch(black_algorytm) {
+    console_handle_.GetLine();
+    switch (black_algorytm) {
     case MINMAX:
       game_.DoMove(MinMaxAll(black_depth, false, black_threads));
       break;
@@ -295,11 +301,9 @@ void Admin::MakeEmFight(std::vector<int> settings) {
     console_handle_.UpdateDisplay(game_);
     console_handle_.UpdateScreen();
     console_handle_.ClearHighlight();
-
-    if (game_.EvaluatePosition() < -900 )
+    console_handle_.GetLine();
+    if (game_.EvaluatePosition() < -900)
       break;
-
-
   }
 }
 
@@ -313,12 +317,12 @@ Move Admin::AlfaBetaMinMaxAll(int depth, bool color, int threads) {
   for (auto &i : move_buffer) {
     ChessBoard i_board(game_);
     game_.TransposeChessboard(i_board, i);
-    i.evaluation_ = game_.AlfaBetaMinMax(i_board,depth,-1000,1000, color);
+    i.evaluation_ = game_.AlfaBetaMinMax(i_board, depth, -1000, 1000, color);
   }
 
   double elapsed_time = std::chrono::duration_cast<std::chrono::milliseconds>(
-      std::chrono::steady_clock::now() - t_1)
-      .count();
+                            std::chrono::steady_clock::now() - t_1)
+                            .count();
 
   console_handle_.message_ = L"elapsed time: ";
   console_handle_.message_ += std::to_wstring(elapsed_time) + L" ms\n";
@@ -326,7 +330,6 @@ Move Admin::AlfaBetaMinMaxAll(int depth, bool color, int threads) {
   DisplayMoves(move_buffer, color);
   DisplayBestMoves(move_buffer, color); // he sorts move_buffer
   return move_buffer.front();
-
 }
 
 void Admin::AlfaBetaMinMax(int depth, int position, int threads) {
@@ -341,13 +344,13 @@ void Admin::AlfaBetaMinMax(int depth, int position, int threads) {
   for (auto &i : move_buffer) {
     ChessBoard i_board(game_);
     game_.TransposeChessboard(i_board, i);
-    i.evaluation_ =
-        game_.AlfaBetaMinMax(i_board, depth,-1000,1000, game_.GetElement(position).Color());
+    i.evaluation_ = game_.AlfaBetaMinMax(i_board, depth, -1000, 1000,
+                                         game_.GetElement(position).Color());
   }
 
   double elapsed_time = std::chrono::duration_cast<std::chrono::milliseconds>(
-      std::chrono::steady_clock::now() - t_1)
-      .count();
+                            std::chrono::steady_clock::now() - t_1)
+                            .count();
 
   console_handle_.message_ = L"elapsed time: ";
   console_handle_.message_ += std::to_wstring(elapsed_time) + L" ms\n";
@@ -368,13 +371,12 @@ void Admin::DisplayMoves(std::vector<Move> &move_buffer, bool color) {
     console_handle_.message_ += (std::wstring)move;
     console_handle_.message_ += L"\n";
 
-     console_handle_.SetBackgroundColor(move.to_ / 8, move.to_ % 8, col::AQUA);
+    console_handle_.SetBackgroundColor(move.to_ / 8, move.to_ % 8, col::AQUA);
   }
 }
 
 void Admin::DisplayBestMoves(std::vector<Move> &move_buffer, bool color) {
   std::sort(move_buffer.begin(), move_buffer.end());
-
   if (color)
     std::reverse(move_buffer.begin(), move_buffer.end());
 
@@ -383,12 +385,68 @@ void Admin::DisplayBestMoves(std::vector<Move> &move_buffer, bool color) {
     if (move == move_buffer.front())
       console_handle_.SetBackgroundColor(move.to_ / 8, move.to_ % 8,
                                          col::LIGHT_AQUA);
-    else return;
+    else
+      return;
   }
 }
 
-
 void Admin::Load() {
-std::string path = console_handle_.GetLine();
-game_.LoadPosition(path);
+
+  std::string path = "../positions/";
+  path += console_handle_.GetLine();
+  game_.LoadPosition(path);
+}
+
+
+
+Move Admin::AlfaBetaNegaMaxAll(int depth, bool color, int threads) {
+
+  auto t_1 = std::chrono::steady_clock::now();
+  std::vector<Move> move_buffer;
+  game_.GenAllPossibleMoves(color, move_buffer);
+
+  DisplayMoves(move_buffer, color);
+
+  for (auto &i : move_buffer) {
+    ChessBoard i_board(game_);
+    game_.TransposeChessboard(i_board, i);
+    i.evaluation_ = game_.AlfaBetaNegaMax(i_board, depth, -1000, 1000, color);
+  }
+
+  double elapsed_time = std::chrono::duration_cast<std::chrono::milliseconds>(
+      std::chrono::steady_clock::now() - t_1)
+      .count();
+
+  console_handle_.message_ = L"elapsed time: ";
+  console_handle_.message_ += std::to_wstring(elapsed_time) + L" ms\n";
+
+  DisplayMoves(move_buffer, color);
+  DisplayBestMoves(move_buffer, color); // he sorts move_buffer
+  return move_buffer.front();
+
+}
+void Admin::AlfaBetaNegaMax(int depth, int position, int threads) {
+  console_handle_.SetBackgroundColor(position / 8, position % 8,
+                                     col::LIGHT_PURPLE);
+  auto t_1 = std::chrono::steady_clock::now();
+
+  std::vector<Move> move_buffer;
+  game_.GetElement(position).GenMoves(game_.plane_, position, move_buffer);
+
+  for (auto &i : move_buffer) {
+    ChessBoard i_board(game_);
+    game_.TransposeChessboard(i_board, i);
+    i.evaluation_ = game_.AlfaBetaNegaMax(i_board, depth, -1000, 1000,
+                                         game_.GetElement(position).Color());
+  }
+
+  double elapsed_time = std::chrono::duration_cast<std::chrono::milliseconds>(
+      std::chrono::steady_clock::now() - t_1)
+      .count();
+
+  console_handle_.message_ = L"elapsed time: ";
+  console_handle_.message_ += std::to_wstring(elapsed_time) + L" ms\n";
+
+  DisplayMoves(move_buffer, game_.GetElement(position).Color());
+  DisplayBestMoves(move_buffer, game_.GetElement(position).Color());
 }
