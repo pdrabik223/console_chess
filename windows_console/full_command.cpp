@@ -209,6 +209,40 @@ full_command AlphaBetaMinMax(std::string &line) {
   return temp;
 }
 
+full_command AlphaBetaMinMaxTranspositionTable(std::string &line) {
+  EraseTillSpace(line);
+
+  full_command temp;
+  std::vector<int> data;
+
+  if (line.substr(0, 3) == "all") {
+
+    temp.comm = ALFA_BETA_MINMAX_W_TRANSPOSITION_TABLE_ALL;
+
+    EraseTillSpace(line);
+
+    if (line.substr(0, 5) == "white")
+      data.push_back(1);
+    else if (line.substr(0, 5) == "black")
+      data.push_back(0);
+
+    EraseTillSpace(line);
+    data.push_back(std::stoi(line));
+    temp.data = data;
+
+  } else {
+    temp.comm = ALFA_BETA_MINMAX_W_TRANSPOSITION_TABLE;
+    data.push_back(ChessToInt(line));
+
+    EraseTillSpace(line);
+    data.push_back(std::stoi(line));
+    temp.data = data;
+  }
+
+  return temp;
+}
+
+
 full_command Move(std::string &line) {
   EraseTillSpace(line);
 
@@ -278,6 +312,9 @@ full_command Parse(std::string &line) {
   if (line.substr(0, 8) == "abminmax")
     return AlphaBetaMinMax(line);
 
+  if (line.substr(0, 10) == "abminmaxtt")
+    return AlphaBetaMinMaxTranspositionTable(line);
+
   if (line.substr(0, 4) == "move")
     return Move(line);
 
@@ -302,5 +339,7 @@ full_command Parse(std::string &line) {
   }
   return {NONE};
 }
+
+
 
 void full_command::FromString(std::string line) { *this = Parse(line); }

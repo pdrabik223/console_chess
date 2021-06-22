@@ -21,6 +21,9 @@ private:
   Move AlfaBetaMinMaxAll(int depth, bool color, int threads);
   void AlfaBetaMinMax(int depth, int position, int threads);
 
+  Move AlfaBetaMinMaxWTranspositionTableAll(int depth, bool color, int threads);
+  void AlfaBetaMinMaxWTranspositionTable(int depth, int position, int threads);
+
   void Help();
   void ShowPossible();
   void ShowPossible(int position);

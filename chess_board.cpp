@@ -32,17 +32,13 @@ size_t Pow(size_t &base, size_t &exp) {
   return base;
 }
 
-static std::array<size_t, 64> GenPowerTable() {
-  std::array<size_t, 64> powers;
-
-//  for (int i = 0; i < 64; i++)
- //   powers[i] = Pow(13, 64);
-}
-
 size_t Pow13(unsigned int exp) {
-  static std::array<size_t, 64> powers = GenPowerTable();
+  size_t solution = 1;
 
-  return powers[exp];
+  for (int i = 1; i < exp; i++)
+    solution *= 13;
+
+  return solution;
 }
 
 ChessBoard::ChessBoard(const ChessBoard &other) {
@@ -318,8 +314,6 @@ double ChessBoard::AlfaBetaMinMax(ChessBoard &target, int depth, double alfa,
     std::vector<Move> move_buffer;
     GenAllPossibleMoves(P_WHITE, move_buffer);
 
-   // std::sort(move_buffer.begin(),move_buffer.end());
-
     for (auto &move : move_buffer) {
       ChessBoard m_board(*this);
       TransposeChessboard(m_board, move);
@@ -357,11 +351,75 @@ double ChessBoard::AlfaBetaMinMax(ChessBoard &target, int depth, double alfa,
     return current_evaluation;
   }
 }
+
 unsigned int ChessBoard::Hash() {
   int i = 0;
   unsigned int sum = 0;
   for (auto &piece : plane_) {
     sum += piece->Hash() * Pow13(i);
     i++;
+  }
+  return sum;
+}
+double ChessBoard::AlfaBetaMinMaxTranspositionTable(
+    ChessBoard &target, int depth, double alfa, double beta, bool color,
+    std::map<size_t, double> &transposition_table) {
+
+  size_t  current_hash = Hash();
+
+  if (transposition_table.find(current_hash) != transposition_table.end())
+    return transposition_table[current_hash];
+
+  double current_evaluation = EvaluatePosition();
+
+  // abs(current_evaluation) is > 900 when
+  // someone mated the other player
+  if (depth == 0 || Abs(current_evaluation) > 900)
+    return current_evaluation;
+
+  if (color) { // for white
+
+    current_evaluation = -1000;
+
+    std::vector<Move> move_buffer;
+    GenAllPossibleMoves(P_WHITE, move_buffer);
+
+    for (auto &move : move_buffer) {
+      ChessBoard m_board(*this);
+      TransposeChessboard(m_board, move);
+
+      move.evaluation_ =
+          target.AlfaBetaMinMaxTranspositionTable(m_board, depth - 1, alfa, beta, P_BLACK, transposition_table);
+
+      current_evaluation = Max(move.evaluation_, current_evaluation);
+
+      if (current_evaluation >= beta)
+        break;
+
+      alfa = Max(current_evaluation, alfa);
+    }
+    transposition_table.insert({current_hash, current_evaluation});
+    return current_evaluation;
+  } else { // for black
+
+    std::vector<Move> move_buffer;
+    current_evaluation = 1000;
+
+    GenAllPossibleMoves(P_BLACK, move_buffer);
+
+    for (auto &move : move_buffer) {
+      ChessBoard m_board(*this);
+      TransposeChessboard(m_board, move);
+
+      move.evaluation_ =
+          target.AlfaBetaMinMaxTranspositionTable(m_board, depth - 1, alfa, beta, P_WHITE,transposition_table);
+
+      current_evaluation = Min(move.evaluation_, current_evaluation);
+      if (current_evaluation <= alfa)
+        break;
+      beta = Min(beta, current_evaluation);
+    }
+    transposition_table.insert({current_hash, current_evaluation});
+    return current_evaluation;
   }
 }

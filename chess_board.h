@@ -12,6 +12,7 @@
 #include "pawns/queen.h"
 #include "pawns/rook.h"
 #include <array>
+#include <map>
 #include <vector>
 
 #define B_HEIGHT 8
@@ -42,10 +43,13 @@ public:
 
   double AlfaBetaMinMax(ChessBoard &target, int depth, double alfa, double beta,
                         bool color);
-  double AlfaBetaNegaMax(ChessBoard &target, int depth, double alfa, double beta,
-                         bool color);
+
+  double AlfaBetaMinMaxTranspositionTable(ChessBoard &target, int depth, double alfa, double beta,
+                                          bool color,
+      std::map<size_t, double> &transposition_table);
 
   unsigned int Hash();
+
   void GenAllPossibleMoves(bool color, std::vector<Move> &possible_moves);
 
 

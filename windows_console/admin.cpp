@@ -85,6 +85,13 @@ Admin::Admin() : game_(), console_handle_() {
       AlfaBetaMinMaxAll(user_input.data[1], user_input.data[0], 1);
       break;
 
+    case ALFA_BETA_MINMAX_W_TRANSPOSITION_TABLE_ALL:
+      AlfaBetaMinMaxWTranspositionTableAll(user_input.data[1], user_input.data[0], 1);
+      break;
+    case ALFA_BETA_MINMAX_W_TRANSPOSITION_TABLE:
+      AlfaBetaMinMaxWTranspositionTable(user_input.data[1], user_input.data[0], 1);
+      break;
+
     case EPIC_COMPUTER_FIGHT:
       MakeEmFight(user_input.data);
       break;
@@ -389,4 +396,58 @@ void Admin::Load() {
   path += console_handle_.GetLine();
   game_.LoadPosition(path);
 }
+Move Admin::AlfaBetaMinMaxWTranspositionTableAll(int depth, bool color,
+                                                 int threads) {
+  auto t_1 = std::chrono::steady_clock::now();
+  std::vector<Move> move_buffer;
+  game_.GenAllPossibleMoves(color, move_buffer);
 
+  DisplayMoves(move_buffer, color);
+  std::map<size_t, double> t_table;
+
+  for (auto &i : move_buffer) {
+    ChessBoard i_board(game_);
+    game_.TransposeChessboard(i_board, i);
+    i.evaluation_ = game_.AlfaBetaMinMaxTranspositionTable(i_board, depth, -1000, 1000, color,t_table);
+  }
+
+  double elapsed_time = std::chrono::duration_cast<std::chrono::milliseconds>(
+      std::chrono::steady_clock::now() - t_1)
+      .count();
+
+  console_handle_.message_ = L"elapsed time: ";
+  console_handle_.message_ += std::to_wstring(elapsed_time) + L" ms\n";
+
+  DisplayMoves(move_buffer, color);
+  DisplayBestMoves(move_buffer, color); // he sorts move_buffer
+  return move_buffer.front();
+}
+
+void Admin::AlfaBetaMinMaxWTranspositionTable(int depth, int position,
+                                                 int threads) {
+  console_handle_.SetBackgroundColor(position / 8, position % 8,
+                                     col::LIGHT_PURPLE);
+  auto t_1 = std::chrono::steady_clock::now();
+
+  std::vector<Move> move_buffer;
+  game_.GetElement(position).GenMoves(game_.plane_, position, move_buffer);
+  std::map<size_t, double> t_table;
+
+  for (auto &i : move_buffer) {
+    ChessBoard i_board(game_);
+    game_.TransposeChessboard(i_board, i);
+    i.evaluation_ = game_.AlfaBetaMinMaxTranspositionTable(
+        i_board, depth, -1000, 1000, game_.GetElement(position).Color(),
+        t_table);
+  }
+
+  double elapsed_time = std::chrono::duration_cast<std::chrono::milliseconds>(
+                            std::chrono::steady_clock::now() - t_1)
+                            .count();
+
+  console_handle_.message_ = L"elapsed time: ";
+  console_handle_.message_ += std::to_wstring(elapsed_time) + L" ms\n";
+
+  DisplayMoves(move_buffer, game_.GetElement(position).Color());
+  DisplayBestMoves(move_buffer, game_.GetElement(position).Color());
+}
