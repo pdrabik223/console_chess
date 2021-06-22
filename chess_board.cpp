@@ -3,6 +3,7 @@
 #include <Windows.h>
 #include <cassert>
 #include <fstream>
+#include <valarray>
 #include <vector>
 
 double &Max(double &x, double &y) {
@@ -17,11 +18,31 @@ double &Min(double &x, double &y) {
   else
     return y;
 }
-double Abs(double& x) {
+double Abs(double &x) {
   if (x < 0)
     return -x;
   else
     return x;
+}
+
+size_t Pow(size_t &base, size_t &exp) {
+  size_t sum = 1;
+  while (exp > 0)
+    base *= exp--;
+  return base;
+}
+
+static std::array<size_t, 64> GenPowerTable() {
+  std::array<size_t, 64> powers;
+
+//  for (int i = 0; i < 64; i++)
+ //   powers[i] = Pow(13, 64);
+}
+
+size_t Pow13(unsigned int exp) {
+  static std::array<size_t, 64> powers = GenPowerTable();
+
+  return powers[exp];
 }
 
 ChessBoard::ChessBoard(const ChessBoard &other) {
@@ -244,7 +265,6 @@ double ChessBoard::MinMax(ChessBoard &target, int depth, bool color) {
     // someone mated the other player
     return current_evaluation;
 
-
   if (color) { // for white
 
     current_evaluation = -1000;
@@ -291,13 +311,14 @@ double ChessBoard::AlfaBetaMinMax(ChessBoard &target, int depth, double alfa,
     // someone mated the other player
     return current_evaluation;
 
-
-  if (color) {                    // for white
+  if (color) { // for white
 
     current_evaluation = -1000;
 
     std::vector<Move> move_buffer;
     GenAllPossibleMoves(P_WHITE, move_buffer);
+
+   // std::sort(move_buffer.begin(),move_buffer.end());
 
     for (auto &move : move_buffer) {
       ChessBoard m_board(*this);
@@ -336,5 +357,11 @@ double ChessBoard::AlfaBetaMinMax(ChessBoard &target, int depth, double alfa,
     return current_evaluation;
   }
 }
-
-
+unsigned int ChessBoard::Hash() {
+  int i = 0;
+  unsigned int sum = 0;
+  for (auto &piece : plane_) {
+    sum += piece->Hash() * Pow13(i);
+    i++;
+  }
+}

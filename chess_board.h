@@ -45,6 +45,7 @@ public:
   double AlfaBetaNegaMax(ChessBoard &target, int depth, double alfa, double beta,
                          bool color);
 
+  unsigned int Hash();
   void GenAllPossibleMoves(bool color, std::vector<Move> &possible_moves);
 
 
@@ -60,6 +61,7 @@ public:
 private:
   bool white_king_in_check_;
   bool black_king_in_check_;
+
 };
 
 #endif // CONSOLE_CHESS__CHESS_BOARD_H_
