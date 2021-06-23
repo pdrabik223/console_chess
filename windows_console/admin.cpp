@@ -13,7 +13,7 @@ Admin::Admin() : game_(), console_handle_() {
   full_command user_input;
 
   std::vector<std::string> commands;
-  //   commands.emplace_back("c7");
+  //commands.emplace_back("abminmaxtt all white 3");
 
   while (1 < 2) {
     console_handle_.UpdateScreen();
@@ -86,10 +86,12 @@ Admin::Admin() : game_(), console_handle_() {
       break;
 
     case ALFA_BETA_MINMAX_W_TRANSPOSITION_TABLE_ALL:
-      AlfaBetaMinMaxWTranspositionTableAll(user_input.data[1], user_input.data[0], 1);
+      AlfaBetaMinMaxWTranspositionTableAll(user_input.data[1],
+                                           user_input.data[0], 1);
       break;
     case ALFA_BETA_MINMAX_W_TRANSPOSITION_TABLE:
-      AlfaBetaMinMaxWTranspositionTable(user_input.data[1], user_input.data[0], 1);
+      AlfaBetaMinMaxWTranspositionTable(user_input.data[1], user_input.data[0],
+                                        1);
       break;
 
     case EPIC_COMPUTER_FIGHT:
@@ -408,12 +410,13 @@ Move Admin::AlfaBetaMinMaxWTranspositionTableAll(int depth, bool color,
   for (auto &i : move_buffer) {
     ChessBoard i_board(game_);
     game_.TransposeChessboard(i_board, i);
-    i.evaluation_ = game_.AlfaBetaMinMaxTranspositionTable(i_board, depth, -1000, 1000, color,t_table);
+    i.evaluation_ = game_.AlfaBetaMinMaxTranspositionTable(
+        i_board, depth, -1000, 1000, color, t_table);
   }
 
   double elapsed_time = std::chrono::duration_cast<std::chrono::milliseconds>(
-      std::chrono::steady_clock::now() - t_1)
-      .count();
+                            std::chrono::steady_clock::now() - t_1)
+                            .count();
 
   console_handle_.message_ = L"elapsed time: ";
   console_handle_.message_ += std::to_wstring(elapsed_time) + L" ms\n";
@@ -424,14 +427,14 @@ Move Admin::AlfaBetaMinMaxWTranspositionTableAll(int depth, bool color,
 }
 
 void Admin::AlfaBetaMinMaxWTranspositionTable(int depth, int position,
-                                                 int threads) {
+                                              int threads) {
   console_handle_.SetBackgroundColor(position / 8, position % 8,
                                      col::LIGHT_PURPLE);
   auto t_1 = std::chrono::steady_clock::now();
 
   std::vector<Move> move_buffer;
   game_.GetElement(position).GenMoves(game_.plane_, position, move_buffer);
-  std::map<size_t, double> t_table;
+  static std::map<size_t, double> t_table;
 
   for (auto &i : move_buffer) {
     ChessBoard i_board(game_);

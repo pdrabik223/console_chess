@@ -361,12 +361,14 @@ unsigned int ChessBoard::Hash() {
   }
   return sum;
 }
+
 double ChessBoard::AlfaBetaMinMaxTranspositionTable(
     ChessBoard &target, int depth, double alfa, double beta, bool color,
     std::map<size_t, double> &transposition_table) {
 
   size_t  current_hash = Hash();
 
+    std::wcout<<L"size:"<<transposition_table.size();
   if (transposition_table.find(current_hash) != transposition_table.end())
     return transposition_table[current_hash];
 
