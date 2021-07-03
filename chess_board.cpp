@@ -1,9 +1,7 @@
 
 #include "chess_board.h"
-#include <Windows.h>
 #include <cassert>
 #include <fstream>
-#include <valarray>
 #include <vector>
 
 double &Max(double &x, double &y) {

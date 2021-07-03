@@ -398,6 +398,7 @@ void Admin::Load() {
   path += console_handle_.GetLine();
   game_.LoadPosition(path);
 }
+
 Move Admin::AlfaBetaMinMaxWTranspositionTableAll(int depth, bool color,
                                                  int threads) {
   auto t_1 = std::chrono::steady_clock::now();

@@ -242,7 +242,6 @@ full_command AlphaBetaMinMaxTranspositionTable(std::string &line) {
   return temp;
 }
 
-
 full_command Move(std::string &line) {
   EraseTillSpace(line);
 
@@ -339,7 +338,5 @@ full_command Parse(std::string &line) {
   }
   return {NONE};
 }
-
-
 
 void full_command::FromString(std::string line) { *this = Parse(line); }
