@@ -48,9 +48,9 @@ Scml::Scml() {
 
   current_evaluation_ = 0;
 
-  /// here when I wrote    buffer.emplace_back("  ", white, black);
-  /// the clion didn't shout at me
-  /// witch is odd
+  // here when I wrote    buffer.emplace_back("  ", white, black);
+  // the clion didn't shout at me
+  // witch is odd
   message_ = {};
   system("cls");
 }

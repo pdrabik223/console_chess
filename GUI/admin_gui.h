@@ -6,8 +6,7 @@
 #define CONSOLE_CHESS_GUI_ADMIN_GUI_H_
 
 #include "chess_board_gui.h"
-#include <SDL_main.h>
-#include <chess_board.h>
+#include "chess_board.h"
 
 class AdminGui {
 

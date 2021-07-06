@@ -5,16 +5,20 @@
 #include <iostream>
 
 #include "chess_board.h"
-#include <vector>
-#include <windows.h>
-#include <GUI/admin_gui.h>
+#include "GUI/admin_gui.h"
 
-int main() {
+int main(int argc, char *argv[]) {
 
-  std::cout << "welcome to admin chess\n";
+  std::cout << "welcome to admin chess with GUI!\n";
 
-  AdminGui game;
+  //AdminGui game;
   // std::this_thread::sleep_for(std::chrono::seconds(3));
+
+  ChessBoard game;
+  ChessBoardGui ui;
+  ui.UpdateDisplay(game);
+  ui.UpdateScreen();
+
 
   return 0;
 }
