@@ -1,3 +1,6 @@
 [submodule "TheASDplan"]
 	path = TheASDplan
 	url = https://github.com/piotr233/TheASDplan
+[submodule "SDL"]
+	path = SDL
+	url = https://github.com/libsdl-org/SDL
