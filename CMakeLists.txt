@@ -5,6 +5,10 @@ set(CMAKE_CXX_STANDARD 14)
 
 include_directories(.)
 
+# add SDL lib
+add_subdirectory(SDL/)
+include_directories("./SDL/include")
+
 set(PAWNS
         pawns/piece.h pawns/piece.cpp
         pawns/pawn.h pawns/pawn.cpp
@@ -21,11 +25,37 @@ set(WIN_CONSOLE
         windows_console/scml.cpp windows_console/scml.h
         windows_console/full_command.cpp windows_console/full_command.h)
 
-add_executable(admin executables/admin_chess.cpp
+set(GUI
+    GUI/chess_board_gui.h GUI/chess_board_gui.cpp)
+
+add_executable(admin
+        executables/admin_chess.cpp
         chess_board.h chess_board.cpp
-
         move.h move.cpp
-
         ${PAWNS}
         ${WIN_CONSOLE}
         windows_console/admin.cpp windows_console/admin.h)
+
+add_executable(admin_gui
+        executables/admin_chess_gui.cpp
+        chess_board.h chess_board.cpp
+        move.h move.cpp
+        ${PAWNS}
+        ${GIU}
+        GUI/admin_gui.h GUI/admin_gui.cpp)
+
+
+target_link_libraries(admin
+        SDL2
+        SDL2::SDL2main)
+
+target_link_libraries(admin_gui
+        SDL2
+        SDL2::SDL2main)
+
+if (WIN32)
+    set(SDL_SHARED SDL2d.dll)
+endif (WIN32)
+if (UNIX)
+    set(SDL_SHARED libSDL2d.so)
+endif (UNIX)
