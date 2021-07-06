@@ -8,7 +8,7 @@ void ChessBoardGui::ClearHighlight() {
 }
 ChessBoardGui::ChessBoardGui() : local_board_() {
 
-  window = SDL_CreateWindow("lele",           // window title
+  window_ = SDL_CreateWindow("chess",           // window title
                             100,              // initial x position
                             100,              // initial y_ position
                             9 * 64,           // width, in pixels
@@ -16,15 +16,15 @@ ChessBoardGui::ChessBoardGui() : local_board_() {
                             SDL_WINDOW_OPENGL // flags - see below
   );
 
-  renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC);
+  renderer_ = SDL_CreateRenderer(window_, -1, SDL_RENDERER_PRESENTVSYNC);
 }
 void ChessBoardGui::UpdateScreen() {
-  SDL_RenderPresent(renderer);
+  SDL_RenderPresent(renderer_);
 }
 void ChessBoardGui::UpdateDisplay(ChessBoard &board) { local_board_ = board; }
 
 ChessBoardGui::~ChessBoardGui() {
-  SDL_DestroyRenderer(renderer);
-  SDL_DestroyWindow(window);
+  SDL_DestroyRenderer(renderer_);
+  SDL_DestroyWindow(window_);
   SDL_Quit();
 }

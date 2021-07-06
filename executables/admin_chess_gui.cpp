@@ -8,10 +8,8 @@
 
 int main(int argc, char *argv[]) {
 
-  std::cout << "welcome to admin chess with GUI!\n";
+  std::cout << "welcome to admin chess with gui!\n";
 
-  //AdminGui game;
-  // std::this_thread::sleep_for(std::chrono::seconds(3));
 
   ChessBoard game;
   ChessBoardGui ui;

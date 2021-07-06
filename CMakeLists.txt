@@ -26,7 +26,7 @@ set(WIN_CONSOLE
         windows_console/full_command.cpp windows_console/full_command.h)
 
 set(GUI
-    GUI/chess_board_gui.h GUI/chess_board_gui.cpp)
+        gui/chess_board_gui.h gui/chess_board_gui.cpp)
 
 add_executable(admin
         executables/admin_chess.cpp
@@ -41,8 +41,8 @@ add_executable(admin_gui
         chess_board.h chess_board.cpp
         move.h move.cpp
         ${PAWNS}
-        ${GIU}
-        GUI/admin_gui.h GUI/admin_gui.cpp)
+        gui/chess_board_gui.h gui/chess_board_gui.cpp
+        gui/admin_gui.h gui/admin_gui.cpp)
 
 
 target_link_libraries(admin
