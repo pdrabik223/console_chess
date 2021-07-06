@@ -9,7 +9,7 @@
 #include <array>
 #include <iostream>
 #include <vector>
-
+#include <ciso646>
 #define P_BLACK false
 #define P_WHITE true
 

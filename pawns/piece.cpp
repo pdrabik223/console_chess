@@ -10,7 +10,7 @@ bool AddMove(std::array<Piece *, 64> &board, std::vector<Move> &possible_moves,
   if (board[target]->IsEmpty()) {
     possible_moves.emplace_back(position, target);
 
-  } else if (board[target]->Color() != color) {
+  } else if (board[target]->Color() not_eq color) {
 	possible_moves.emplace_back(position, target);
     return true;
 

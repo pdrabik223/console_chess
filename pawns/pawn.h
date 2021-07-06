@@ -6,6 +6,7 @@
 #define CONSOLE_CHESS_PAWNS_PAWN_H_
 #include "piece.h"
 #include <vector>
+
 class Pawn : public Piece {
 public:
   Pawn() { info_ = P_BLACK; }

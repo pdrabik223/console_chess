@@ -17,7 +17,7 @@ set(PAWNS
         pawns/night.h pawns/night.cpp
         pawns/queen.h pawns/queen.cpp
         pawns/king.h pawns/king.cpp
-        windows_console/scml.cpp windows_console/scml.h)
+       )
 
 set(WIN_CONSOLE
         windows_console/icon.h windows_console/icon.cpp

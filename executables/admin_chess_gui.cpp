@@ -14,6 +14,8 @@ int main(int argc, char *argv[]) {
   ChessBoard game;
   ChessBoardGui ui;
   ui.UpdateDisplay(game);
+ char h;
+  std::cin>>h;
   ui.UpdateScreen();
 
 

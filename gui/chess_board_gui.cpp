@@ -26,5 +26,5 @@ void ChessBoardGui::UpdateDisplay(ChessBoard &board) { local_board_ = board; }
 ChessBoardGui::~ChessBoardGui() {
   SDL_DestroyRenderer(renderer_);
   SDL_DestroyWindow(window_);
-  SDL_Quit();
+  //SDL_Quit();
 }

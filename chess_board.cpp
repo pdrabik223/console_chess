@@ -185,7 +185,7 @@ void ChessBoard::LoadPosition(const std::string &path) {
 
     input = moves[0];
     moves.erase(0, 1);
-    if (input >= '1' and input <= '9') {
+    if (input >= '1' && input <= '9') {
       int j;
       for (j = current_square; j < current_square + (int)(input - '0'); j++)
         plane_[j] = new Piece();
