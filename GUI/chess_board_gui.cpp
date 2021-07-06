@@ -1,8 +1,6 @@
 //
 // Created by studio25 on 06.07.2021
 //
-
-
 #include "chess_board_gui.h"
 void ChessBoardGui::ClearHighlight() {
   highlighted_squares_.clear();
@@ -21,15 +19,9 @@ ChessBoardGui::ChessBoardGui() : local_board_() {
   renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC);
 }
 void ChessBoardGui::UpdateScreen() {
-
-
-
   SDL_RenderPresent(renderer);
-
-
-  }
+}
 void ChessBoardGui::UpdateDisplay(ChessBoard &board) { local_board_ = board; }
-
 
 ChessBoardGui::~ChessBoardGui() {
   SDL_DestroyRenderer(renderer);

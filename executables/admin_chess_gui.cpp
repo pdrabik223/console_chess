@@ -4,8 +4,7 @@
 
 #include <iostream>
 
-#include "chess_board.h"
-#include "GUI/admin_gui.h"
+#include "GUI/chess_board_gui.h"
 
 int main(int argc, char *argv[]) {
 
