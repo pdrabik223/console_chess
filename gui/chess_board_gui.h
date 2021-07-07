@@ -31,8 +31,8 @@ enum GuiColor{
 
 };
 enum Orientation{
-  WHITE_UP,
-  BLACK_UP
+  WHITE_UP = true,
+  BLACK_UP = false
 
 
 };
@@ -51,9 +51,14 @@ public:
 
   void DrawSquares();
 
+  void DrawPieces();
+
   void ClearHighlight();
 
   void ThEventLoop();
+
+  void RotateBoard();
+
 
   ~ChessBoardGui();
 
@@ -64,7 +69,7 @@ protected:
   std::vector<std::pair<int, GuiColor>> highlighted_squares_;
   std::vector<std::pair<int, GuiColor>> highlighted_pieces_;
 
-  SDL_Event event_;
+
   SDL_Window *window_;
   SDL_Renderer *renderer_;
 

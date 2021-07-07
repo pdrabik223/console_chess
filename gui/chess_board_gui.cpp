@@ -8,22 +8,14 @@ void ChessBoardGui::ClearHighlight() {
   highlighted_pieces_.clear();
 }
 ChessBoardGui::ChessBoardGui() : local_board_() {
-
   current_orientation_ = WHITE_UP;
-
-  window_ = SDL_CreateWindow("chess",          // window title
-                             100,              // initial x position
-                             100,              // initial y_ position
-                             9 * 64,           // width, in pixels
-                             8 * 64,           // height, in pixels
-                             SDL_WINDOW_OPENGL // flags - see below
-  );
-
-  renderer_ = SDL_CreateRenderer(window_, -1, SDL_RENDERER_PRESENTVSYNC);
-
-  DrawSquares();
-
+  // for reasons unclear to me
+  // sdl needs variables declared in thread they will be used
   window_thread_ = new std::thread(&ChessBoardGui::ThEventLoop, this);
+  // that's why we wait here half a second
+  // so that the variables can be filled in
+  std::this_thread::sleep_for(std::chrono::milliseconds(500));
+
 }
 bool ChessBoardGui::UpdateScreen() {
   if (not active_)
@@ -47,23 +39,44 @@ ChessBoardGui::~ChessBoardGui() {
 }
 void ChessBoardGui::ThEventLoop() {
 
+  SDL_Event event;
+
+  window_ = SDL_CreateWindow("chess",          // window title
+                             100,                // initial x position
+                             100,                // initial y_ position
+                             9 * 64,            // width, in pixels
+                             8 * 64,             // height, in pixels
+                             SDL_WINDOW_OPENGL // flags - see below
+  );
+
+  renderer_ = SDL_CreateRenderer(window_, -1, SDL_RENDERER_PRESENTVSYNC);
+
+  DrawSquares();
+
+  SDL_RenderPresent(renderer_);
+
   std::cout << "jo";
+
   while (1 < 2) {
-    SDL_WaitEvent(&event_);
+    SDL_WaitEvent(&event);
 
-    switch (event_.type) {
-    case SDL_QUIT:
-      active_ = false;
-      return;
-    case SDL_MOUSEMOTION:
-      std::cout << "muse";
-      break;
-    case SDL_MOUSEBUTTONUP:
-      std::cout << "ja";
-      break;
-    }
+      switch (event.type) {
+      case SDL_QUIT:
+        active_ = false;
+        return;
+      case SDL_MOUSEMOTION:
+        std::cout << "muse";
+        break;
+      case SDL_MOUSEBUTTONUP:
+        std::cout << "ja";
+        RotateBoard();
+        DrawSquares();
+        SDL_RenderPresent(renderer_);
+        break;
+      }
 
-    // std::this_thread::sleep_for(std::chrono::milliseconds(24));
+    std::cout<<"f";
+    std::this_thread::sleep_for(std::chrono::milliseconds(24));
   }
 }
 void ChessBoardGui::DrawSquares() {
@@ -72,10 +85,16 @@ void ChessBoardGui::DrawSquares() {
     for (int x = 0; x < 8; x++) {
       SDL_Rect square = {y * 64, x * 64, 64, 64};
 
-      if (current_orientation_ == WHITE_UP and (x % 2 == 0 xor y % 2 == 0))
+      if (current_orientation_ == WHITE_UP)
+        if( x % 2 == 0 xor y % 2 == 0)
         SDL_SetRenderDrawColor(renderer_, LIGHT_WHITE_COLOR);
-      else
+        else
         SDL_SetRenderDrawColor(renderer_, LIGHT_BLACK_COLOR);
+      else
+      if( x % 2 == 0 xor y % 2 == 0)
+        SDL_SetRenderDrawColor(renderer_, LIGHT_BLACK_COLOR);
+      else
+        SDL_SetRenderDrawColor(renderer_, LIGHT_WHITE_COLOR);
 
       SDL_RenderFillRect(renderer_, &square);
     }
@@ -100,4 +119,12 @@ void ChessBoardGui::DrawSquares() {
     SDL_SetRenderDrawColor(renderer_, 255, 255, 255, 0);
     SDL_RenderFillRect(renderer_, &square);
   }
+}
+void ChessBoardGui::RotateBoard() {
+if(current_orientation_ == WHITE_UP) current_orientation_ = BLACK_UP;
+else current_orientation_ = WHITE_UP;
+}
+void ChessBoardGui::DrawPieces() {
+
+
 }
