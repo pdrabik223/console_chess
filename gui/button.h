@@ -8,16 +8,23 @@
 #include <SDL_rect.h>
 #include <SDL_surface.h>
 #include <SDL_render.h>
-
+#include "ppm_loader.h"
 
 class Button {
 
   SDL_Rect placement_;
-  SDL_Surface* image_ = SDL_LoadBMP("image.bmp");
+  SDL_Surface* image_;
 
+  Button() {
+
+  placement_ = LoadFromPpm(image_, "image.bmp");
+
+  }
 
   void DrawToRenderer(SDL_Renderer *renderer);
-~Button(){
+
+
+  ~Button(){
 
 
   SDL_FreeSurface(image_);
