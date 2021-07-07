@@ -3,10 +3,9 @@
 //
 
 #include "button.h"
-void Button::DrawToRenderer(SDL_Renderer *renderer) {
+void Button::DrawToRenderer(SDL_Renderer *renderer, SDL_Rect target_placement) {
 
-  SDL_Texture * texture = SDL_CreateTextureFromSurface(renderer, image_);
-  SDL_RenderCopy(renderer, texture, NULL, NULL);
+  SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, image_);
+  SDL_RenderCopy(renderer, texture, &placement_, &target_placement);
   SDL_DestroyTexture(texture);
-
 }

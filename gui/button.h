@@ -21,12 +21,10 @@ class Button {
 
   }
 
-  void DrawToRenderer(SDL_Renderer *renderer);
+  void DrawToRenderer(SDL_Renderer *renderer, SDL_Rect target_placement);
 
 
   ~Button(){
-
-
   SDL_FreeSurface(image_);
 }
 };
