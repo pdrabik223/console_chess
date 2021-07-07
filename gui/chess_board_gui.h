@@ -43,7 +43,7 @@ public:
 
   ChessBoardGui &operator=(const ChessBoardGui &other);
 
-  void UpdateScreen();
+  bool UpdateScreen();
 
   void UpdateDisplay(ChessBoard &board);
 
@@ -56,6 +56,8 @@ public:
   void ThEventLoop();
 
   ~ChessBoardGui();
+
+  bool active_ = true;
 
 protected:
   ChessBoard local_board_;

@@ -25,7 +25,12 @@ ChessBoardGui::ChessBoardGui() : local_board_() {
 
   window_thread_ = new std::thread(&ChessBoardGui::ThEventLoop, this);
 }
-void ChessBoardGui::UpdateScreen() { SDL_RenderPresent(renderer_); }
+bool ChessBoardGui::UpdateScreen() {
+  if (not active_)
+    return false;
+  SDL_RenderPresent(renderer_);
+  return true;
+}
 
 void ChessBoardGui::UpdateDisplay(ChessBoard &board) {
   DrawSquares();
@@ -42,21 +47,22 @@ ChessBoardGui::~ChessBoardGui() {
 }
 void ChessBoardGui::ThEventLoop() {
 
+  std::cout << "jo";
   while (1 < 2) {
+    SDL_WaitEvent(&event_);
 
-    if (SDL_PollEvent(&event_)) {
-
-      switch (event_.type) {
-      case SDL_QUIT:
-        return;
-      case SDL_MOUSEMOTION:
-
-        break;
-      case SDL_MOUSEBUTTONUP:
-
-        break;
-      }
+    switch (event_.type) {
+    case SDL_QUIT:
+      active_ = false;
+      return;
+    case SDL_MOUSEMOTION:
+      std::cout << "muse";
+      break;
+    case SDL_MOUSEBUTTONUP:
+      std::cout << "ja";
+      break;
     }
+
     // std::this_thread::sleep_for(std::chrono::milliseconds(24));
   }
 }

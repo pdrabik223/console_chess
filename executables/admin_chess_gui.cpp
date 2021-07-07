@@ -16,8 +16,13 @@ int main(int argc, char *argv[]) {
   ui.UpdateDisplay(game);
 
   ui.UpdateScreen();
+  while (1<2){
   char h;
   std::cin>>h;
+  if(ui.UpdateScreen()) return 1;
+
+
+  }
 
   return 0;
 }
