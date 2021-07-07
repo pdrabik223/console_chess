@@ -9,6 +9,10 @@ include_directories(.)
 add_subdirectory(SDL/)
 include_directories("./SDL/include")
 
+# add SDL_image lib
+add_subdirectory(SDL_image/)
+include_directories("./SDL_image/include")
+
 set(PAWNS
         pawns/piece.h pawns/piece.cpp
         pawns/pawn.h pawns/pawn.cpp
@@ -46,13 +50,10 @@ add_executable(admin_gui
         gui/admin_gui.h gui/admin_gui.cpp)
 
 
-target_link_libraries(admin
-        SDL2
-        SDL2::SDL2main)
-
 target_link_libraries(admin_gui
         SDL2
-        SDL2::SDL2main)
+        SDL2::SDL2main
+        SDL_image)
 
 if (WIN32)
     set(SDL_SHARED SDL2d.dll)
