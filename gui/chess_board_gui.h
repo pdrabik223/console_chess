@@ -10,12 +10,13 @@
 #include <SDL_render.h>
 #include <SDL_video.h>
 
+#include "button.h"
 #include "chess_board.h"
 #include "move.h"
 
-#include <vector>
 #include <chrono>
 #include <thread>
+#include <vector>
 
 #define WHITE_COLOR 255,255,255,0
 #define LIGHT_WHITE_COLOR 200,200,200,0
@@ -66,6 +67,8 @@ public:
 
 protected:
   ChessBoard local_board_;
+  std::array<Button,64> pieces_;
+
   std::vector<std::pair<int, GuiColor>> highlighted_squares_;
   std::vector<std::pair<int, GuiColor>> highlighted_pieces_;
 

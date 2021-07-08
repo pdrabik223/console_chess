@@ -2,16 +2,23 @@
 // Created by studio25 on 06.07.2021
 //
 #include "chess_board_gui.h"
+#include "button.h"
 
 void ChessBoardGui::ClearHighlight() {
   highlighted_squares_.clear();
   highlighted_pieces_.clear();
 }
 ChessBoardGui::ChessBoardGui() : local_board_() {
+
+  // load piece's images from drive
+  LoadImagesToMemory();
+
   current_orientation_ = WHITE_UP;
+
   // for reasons unclear to me
   // sdl needs variables declared in thread they will be used
   window_thread_ = new std::thread(&ChessBoardGui::ThEventLoop, this);
+
   // that's why we wait here half a second
   // so that the variables can be filled in
   std::this_thread::sleep_for(std::chrono::milliseconds(500));
@@ -37,6 +44,7 @@ ChessBoardGui::~ChessBoardGui() {
 
   // SDL_Quit();
 }
+
 void ChessBoardGui::ThEventLoop() {
 
   SDL_Event event;
@@ -128,7 +136,37 @@ void ChessBoardGui::DrawPieces() {
 
   for(int y = 0 ;y < 8;y++) {
     for (int x = 0; x < 8; x++){
-     switch(local_board_.GetElement(x,y).)
+     switch(local_board_.GetElement(x,y).GetPieceType()){
+      case WHITE_PAWN:
+        pieces_[]
+        break;
+      case WHITE_NIGHT:
+
+        break;
+      case WHITE_BISHOP:
+
+        break;
+      case WHITE_ROOK:
+        break;
+      case WHITE_QUEEN:
+        break;
+      case WHITE_KING:
+        break;
+      case BLACK_PAWN:
+        break;
+      case BLACK_NIGHT:
+        break;
+      case BLACK_BISHOP:
+        break;
+      case BLACK_ROOK:
+        break;
+      case BLACK_QUEEN:
+        break;
+      case BLACK_KING:
+        break;
+      default:
+        break;
+      }
 
 
 
