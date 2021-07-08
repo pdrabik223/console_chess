@@ -81,7 +81,7 @@ void ReadHeader(std::fstream &plik) {
   throw invalid_file_format;
 }
 
-SDL_Rect LoadFromPpm(SDL_Surface* target_image,std::string path) {
+SDL_Rect LoadFromPpm(SDL_Surface &target_image,std::string path) {
 
   std::fstream plik;
   plik.open(path, std::ios::in);
@@ -127,7 +127,7 @@ SDL_Rect LoadFromPpm(SDL_Surface* target_image,std::string path) {
         pixels[i] = {R, G, B, 0}; // dodaje pobrany kolor do tablicy
 
     }
-    target_image->pixels = pixels;
+    target_image.pixels = pixels;
     return {0,0,image_height,image_width};
   } else {
     // nie znaleziono pliku pod podanym adresem lub napodkano problem z
