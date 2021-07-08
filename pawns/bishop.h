@@ -19,6 +19,7 @@ public:
   }
 
   Bishop(const Bishop &other) = default;
+
   double Value() const override {
     if (Color())
       return 3.5;
@@ -31,6 +32,8 @@ public:
   bool Color() const override;
   bool Moved() const override;
   void SetMoved() override;
+  PieceType GetPieceType() override;
+
   explicit operator char() const override {
     if (Color())
       return 'b';

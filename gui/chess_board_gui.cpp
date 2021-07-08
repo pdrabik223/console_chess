@@ -126,5 +126,12 @@ else current_orientation_ = WHITE_UP;
 }
 void ChessBoardGui::DrawPieces() {
 
+  for(int y = 0 ;y < 8;y++) {
+    for (int x = 0; x < 8; x++){
+     switch(local_board_.GetElement(x,y).)
 
+
+
+    }
+  }
 }

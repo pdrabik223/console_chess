@@ -16,6 +16,24 @@
 #define B_HEIGHT 8
 #define B_WIDTH 8
 
+enum PieceType{
+  WHITE_PAWN,
+  WHITE_NIGHT,
+  WHITE_BISHOP,
+  WHITE_ROOK,
+  WHITE_QUEEN,
+  WHITE_KING,
+  BLACK_PAWN,
+  BLACK_NIGHT,
+  BLACK_BISHOP,
+  BLACK_ROOK,
+  BLACK_QUEEN,
+  BLACK_KING,
+  NONE,
+  SIZE
+};
+
+
 class Piece {
 
 public:
@@ -54,6 +72,9 @@ public:
   /// P = 7 N = 8 B = 9 R = 10 Q = 11 K = 12
   /// empty square is 0
   virtual unsigned char Hash(){return 0;};
+
+  virtual PieceType GetPieceType(){return NONE;}
+
 protected:
   virtual void GenMovesForBlack(std::array<Piece *, 64> &board,
                                 const unsigned int position,

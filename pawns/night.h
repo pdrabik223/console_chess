@@ -39,6 +39,8 @@ public:
   bool Color() const override { return info_ bitand 1; }
   bool Moved() const override { return info_ bitand 2; }
   void SetMoved() override;
+  PieceType GetPieceType() override;
+
   void GenMoves(std::array<Piece *, 64> &board, unsigned int position,
                 std::vector<Move> &possible_moves) override;
 };

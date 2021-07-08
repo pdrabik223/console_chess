@@ -3,8 +3,7 @@
 //
 
 #include "bishop.h"
-void Bishop::GenMoves(std::array<Piece *, 64> &board,
-                      unsigned int position,
+void Bishop::GenMoves(std::array<Piece *, 64> &board, unsigned int position,
                       std::vector<Move> &possible_moves) {
 
   /// the x part of position
@@ -66,3 +65,4 @@ bool Bishop::IsEmpty() { return false; }
 bool Bishop::Color() const { return info_ bitand 1; }
 bool Bishop::Moved() const { return info_ bitand 2; }
 void Bishop::SetMoved() { info_ |= 2; }
+PieceType Bishop::GetPieceType() { return Color() ? WHITE_BISHOP : BLACK_BISHOP; }

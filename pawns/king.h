@@ -39,7 +39,7 @@ public:
   bool Color() const override;
   bool Moved() const override;
   void SetMoved() override;
-
+  PieceType GetPieceType() override;
   unsigned char Hash() const {
     if (Color())
       return 6;

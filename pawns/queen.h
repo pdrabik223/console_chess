@@ -37,7 +37,7 @@ public:
   void SetMoved() override;
   virtual Queen *Clone(){return new Queen(* this);};
   unsigned char Hash() override;
-
+  PieceType GetPieceType() override;
   void GenMoves(std::array<Piece *, 64> &board, unsigned int position,
                 std::vector<Move> &possible_moves) override;
 };
