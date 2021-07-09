@@ -10,7 +10,7 @@
 #include <SDL_render.h>
 #include <SDL_video.h>
 
-#include "button.h"
+
 #include "chess_board.h"
 #include "move.h"
 
@@ -67,7 +67,6 @@ public:
 
 protected:
   ChessBoard local_board_;
-  std::array<Button,64> pieces_;
 
   std::vector<std::pair<int, GuiColor>> highlighted_squares_;
   std::vector<std::pair<int, GuiColor>> highlighted_pieces_;

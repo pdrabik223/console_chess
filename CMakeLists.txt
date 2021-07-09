@@ -27,7 +27,6 @@ set(WIN_CONSOLE
 
 set(GUI
         gui/chess_board_gui.h gui/chess_board_gui.cpp
-        gui/button.h gui/button.cpp
         gui/ppm_loader.cpp
         gui/file_exception.h)
 

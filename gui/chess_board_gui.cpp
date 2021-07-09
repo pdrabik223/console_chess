@@ -2,7 +2,29 @@
 // Created by studio25 on 06.07.2021
 //
 #include "chess_board_gui.h"
-#include "button.h"
+#include "ppm_loader.h"
+
+static std::array<SDL_Surface, SIZE - 1> images;
+
+
+static void LoadImagesToMemory() {
+  std::string directory_path = "../gui/assets/";
+
+  LoadFromPpm(images[WHITE_PAWN],directory_path + "white_pawn.ppm");
+  LoadFromPpm(images[WHITE_NIGHT],directory_path + "white_knight.ppm");
+  LoadFromPpm(images[WHITE_BISHOP],directory_path + "white_bishop.ppm");
+  LoadFromPpm(images[WHITE_ROOK],directory_path + "white_rook.ppm");
+  LoadFromPpm(images[WHITE_QUEEN],directory_path + "white_queen.ppm");
+  LoadFromPpm(images[WHITE_KING],directory_path + "white_king.ppm");
+  LoadFromPpm(images[BLACK_PAWN],directory_path + "black_pawn.ppm");
+  LoadFromPpm(images[BLACK_NIGHT],directory_path + "black_knight.ppm");
+  LoadFromPpm(images[BLACK_BISHOP],directory_path + "black_bishop.ppm");
+  LoadFromPpm(images[BLACK_ROOK],directory_path + "black_rook.ppm");
+  LoadFromPpm(images[BLACK_QUEEN],directory_path + "black_queen.ppm");
+  LoadFromPpm(images[BLACK_KING],directory_path + "black_king.ppm");
+}
+
+
 
 void ChessBoardGui::ClearHighlight() {
   highlighted_squares_.clear();
@@ -60,10 +82,11 @@ void ChessBoardGui::ThEventLoop() {
   renderer_ = SDL_CreateRenderer(window_, -1, SDL_RENDERER_PRESENTVSYNC);
 
   DrawSquares();
+  DrawPieces();
 
   SDL_RenderPresent(renderer_);
 
-  std::cout << "jo";
+
 
   while (1 < 2) {
     SDL_WaitEvent(&event);
@@ -76,9 +99,10 @@ void ChessBoardGui::ThEventLoop() {
         std::cout << "muse";
         break;
       case SDL_MOUSEBUTTONUP:
-        std::cout << "ja";
+
         RotateBoard();
         DrawSquares();
+        DrawPieces();
         SDL_RenderPresent(renderer_);
         break;
       }
@@ -132,43 +156,22 @@ void ChessBoardGui::RotateBoard() {
 if(current_orientation_ == WHITE_UP) current_orientation_ = BLACK_UP;
 else current_orientation_ = WHITE_UP;
 }
+
+void DrawToRenderer(SDL_Renderer *renderer, SDL_Rect target_placement, PieceType pawn) {
+  if(pawn == NONE) return;
+  auto image = images[pawn];
+  SDL_Rect image_contour = {0,0,64,64};
+  SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, &image);
+  SDL_RenderCopy(renderer, texture, &image_contour, &target_placement);
+  SDL_DestroyTexture(texture);
+}
+
+
 void ChessBoardGui::DrawPieces() {
 
   for(int y = 0 ;y < 8;y++) {
     for (int x = 0; x < 8; x++){
-     switch(local_board_.GetElement(x,y).GetPieceType()){
-      case WHITE_PAWN:
-        pieces_[]
-        break;
-      case WHITE_NIGHT:
-
-        break;
-      case WHITE_BISHOP:
-
-        break;
-      case WHITE_ROOK:
-        break;
-      case WHITE_QUEEN:
-        break;
-      case WHITE_KING:
-        break;
-      case BLACK_PAWN:
-        break;
-      case BLACK_NIGHT:
-        break;
-      case BLACK_BISHOP:
-        break;
-      case BLACK_ROOK:
-        break;
-      case BLACK_QUEEN:
-        break;
-      case BLACK_KING:
-        break;
-      default:
-        break;
-      }
-
-
+      DrawToRenderer(renderer_,{x*64,y*64,64,64} ,local_board_.GetElement(x,y).GetPieceType());
 
     }
   }
