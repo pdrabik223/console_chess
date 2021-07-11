@@ -128,6 +128,7 @@ SDL_Rect LoadFromPpm(SDL_Surface &target_image,std::string path) {
 
     }
  // test if here it retrives pointer and the data isn't deleted
+    // todo copy whole data to another pointer
     target_image.pixels = pixels;
 
     return {0,0,image_height,image_width};
