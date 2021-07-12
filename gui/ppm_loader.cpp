@@ -127,7 +127,7 @@ SDL_Rect LoadFromPpm(SDL_Surface &target_image,std::string path) {
         pixels[i] = {R, G, B, 0}; // dodaje pobrany kolor do tablicy
 
     }
- // test if here it retrives pointer and the data isn't deleted
+    // test if here it retrives pointer and the data isn't deleted
     // todo copy whole data to another pointer
     target_image.pixels = pixels;
 
