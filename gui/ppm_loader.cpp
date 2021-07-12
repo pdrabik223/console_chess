@@ -4,7 +4,6 @@
 
 #include "ppm_loader.h"
 
-
 exception::InvalidFileFormatException invalid_file_format;
 exception::InvalidCharacterException invalid_character;
 
@@ -44,7 +43,7 @@ int ReadNumber(std::fstream &plik) {
     if (plik.fail())
       HandleChar(
           plik); // obiekt fstream gdy napotka nielegalny symbol wystawia blad
-      // wiecej informacji : https://www.cplusplus.com/reference/ios/ios/rdstate/
+    // wiecej informacji : https://www.cplusplus.com/reference/ios/ios/rdstate/
     else
       return number;
 
@@ -66,8 +65,7 @@ void ReadHeader(std::fstream &plik) {
 
     plik >> letter;
     if (IsComment(letter))
-      IgnoreComment(
-          plik); // w_ przypadu gdy napotkamy '#' czyli poczatek komentarza
+      IgnoreComment(plik); // in case of # we ignore the rest of the line
 
     else if (letter == 'P') {
       plik >> letter;
@@ -81,7 +79,7 @@ void ReadHeader(std::fstream &plik) {
   throw invalid_file_format;
 }
 
-SDL_Rect LoadFromPpm(SDL_Surface &target_image,std::string path) {
+SDL_Rect LoadFromPpm(SDL_Surface &target_image, std::string path) {
 
   std::fstream plik;
   plik.open(path, std::ios::in);
@@ -102,7 +100,7 @@ SDL_Rect LoadFromPpm(SDL_Surface &target_image,std::string path) {
 
     size_t array_size = image_height * image_width; // tymczasowa  zmienna
 
-    SDL_Color* pixels = new SDL_Color [array_size];
+    SDL_Color *pixels = new SDL_Color[array_size];
 
     for (unsigned i = 0; i < array_size; i++) {
 
@@ -125,20 +123,15 @@ SDL_Rect LoadFromPpm(SDL_Surface &target_image,std::string path) {
         pixels[i] = {R, G, B, 255};
       else
         pixels[i] = {R, G, B, 0}; // dodaje pobrany kolor do tablicy
-
     }
     // test if here it retrives pointer and the data isn't deleted
     // todo copy whole data to another pointer
     target_image.pixels = pixels;
 
-    return {0,0,image_height,image_width};
+    return {0, 0, image_height, image_width};
 
   } else {
-    // nie znaleziono pliku pod podanym adresem lub napodkano problem z
-    // odczytaniem danych z niego
-    // wiecej pod adresem: https://en.cppreference.com/w/cpp/io/basic_ios/good
-
+    // in case of invalid path
     throw invalid_path;
   }
-
 }
