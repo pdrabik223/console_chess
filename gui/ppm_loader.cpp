@@ -119,7 +119,7 @@ SDL_Rect LoadFromPpm(SDL_Surface &target_image, std::string path) {
       }
       unsigned char B = CheckColor(ReadNumber(plik));
 
-      if (R == 0 && G == 0 && B == 0)
+      if (R == 255 && G == 255 && B == 255)
         pixels[i] = {R, G, B, 255};
       else
         pixels[i] = {R, G, B, 0}; // dodaje pobrany kolor do tablicy
