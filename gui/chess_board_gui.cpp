@@ -166,12 +166,15 @@ void ChessBoardGui::DrawPieces() {
 void ChessBoardGui::DrawToRenderer(SDL_Rect target_placement, PieceType pawn) {
   if (pawn == NONE)
     return;
-  auto image = images[pawn];
 
-  SDL_Rect image_contour = {0, 0, 64, 64};
+  // in CreateTextureFromSurface surface is not modified
 
-  SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer_, &image);
-  SDL_RenderCopy(renderer_, texture, &image_contour, &target_placement);
+  SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer_, &(images[pawn]));
+
+  if (texture == NULL) {
+    fprintf(stderr, "CreateTextureFromSurface failed: %s\n", SDL_GetError());
+   }
+
+  SDL_RenderCopy(renderer_, texture, NULL, &target_placement);
   SDL_DestroyTexture(texture);
-
 }

@@ -129,6 +129,10 @@ SDL_Rect LoadFromPpm(SDL_Surface &target_image, std::string path) {
 
     target_image.pixels = pixels;
 
+    if (&target_image == NULL) {
+      fprintf(stderr, "CreateRGBSurface failed: %s\n", SDL_GetError());
+    }
+
     return {0, 0, image_height, image_width};
 
   } else {
