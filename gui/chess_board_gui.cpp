@@ -4,6 +4,10 @@
 #include "chess_board_gui.h"
 #include "ppm_loader.h"
 
+ int Abs(int a ){
+   return a < 0 ? -a : a ;
+ }
+
 static std::array<SDL_Surface *, SIZE - 1> images;
 
 static void LoadImagesToMemory() {
@@ -14,11 +18,12 @@ static void LoadImagesToMemory() {
   Uint32 b_mask = 0x0000ff00;
   Uint32 a_mask = 0x000000ff;
 
-  for(int i =0 ;i< SIZE - 1 ;i++) {
-    images[i] = SDL_CreateRGBSurface(0, 64, 64, 32, r_mask, g_mask, b_mask, a_mask);
+  for (int i = 0; i < SIZE - 1; i++) {
+    images[i] =
+        SDL_CreateRGBSurface(0, 64, 64, 32, r_mask, g_mask, b_mask, a_mask);
 
-    if ( images[i] == NULL) {
-      fprintf(stderr,"SDL_CreateRGBSurface() failed: %s", SDL_GetError());
+    if (images[i] == NULL) {
+      fprintf(stderr, "SDL_CreateRGBSurface() failed: %s", SDL_GetError());
       exit(1);
     }
   }
@@ -41,6 +46,7 @@ void ChessBoardGui::ClearHighlight() {
   highlighted_squares_.clear();
   highlighted_pieces_.clear();
 }
+
 ChessBoardGui::ChessBoardGui() : local_board_() {
 
   // load piece's images from drive
@@ -56,6 +62,7 @@ ChessBoardGui::ChessBoardGui() : local_board_() {
   // so that the variables can be filled in
   std::this_thread::sleep_for(std::chrono::milliseconds(500));
 }
+
 bool ChessBoardGui::UpdateScreen() {
   if (not active_)
     return false;
@@ -104,7 +111,6 @@ void ChessBoardGui::ThEventLoop() {
       active_ = false;
       return;
     case SDL_MOUSEMOTION:
-      std::cout << "muse";
       break;
     case SDL_MOUSEBUTTONUP:
 
@@ -115,22 +121,22 @@ void ChessBoardGui::ThEventLoop() {
       break;
     }
 
-    std::cout << "f";
     std::this_thread::sleep_for(std::chrono::milliseconds(24));
   }
 }
+
 void ChessBoardGui::DrawSquares() {
 
   for (int y = 0; y < 8; y++)
     for (int x = 0; x < 8; x++) {
       SDL_Rect square = {y * 64, x * 64, 64, 64};
 
-      if (current_orientation_ == WHITE_UP)
-        if (x % 2 == 0 xor y % 2 == 0)
-          SDL_SetRenderDrawColor(renderer_, LIGHT_WHITE_COLOR);
-        else
-          SDL_SetRenderDrawColor(renderer_, LIGHT_BLACK_COLOR);
-      else if (x % 2 == 0 xor y % 2 == 0)
+     // if (current_orientation_ == BLACK_UP)
+//        if (x % 2 == 0 xor y % 2 == 0)
+//          SDL_SetRenderDrawColor(renderer_, LIGHT_WHITE_COLOR);
+//        else
+//          SDL_SetRenderDrawColor(renderer_, LIGHT_BLACK_COLOR);
+       if (x % 2 == 0 xor y % 2 == 0)
         SDL_SetRenderDrawColor(renderer_, LIGHT_BLACK_COLOR);
       else
         SDL_SetRenderDrawColor(renderer_, LIGHT_WHITE_COLOR);
@@ -159,6 +165,7 @@ void ChessBoardGui::DrawSquares() {
     SDL_RenderFillRect(renderer_, &square);
   }
 }
+
 void ChessBoardGui::RotateBoard() {
   if (current_orientation_ == WHITE_UP)
     current_orientation_ = BLACK_UP;
@@ -166,17 +173,17 @@ void ChessBoardGui::RotateBoard() {
     current_orientation_ = WHITE_UP;
 }
 
-
-
 void ChessBoardGui::DrawPieces() {
+  int flip = current_orientation_ == WHITE_UP ? 0 : 7;
 
   for (int y = 0; y < 8; y++) {
     for (int x = 0; x < 8; x++) {
-      DrawToRenderer( {x * 64, y * 64, 64, 64},
-                     local_board_.GetElement(y, x).GetPieceType());
+      DrawToRenderer({x * 64, y * 64, 64, 64},
+                     local_board_.GetElement(Abs(y - flip), x).GetPieceType());
     }
   }
 }
+
 void ChessBoardGui::DrawToRenderer(SDL_Rect target_placement, PieceType pawn) {
   if (pawn == NONE)
     return;
@@ -189,7 +196,7 @@ void ChessBoardGui::DrawToRenderer(SDL_Rect target_placement, PieceType pawn) {
 
   if (texture == NULL) {
     fprintf(stderr, "CreateTextureFromSurface failed: %s\n", SDL_GetError());
-   }
+  }
 
   SDL_RenderCopy(renderer_, texture, NULL, &target_placement);
   SDL_DestroyTexture(texture);
