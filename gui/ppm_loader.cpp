@@ -41,9 +41,7 @@ int ReadNumber(std::fstream &plik) {
   do {
     plik >> number;
     if (plik.fail())
-      HandleChar(
-          plik); // obiekt fstream gdy napotka nielegalny symbol wystawia blad
-    // wiecej informacji : https://www.cplusplus.com/reference/ios/ios/rdstate/
+      HandleChar(plik);
     else
       return number;
 
@@ -100,7 +98,7 @@ SDL_Rect LoadFromPpm(SDL_Surface *target_image, std::string path) {
 
     size_t array_size = image_height * image_width; // tymczasowa  zmienna
 
-    SDL_Color *pixels = new SDL_Color[array_size];
+    unsigned int *pixels = new unsigned int[array_size];
 
     for (unsigned i = 0; i < array_size; i++) {
 
@@ -119,16 +117,16 @@ SDL_Rect LoadFromPpm(SDL_Surface *target_image, std::string path) {
       }
       unsigned char B = CheckColor(ReadNumber(plik));
 
-      if (R == 255 && G == 255 && B == 255)
-        pixels[i] = {0, 0, 0, 0};
+      if (R == 195 && G == 195 && B == 195) // if given color is considered invisible
+        pixels[i] = 0;                       // convert it to invisible also this time gray 25% is see-thure
+
       else
-        pixels[i] = {R, G, B, 255};
+        pixels[i] = (R << 24) + (G << 16) + (B << 8) + 255;
     }
     // test if here it retrives pointer and the data isn't deleted
     // todo copy whole data to another pointer
 
     target_image->pixels = pixels;
-
 
     return {0, 0, image_height, image_width};
 
