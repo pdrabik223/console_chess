@@ -4,10 +4,24 @@
 #include "chess_board_gui.h"
 #include "ppm_loader.h"
 
-static std::array<SDL_Surface, SIZE - 1> images;
+static std::array<SDL_Surface *, SIZE - 1> images;
 
 static void LoadImagesToMemory() {
   std::string directory_path = "../gui/assets/";
+
+  Uint32 r_mask = 0xff000000;
+  Uint32 g_mask = 0x00ff0000;
+  Uint32 b_mask = 0x0000ff00;
+  Uint32 a_mask = 0x000000ff;
+
+  for(int i =0 ;i< SIZE - 1 ;i++) {
+    images[i] = SDL_CreateRGBSurface(0, 64, 64, 32, r_mask, g_mask, b_mask, a_mask);
+
+    if ( images[i] == NULL) {
+      fprintf(stderr,"SDL_CreateRGBSurface() failed: %s", SDL_GetError());
+      exit(1);
+    }
+  }
 
   LoadFromPpm(images[WHITE_PAWN], directory_path + "white_pawn.ppm");
   LoadFromPpm(images[WHITE_NIGHT], directory_path + "white_knight.ppm");
@@ -159,7 +173,7 @@ void ChessBoardGui::DrawPieces() {
   for (int y = 0; y < 8; y++) {
     for (int x = 0; x < 8; x++) {
       DrawToRenderer( {x * 64, y * 64, 64, 64},
-                     local_board_.GetElement(x, y).GetPieceType());
+                     local_board_.GetElement(y, x).GetPieceType());
     }
   }
 }
@@ -168,8 +182,10 @@ void ChessBoardGui::DrawToRenderer(SDL_Rect target_placement, PieceType pawn) {
     return;
 
   // in CreateTextureFromSurface surface is not modified
-
-  SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer_, &(images[pawn]));
+  if (images[pawn] == NULL) {
+    fprintf(stderr, "CreateRGBSurface failed: %s\n", SDL_GetError());
+  }
+  SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer_, images[pawn]);
 
   if (texture == NULL) {
     fprintf(stderr, "CreateTextureFromSurface failed: %s\n", SDL_GetError());

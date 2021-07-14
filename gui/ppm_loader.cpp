@@ -79,7 +79,7 @@ void ReadHeader(std::fstream &plik) {
   throw invalid_file_format;
 }
 
-SDL_Rect LoadFromPpm(SDL_Surface &target_image, std::string path) {
+SDL_Rect LoadFromPpm(SDL_Surface *target_image, std::string path) {
 
   std::fstream plik;
   plik.open(path, std::ios::in);
@@ -120,18 +120,15 @@ SDL_Rect LoadFromPpm(SDL_Surface &target_image, std::string path) {
       unsigned char B = CheckColor(ReadNumber(plik));
 
       if (R == 255 && G == 255 && B == 255)
-        pixels[i] = {R, G, B, 255};
-      else
         pixels[i] = {R, G, B, 0};
+      else
+        pixels[i] = {R, G, B, 255};
     }
     // test if here it retrives pointer and the data isn't deleted
     // todo copy whole data to another pointer
 
-    target_image.pixels = pixels;
+    target_image->pixels = pixels;
 
-    if (&target_image == NULL) {
-      fprintf(stderr, "CreateRGBSurface failed: %s\n", SDL_GetError());
-    }
 
     return {0, 0, image_height, image_width};
 

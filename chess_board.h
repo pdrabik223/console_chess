@@ -29,7 +29,7 @@ public:
   ChessBoard(const ChessBoard &other);
   ChessBoard &operator=(const ChessBoard &other);
 
-  Piece &GetElement(unsigned x, unsigned y);
+  Piece &GetElement(unsigned h, unsigned w);
   Piece &GetElement(unsigned position);
   Piece *&operator[](unsigned position);
 

@@ -85,8 +85,8 @@ Piece *&ChessBoard::operator[](unsigned int position) {
   return plane_[position];
 }
 
-Piece &ChessBoard::GetElement(unsigned int x, unsigned int y) {
-  return *plane_[x * B_WIDTH + y];
+Piece &ChessBoard::GetElement(unsigned int h, unsigned int w) {
+  return *plane_[h * B_WIDTH + w];
 }
 
 double ChessBoard::EvaluatePosition() {

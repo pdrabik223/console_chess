@@ -12,7 +12,7 @@
 #define CONSOLE_CHESS_GUI_PPM_LOADER_H_
 
 
-SDL_Rect LoadFromPpm(SDL_Surface &target_image,std::string path);
+SDL_Rect LoadFromPpm(SDL_Surface *target_image,std::string path);
 
 bool IsComment(const char &letter);
 
