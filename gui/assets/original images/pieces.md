@@ -24,3 +24,9 @@ white and black
 
 # Clean chess
 [Whole pack](https://www.flaticon.com/packs/chess-36)
+
+
+# How to edit them 
+I propose three-step plan 
+
+- convert file 

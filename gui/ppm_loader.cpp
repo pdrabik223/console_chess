@@ -117,12 +117,13 @@ SDL_Rect LoadFromPpm(SDL_Surface *target_image, std::string path) {
       }
       unsigned char B = CheckColor(ReadNumber(plik));
 
-      if (R == 195 && G == 195 && B == 195) // if given color is considered invisible
-        pixels[i] = 0;                       // convert it to invisible also this time gray 25% is see-thure
-
+      if ((R == G) && (R == B ) && (B == 255)) // if given color is considered invisible
+        pixels[i] = 0;                         // convert it to invisible also this time gray 25% is see-thure
       else
         pixels[i] = (R << 24) + (G << 16) + (B << 8) + 255;
     }
+
+
     // test if here it retrives pointer and the data isn't deleted
     // todo copy whole data to another pointer
 

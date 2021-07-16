@@ -4,9 +4,7 @@
 #include "chess_board_gui.h"
 #include "ppm_loader.h"
 
- int Abs(int a ){
-   return a < 0 ? -a : a ;
- }
+int Abs(int a) { return a < 0 ? -a : a; }
 
 static std::array<SDL_Surface *, SIZE - 1> images;
 
@@ -20,7 +18,7 @@ static void LoadImagesToMemory() {
 
   for (int i = 0; i < SIZE - 1; i++) {
     images[i] =
-        SDL_CreateRGBSurface(0, 64, 64, 32, r_mask, g_mask, b_mask, a_mask);
+        SDL_CreateRGBSurface(0, 60, 60, 32, r_mask, g_mask, b_mask, a_mask);
 
     if (images[i] == NULL) {
       fprintf(stderr, "SDL_CreateRGBSurface() failed: %s", SDL_GetError());
@@ -131,12 +129,12 @@ void ChessBoardGui::DrawSquares() {
     for (int x = 0; x < 8; x++) {
       SDL_Rect square = {y * 64, x * 64, 64, 64};
 
-     // if (current_orientation_ == BLACK_UP)
-//        if (x % 2 == 0 xor y % 2 == 0)
-//          SDL_SetRenderDrawColor(renderer_, LIGHT_WHITE_COLOR);
-//        else
-//          SDL_SetRenderDrawColor(renderer_, LIGHT_BLACK_COLOR);
-       if (x % 2 == 0 xor y % 2 == 0)
+      // if (current_orientation_ == BLACK_UP)
+      //        if (x % 2 == 0 xor y % 2 == 0)
+      //          SDL_SetRenderDrawColor(renderer_, LIGHT_WHITE_COLOR);
+      //        else
+      //          SDL_SetRenderDrawColor(renderer_, LIGHT_BLACK_COLOR);
+      if (x % 2 == 0 xor y % 2 == 0)
         SDL_SetRenderDrawColor(renderer_, LIGHT_BLACK_COLOR);
       else
         SDL_SetRenderDrawColor(renderer_, LIGHT_WHITE_COLOR);
@@ -147,6 +145,7 @@ void ChessBoardGui::DrawSquares() {
   for (auto &c : highlighted_squares_) {
 
     SDL_Rect square = {c.first / 8, c.first % 8, 64, 64};
+
     switch (c.second) {
     case WHITE:
       SDL_SetRenderDrawColor(renderer_, WHITE_COLOR);
@@ -178,7 +177,7 @@ void ChessBoardGui::DrawPieces() {
 
   for (int y = 0; y < 8; y++) {
     for (int x = 0; x < 8; x++) {
-      DrawToRenderer({x * 64, y * 64, 64, 64},
+      DrawToRenderer({x * 64 +  x, y * 64 + y, 60, 60},
                      local_board_.GetElement(Abs(y - flip), x).GetPieceType());
     }
   }
