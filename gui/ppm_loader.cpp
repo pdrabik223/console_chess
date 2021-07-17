@@ -5,9 +5,11 @@
 #include "ppm_loader.h"
 
 exception::InvalidFileFormatException invalid_file_format;
+
 exception::InvalidCharacterException invalid_character;
 
 exception::BadDimensionsException bad_dimensions;
+
 exception::InvalidPathException invalid_path;
 
 exception::NotImplementedFileFormatException not_implemented_file_format;
@@ -117,12 +119,13 @@ SDL_Rect LoadFromPpm(SDL_Surface *target_image, std::string path) {
       }
       unsigned char B = CheckColor(ReadNumber(plik));
 
-      if ((R == G) && (R == B ) && (B == 255)) // if given color is considered invisible
-        pixels[i] = 0;                         // convert it to invisible also this time gray 25% is see-thure
+      if ((R == G) && (R == B) &&
+          (B == 255)) // if given color is considered invisible
+        pixels[i] =
+            0; // convert it to invisible also this time gray 25% is see-thure
       else
         pixels[i] = (R << 24) + (G << 16) + (B << 8) + 255;
     }
-
 
     // test if here it retrives pointer and the data isn't deleted
     // todo copy whole data to another pointer
