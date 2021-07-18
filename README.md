@@ -5,6 +5,8 @@ this time I'm serius
 GR8
 what now 
 
+
+
 |**Idea**|**How hard it is**|**Where we are**|**What need's to be done first**|
 | :--- | :--- | :--- | :--- |
 |**Transformation tables**|manageable|it's kinda done<br> I mean it's there <br>but i need to test it more|test it , test the whole thing|

@@ -200,3 +200,12 @@ void ChessBoardGui::DrawToRenderer(SDL_Rect target_placement, PieceType pawn) {
   SDL_RenderCopy(renderer_, texture, NULL, &target_placement);
   SDL_DestroyTexture(texture);
 }
+void ChessBoardGui::LabelSquares() {
+
+  TTF_Init();
+
+  TTF_Font *sans = TTF_OpenFont("gui/assets/STIXTwoMath-Regular.ttf", 16);
+
+  if (!sans)
+    std::cout << TTF_GetError();
+}
