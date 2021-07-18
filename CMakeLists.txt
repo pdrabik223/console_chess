@@ -4,7 +4,6 @@ project(console_chess)
 set(CMAKE_CXX_STANDARD 14)
 
 include_directories(.)
-
 # add SDL lib
 add_subdirectory(SDL/)
 include_directories("./SDL/include")
