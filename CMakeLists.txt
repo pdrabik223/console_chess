@@ -8,6 +8,7 @@ include_directories(.)
 add_subdirectory(SDL/)
 include_directories("./SDL/include")
 
+
 set(PAWNS
         pawns/piece.h pawns/piece.cpp
         pawns/pawn.h pawns/pawn.cpp
