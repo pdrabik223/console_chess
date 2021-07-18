@@ -119,10 +119,10 @@ SDL_Rect LoadFromPpm(SDL_Surface *target_image, std::string path) {
       }
       unsigned char B = CheckColor(ReadNumber(plik));
 
-      if ((R == G) && (R == B) &&
-          (B == 255)) // if given color is considered invisible
-        pixels[i] =
-            0; // convert it to invisible also this time gray 25% is see-thure
+      // if given color is considered invisible
+      if ((R == G) && (R == B) && (B == 195))
+        // convert it to invisible also this time gray 25% is see-thure
+        pixels[i] = 0;
       else
         pixels[i] = (R << 24) + (G << 16) + (B << 8) + 255;
     }

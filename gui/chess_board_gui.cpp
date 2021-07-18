@@ -177,7 +177,7 @@ void ChessBoardGui::DrawPieces() {
 
   for (int y = 0; y < 8; y++) {
     for (int x = 0; x < 8; x++) {
-      DrawToRenderer({x * 64 +  x, y * 64 + y, 60, 60},
+      DrawToRenderer({x * 64 + 2, y * 64 + 2, 60, 60},
                      local_board_.GetElement(Abs(y - flip), x).GetPieceType());
     }
   }
