@@ -9,7 +9,7 @@
 #include <SDL_main.h>
 #include <SDL_render.h>
 #include <SDL_video.h>
-#include <SDL_ttf/SDL_ttf.h>
+//#include <SDL_ttf/SDL_ttf.h>
 
 #include "chess_board.h"
 #include "move.h"

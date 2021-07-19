@@ -3,7 +3,7 @@
 //
 #include "chess_board_gui.h"
 #include "ppm_loader.h"
-
+#include <SDL_ttf.h>
 int Abs(int a) { return a < 0 ? -a : a; }
 
 static std::array<SDL_Surface *, SIZE - 1> images;
