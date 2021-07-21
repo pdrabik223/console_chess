@@ -3,7 +3,7 @@
 //
 #include "chess_board_gui.h"
 #include "ppm_loader.h"
-#include <SDL_ttf.h>
+//#include <SDL_ttf.h>
 int Abs(int a) { return a < 0 ? -a : a; }
 
 static std::array<SDL_Surface *, SIZE - 1> images;
@@ -202,10 +202,10 @@ void ChessBoardGui::DrawToRenderer(SDL_Rect target_placement, PieceType pawn) {
 }
 void ChessBoardGui::LabelSquares() {
 
-  TTF_Init();
-
-  TTF_Font *sans = TTF_OpenFont("gui/assets/STIXTwoMath-Regular.ttf", 16);
-
-  if (!sans)
-    std::cout << TTF_GetError();
+//  TTF_Init();
+//
+//  TTF_Font *sans = TTF_OpenFont("gui/assets/STIXTwoMath-Regular.ttf", 16);
+//
+//  if (!sans)
+//    std::cout << TTF_GetError();
 }
