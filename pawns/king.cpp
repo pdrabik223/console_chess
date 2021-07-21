@@ -78,4 +78,4 @@ bool King::IsEmpty() { return false; }
 bool King::Color() const { return info_ bitand 1; }
 bool King::Moved() const { return info_ bitand 2; }
 void King::SetMoved() { info_ |= 2; }
-PieceType King::GetPieceType() { return Color() ? WHITE_KING : BLACK_KING; }
+PieceType King::GetPieceType() { return Color() ? PieceType::WHITE_KING : PieceType::BLACK_KING; }

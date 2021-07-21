@@ -65,4 +65,4 @@ bool Bishop::IsEmpty() { return false; }
 bool Bishop::Color() const { return info_ bitand 1; }
 bool Bishop::Moved() const { return info_ bitand 2; }
 void Bishop::SetMoved() { info_ |= 2; }
-PieceType Bishop::GetPieceType() { return Color() ? WHITE_BISHOP : BLACK_BISHOP; }
+PieceType Bishop::GetPieceType() { return Color() ? PieceType::WHITE_BISHOP : PieceType::BLACK_BISHOP; }

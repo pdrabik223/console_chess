@@ -82,4 +82,4 @@ void Night::GenMoves(std::array<Piece *, 64> &board,
       possible_moves.emplace_back(position, CCord(nx, ny));
 }
 void Night::SetMoved() { info_ |= 2; }
-PieceType Night::GetPieceType() { return Color() ? WHITE_NIGHT : BLACK_NIGHT; }
+PieceType Night::GetPieceType() { return Color() ? PieceType::WHITE_NIGHT : PieceType::BLACK_NIGHT; }

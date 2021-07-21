@@ -16,7 +16,7 @@
 #define B_HEIGHT 8
 #define B_WIDTH 8
 
-enum class  PieceType{
+enum class PieceType{
   WHITE_PAWN = 0,
   WHITE_NIGHT = 1,
   WHITE_BISHOP = 2,

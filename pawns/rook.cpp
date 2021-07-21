@@ -39,4 +39,4 @@ bool Rook::IsEmpty() { return false; }
 bool Rook::Color() const { return info_ bitand 1; }
 bool Rook::Moved() const { return info_ bitand 2; }
 void Rook::SetMoved() { info_ |= 2; }
-PieceType Rook::GetPieceType() { return Color() ? WHITE_ROOK : BLACK_ROOK; }
+PieceType Rook::GetPieceType() { return Color() ? PieceType::WHITE_ROOK : PieceType::BLACK_ROOK; }
