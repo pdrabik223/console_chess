@@ -10,19 +10,6 @@ add_subdirectory(SDL/)
 include_directories(${PROJECT_SOURCE_DIR}/SDL/include)
 include_directories(${PROJECT_SOURCE_DIR}/SDL2_ttf/include)
 
-# searching for include directory
-#find_path(SDL_TTF ./SDL_ttf/include/SDL_ttf.h)
-
-# searching for library file
-#find_library(SDL_TTF_LIB ./SDL_ttf/lib/SDL_ttf.lib)
-
-
-
-# add ttf
-#add_subdirectory(SDL_TTF)
-#include_directories(./SDL_ttf/include)
-
-
 
 set(PAWNS
         pawns/piece.h pawns/piece.cpp
