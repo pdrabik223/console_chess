@@ -9,7 +9,7 @@
 #include <windows_console/admin.h>
 
 int main() {
-  srand(time(NULL));
+
   std::cout << "welcome to admin chess\n";
 
     Admin game;

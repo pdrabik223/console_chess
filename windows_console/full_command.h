@@ -8,7 +8,7 @@
 #include <vector>
 #include <windows_console/scml.h>
 
-enum Task {
+enum class Task {
 
   QUIT, // ok
   MOVE,
@@ -38,7 +38,7 @@ struct full_command;
 full_command Parse(std::string &line);
 
 struct full_command {
-  full_command() : comm(NONE), data(){};
+  full_command() : comm(Task::NONE), data(){};
   full_command(Task t) : comm(t){};
 
   full_command(Task t, std::vector<int> data)

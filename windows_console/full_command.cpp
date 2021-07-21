@@ -58,62 +58,62 @@ full_command Add(std::string &line) {
 
     data.push_back('p');
     data.push_back(0);
-    return {ADD_PIECE, data};
+    return {Task::ADD_PIECE, data};
 
   case 'P':
     data.push_back('p');
     data.push_back(1);
-    return {ADD_PIECE, data};
+    return {Task::ADD_PIECE, data};
 
   case 'n':
     data.push_back('n');
     data.push_back(0);
-    return {ADD_PIECE, data};
+    return {Task::ADD_PIECE, data};
 
   case 'N':
     data.push_back('n');
     data.push_back(1);
-    return {ADD_PIECE, data};
+    return {Task::ADD_PIECE, data};
 
   case 'b':
     data.push_back('b');
     data.push_back(0);
-    return {ADD_PIECE, data};
+    return {Task::ADD_PIECE, data};
 
   case 'B':
     data.push_back('b');
     data.push_back(1);
-    return {ADD_PIECE, data};
+    return {Task::ADD_PIECE, data};
 
   case 'r':
     data.push_back('r');
     data.push_back(0);
-    return {ADD_PIECE, data};
+    return {Task::ADD_PIECE, data};
 
   case 'R':
     data.push_back('r');
     data.push_back(1);
-    return {ADD_PIECE, data};
+    return {Task::ADD_PIECE, data};
 
   case 'q':
     data.push_back('q');
     data.push_back(0);
-    return {ADD_PIECE, data};
+    return {Task::ADD_PIECE, data};
 
   case 'Q':
     data.push_back('q');
     data.push_back(1);
-    return {ADD_PIECE, data};
+    return {Task::ADD_PIECE, data};
 
   case 'k':
     data.push_back('k');
     data.push_back(0);
-    return {ADD_PIECE, data};
+    return {Task::ADD_PIECE, data};
 
   case 'K':
     data.push_back('k');
     data.push_back(1);
-    return {ADD_PIECE, data};
+    return {Task::ADD_PIECE, data};
   }
 }
 
@@ -122,24 +122,24 @@ full_command Del(std::string &line) {
   EraseTillSpace(line);
 
   if (line == "all")
-    return {DELL_ALL};
+    return {Task::DELL_ALL};
 
   std::vector<int> data;
   data.push_back(ChessToInt(line));
 
-  return {DELETE_PIECE, data};
+  return {Task::DELETE_PIECE, data};
 }
 
 full_command Show(std::string &line) {
   EraseTillSpace(line);
 
   if (line == "all")
-    return {SHOW_ALL};
+    return {Task::SHOW_ALL};
 
   std::vector<int> data;
   data.push_back(ChessToInt(line));
 
-  return {SHOW_MOVES, data};
+  return {Task::SHOW_MOVES, data};
 }
 
 full_command MinMax(std::string &line) {
@@ -151,7 +151,7 @@ full_command MinMax(std::string &line) {
 
   if (line.substr(0, 3) == "all") {
 
-    temp.comm = MINMAX_ALL;
+    temp.comm = Task::MINMAX_ALL;
 
     EraseTillSpace(line);
 
@@ -165,7 +165,7 @@ full_command MinMax(std::string &line) {
     temp.data = data;
 
   } else {
-    temp.comm = MINMAX;
+    temp.comm = Task::MINMAX;
     data.push_back(ChessToInt(line));
 
     EraseTillSpace(line);
@@ -184,7 +184,7 @@ full_command AlphaBetaMinMax(std::string &line) {
 
   if (line.substr(0, 3) == "all") {
 
-    temp.comm = ALFA_BETA_MINMAX_ALL;
+    temp.comm = Task::MINMAX_ALL;
 
     EraseTillSpace(line);
 
@@ -198,7 +198,7 @@ full_command AlphaBetaMinMax(std::string &line) {
     temp.data = data;
 
   } else {
-    temp.comm = ALFA_BETA_MINMAX;
+    temp.comm = Task::ALFA_BETA_MINMAX;
     data.push_back(ChessToInt(line));
 
     EraseTillSpace(line);
@@ -217,7 +217,7 @@ full_command AlphaBetaMinMaxTranspositionTable(std::string &line) {
 
   if (line.substr(0, 3) == "all") {
 
-    temp.comm = ALFA_BETA_MINMAX_W_TRANSPOSITION_TABLE_ALL;
+    temp.comm = Task::ALFA_BETA_MINMAX_W_TRANSPOSITION_TABLE_ALL;
 
     EraseTillSpace(line);
 
@@ -231,7 +231,7 @@ full_command AlphaBetaMinMaxTranspositionTable(std::string &line) {
     temp.data = data;
 
   } else {
-    temp.comm = ALFA_BETA_MINMAX_W_TRANSPOSITION_TABLE;
+    temp.comm = Task::ALFA_BETA_MINMAX_W_TRANSPOSITION_TABLE;
     data.push_back(ChessToInt(line));
 
     EraseTillSpace(line);
@@ -248,7 +248,7 @@ full_command Move(std::string &line) {
   std::vector<int> data;
   data.push_back(ChessToInt(line));
   data.push_back(ChessToInt(line));
-  return {MOVE, data};
+  return {Task::MOVE, data};
 }
 
 full_command Fight(std::string &line) {
@@ -258,12 +258,12 @@ full_command Fight(std::string &line) {
   /// white brain
   if (line.substr(0, 6) == "minmax") {
     EraseTillSpace(line);
-    data.push_back(MINMAX);
+    data.push_back((int)Task::MINMAX);
     data.push_back(std::stoi(line));
     EraseTillSpace(line);
   } else if (line.substr(0, 8) == "abminmax") {
     EraseTillSpace(line);
-    data.push_back(ALFA_BETA_MINMAX);
+    data.push_back((int)Task::ALFA_BETA_MINMAX);
     data.push_back(std::stoi(line));
     EraseTillSpace(line);
   }
@@ -271,30 +271,30 @@ full_command Fight(std::string &line) {
   /// black brain
   if (line.substr(0, 6) == "minmax") {
     EraseTillSpace(line);
-    data.push_back(MINMAX);
+    data.push_back((int)Task::MINMAX);
     data.push_back(std::stoi(line));
     EraseTillSpace(line);
   } else if (line.substr(0, 8) == "abminmax") {
     EraseTillSpace(line);
-    data.push_back(ALFA_BETA_MINMAX);
+    data.push_back((int)Task::ALFA_BETA_MINMAX);
     data.push_back(std::stoi(line));
     EraseTillSpace(line);
   }
 
   data.push_back(1); // threads
 
-  return {EPIC_COMPUTER_FIGHT, data};
+  return {Task::EPIC_COMPUTER_FIGHT, data};
 }
 
 full_command Parse(std::string &line) {
 
   if (line == "help")
-    return {HELP};
+    return {Task::HELP};
   if (line == "quit")
-    return {QUIT};
+    return {Task::QUIT};
 
   if (line.substr(0, 5) == "clear")
-    return {CLEAR};
+    return {Task::CLEAR};
 
   if (line.substr(0, 3) == "add")
     return Add(line);
@@ -321,7 +321,7 @@ full_command Parse(std::string &line) {
     return Fight(line);
 
   if (line.substr(0, 4) == "load")
-    return {LOAD};
+    return {Task::LOAD};
 
   switch (line[0]) {
   case 'a':
@@ -334,9 +334,9 @@ full_command Parse(std::string &line) {
   case 'h':
     std::vector<int> moves;
     moves.push_back(ChessToInt(line));
-    return {SHOW_MOVES, moves};
+    return {Task::SHOW_MOVES, moves};
   }
-  return {NONE};
+  return {Task::NONE};
 }
 
 void full_command::FromString(std::string line) { *this = Parse(line); }
