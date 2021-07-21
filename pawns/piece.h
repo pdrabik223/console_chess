@@ -73,7 +73,7 @@ public:
   /// empty square is 0
   virtual unsigned char Hash(){return 0;};
 
-  virtual PieceType GetPieceType(){return NONE;}
+  virtual PieceType GetPieceType(){return PieceType::NONE;}
 
 protected:
   virtual void GenMovesForBlack(std::array<Piece *, 64> &board,
