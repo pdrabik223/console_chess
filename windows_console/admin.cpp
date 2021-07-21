@@ -24,80 +24,80 @@ Admin::Admin() : game_(), console_handle_() {
       user_input.FromString(console_handle_.GetLine());
 
     switch (user_input.comm) {
-    case QUIT:
+    case Task::QUIT:
       goto quit;
-    case CLEAR:
+    case Task::CLEAR:
       console_handle_.ClearHighlight();
       break;
-    case MOVE:
+    case Task::MOVE:
       game_.DoMove(
           {(unsigned)user_input.data[0], (unsigned)user_input.data[1]});
       console_handle_.UpdateDisplay(game_);
       break;
-    case ADD_PIECE:
+    case Task::ADD_PIECE:
 
       AddPiece(user_input);
       console_handle_.UpdateDisplay(game_);
 
       break;
-    case ADD_ALL:
+    case Task::ADD_ALL:
 
       game_ = ChessBoard();
       console_handle_.UpdateDisplay(game_);
 
       break;
-    case DELETE_PIECE:
+    case Task::DELETE_PIECE:
 
       game_[user_input.data[0]] = new Piece();
       console_handle_.UpdateDisplay(game_);
 
       break;
-    case DELL_ALL:
+    case Task::DELL_ALL:
       for (int i = 0; i < 64; i++)
         game_[i] = new Piece();
 
       console_handle_.UpdateDisplay(game_);
       break;
-    case SHOW_MOVES:
+    case Task::SHOW_MOVES:
       ShowPossible(user_input.data[0]);
       break;
-    case SHOW_ALL:
+    case Task::SHOW_ALL:
       ShowPossible();
       break;
-    case HELP:
+    case Task::HELP:
       Help();
       break;
 
-    case LOAD:
+    case Task::LOAD:
       Load();
       console_handle_.UpdateDisplay(game_);
       break;
-    case MINMAX:
+    case Task::MINMAX:
       MinMax(user_input.data[1], user_input.data[0], 1);
       break;
-    case MINMAX_ALL:
+    case Task::MINMAX_ALL:
       MinMaxAll(user_input.data[1], user_input.data[0], 1);
       break;
-    case ALFA_BETA_MINMAX:
+    case Task::ALFA_BETA_MINMAX:
       AlfaBetaMinMax(user_input.data[1], user_input.data[0], 1);
       break;
-    case ALFA_BETA_MINMAX_ALL:
+    case Task::ALFA_BETA_MINMAX_ALL:
       AlfaBetaMinMaxAll(user_input.data[1], user_input.data[0], 1);
       break;
 
-    case ALFA_BETA_MINMAX_W_TRANSPOSITION_TABLE_ALL:
+    case Task::ALFA_BETA_MINMAX_W_TRANSPOSITION_TABLE_ALL:
       AlfaBetaMinMaxWTranspositionTableAll(user_input.data[1],
                                            user_input.data[0], 1);
       break;
-    case ALFA_BETA_MINMAX_W_TRANSPOSITION_TABLE:
+    case Task::ALFA_BETA_MINMAX_W_TRANSPOSITION_TABLE:
       AlfaBetaMinMaxWTranspositionTable(user_input.data[1], user_input.data[0],
                                         1);
       break;
 
-    case EPIC_COMPUTER_FIGHT:
+    case Task::EPIC_COMPUTER_FIGHT:
       MakeEmFight(user_input.data);
       break;
-    case NONE:
+    case Task::NONE:
       break;
     }
   }
@@ -269,11 +269,11 @@ void Admin::MakeEmFight(std::vector<int> settings) {
 
   while (1 < 2) {
     /// white is first
-    switch (white_algorytm) {
-    case MINMAX:
+    switch ((Task)white_algorytm) {
+    case Task::MINMAX:
       game_.DoMove(MinMaxAll(white_depth, true, white_threads));
       break;
-    case ALFA_BETA_MINMAX:
+    case Task::ALFA_BETA_MINMAX:
       game_.DoMove(AlfaBetaMinMaxAll(white_depth, true, white_threads));
       break;
     default:
@@ -289,11 +289,11 @@ void Admin::MakeEmFight(std::vector<int> settings) {
 
     /// black is second
     console_handle_.GetLine();
-    switch (black_algorytm) {
-    case MINMAX:
+    switch ((Task)black_algorytm) {
+    case Task::MINMAX:
       game_.DoMove(MinMaxAll(black_depth, false, black_threads));
       break;
-    case ALFA_BETA_MINMAX:
+    case Task::ALFA_BETA_MINMAX:
       game_.DoMove(AlfaBetaMinMaxAll(black_depth, false, black_threads));
       break;
     default:
