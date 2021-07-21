@@ -4,9 +4,23 @@ project(console_chess)
 set(CMAKE_CXX_STANDARD 14)
 
 include_directories(.)
+
 # add SDL lib
 add_subdirectory(SDL/)
-include_directories("./SDL/include")
+include_directories(${PROJECT_SOURCE_DIR}/SDL/include)
+
+# searching for include directory
+#find_path(SDL_TTF ./SDL_ttf/include/SDL_ttf.h)
+
+# searching for library file
+#find_library(SDL_TTF_LIB ./SDL_ttf/lib/SDL_ttf.lib)
+
+
+
+# add ttf
+#add_subdirectory(SDL_TTF)
+#include_directories(./SDL_ttf/include)
+
 
 
 set(PAWNS
@@ -46,10 +60,11 @@ add_executable(admin_gui
         ${GUI}
         gui/admin_gui.h gui/admin_gui.cpp)
 
-
 target_link_libraries(admin_gui
         SDL2
-        SDL2::SDL2main)
+        SDL2::SDL2main
+        )
+
 
 if (WIN32)
     set(SDL_SHARED SDL2d.dll)
