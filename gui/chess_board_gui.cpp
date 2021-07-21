@@ -6,7 +6,7 @@
 //#include <SDL_ttf.h>
 int Abs(int a) { return a < 0 ? -a : a; }
 
-static std::array<SDL_Surface *, SIZE - 1> images;
+static std::array<SDL_Surface *, (int)PieceType::SIZE - 1> images;
 
 static void LoadImagesToMemory() {
   std::string directory_path = "../gui/assets/";
@@ -16,7 +16,7 @@ static void LoadImagesToMemory() {
   Uint32 b_mask = 0x0000ff00;
   Uint32 a_mask = 0x000000ff;
 
-  for (int i = 0; i < SIZE - 1; i++) {
+  for (int i = 0; i < (int)PieceType::SIZE - 1; i++) {
     images[i] =
         SDL_CreateRGBSurface(0, 60, 60, 32, r_mask, g_mask, b_mask, a_mask);
 
@@ -26,18 +26,18 @@ static void LoadImagesToMemory() {
     }
   }
 
-  LoadFromPpm(images[WHITE_PAWN], directory_path + "white_pawn.ppm");
-  LoadFromPpm(images[WHITE_NIGHT], directory_path + "white_knight.ppm");
-  LoadFromPpm(images[WHITE_BISHOP], directory_path + "white_bishop.ppm");
-  LoadFromPpm(images[WHITE_ROOK], directory_path + "white_rook.ppm");
-  LoadFromPpm(images[WHITE_QUEEN], directory_path + "white_queen.ppm");
-  LoadFromPpm(images[WHITE_KING], directory_path + "white_king.ppm");
-  LoadFromPpm(images[BLACK_PAWN], directory_path + "black_pawn.ppm");
-  LoadFromPpm(images[BLACK_NIGHT], directory_path + "black_knight.ppm");
-  LoadFromPpm(images[BLACK_BISHOP], directory_path + "black_bishop.ppm");
-  LoadFromPpm(images[BLACK_ROOK], directory_path + "black_rook.ppm");
-  LoadFromPpm(images[BLACK_QUEEN], directory_path + "black_queen.ppm");
-  LoadFromPpm(images[BLACK_KING], directory_path + "black_king.ppm");
+  LoadFromPpm(images[(int)PieceType::WHITE_PAWN], directory_path + "white_pawn.ppm");
+  LoadFromPpm(images[(int)PieceType::WHITE_NIGHT], directory_path + "white_knight.ppm");
+  LoadFromPpm(images[(int)PieceType::WHITE_BISHOP], directory_path + "white_bishop.ppm");
+  LoadFromPpm(images[(int)PieceType::WHITE_ROOK], directory_path + "white_rook.ppm");
+  LoadFromPpm(images[(int)PieceType::WHITE_QUEEN], directory_path + "white_queen.ppm");
+  LoadFromPpm(images[(int)PieceType::WHITE_KING], directory_path + "white_king.ppm");
+  LoadFromPpm(images[(int)PieceType::BLACK_PAWN], directory_path + "black_pawn.ppm");
+  LoadFromPpm(images[(int)PieceType::BLACK_NIGHT], directory_path + "black_knight.ppm");
+  LoadFromPpm(images[(int)PieceType::BLACK_BISHOP], directory_path + "black_bishop.ppm");
+  LoadFromPpm(images[(int)PieceType::BLACK_ROOK], directory_path + "black_rook.ppm");
+  LoadFromPpm(images[(int)PieceType::BLACK_QUEEN], directory_path + "black_queen.ppm");
+  LoadFromPpm(images[(int)PieceType::BLACK_KING], directory_path + "black_king.ppm");
 }
 
 void ChessBoardGui::ClearHighlight() {
@@ -184,14 +184,14 @@ void ChessBoardGui::DrawPieces() {
 }
 
 void ChessBoardGui::DrawToRenderer(SDL_Rect target_placement, PieceType pawn) {
-  if (pawn == NONE)
+  if (pawn == PieceType::NONE)
     return;
 
   // in CreateTextureFromSurface surface is not modified
-  if (images[pawn] == NULL) {
+  if (images[(int)pawn] == NULL) {
     fprintf(stderr, "CreateRGBSurface failed: %s\n", SDL_GetError());
   }
-  SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer_, images[pawn]);
+  SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer_, images[(int)pawn]);
 
   if (texture == NULL) {
     fprintf(stderr, "CreateTextureFromSurface failed: %s\n", SDL_GetError());
@@ -209,3 +209,4 @@ void ChessBoardGui::LabelSquares() {
 //  if (!sans)
 //    std::cout << TTF_GetError();
 }
+
