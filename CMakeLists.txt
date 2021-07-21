@@ -8,6 +8,7 @@ include_directories(.)
 # add SDL lib
 add_subdirectory(SDL/)
 include_directories(${PROJECT_SOURCE_DIR}/SDL/include)
+include_directories(${PROJECT_SOURCE_DIR}/SDL2_ttf/include)
 
 # searching for include directory
 #find_path(SDL_TTF ./SDL_ttf/include/SDL_ttf.h)
@@ -64,6 +65,9 @@ target_link_libraries(admin_gui
         SDL2
         SDL2::SDL2main
         )
+
+find_library(SDL_TTF SDL2TTF SDL2_TTF SDL_Ttf SDL_ttf SDL2TTF_LIBRARY  REQUIRED PATHS ${PROJECT_SOURCE_DIR}/SDL2_ttf/lib/x64)
+target_link_libraries(admin_gui ${SDL_TTF})
 
 
 if (WIN32)
