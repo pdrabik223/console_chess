@@ -316,13 +316,20 @@ void ChessBoardGui::DrawEvaluation() {
 }
 
 void ChessBoardGui::LoadButtons() {
+  std::string directory_path = "../gui/assets/";
 
   buttons_[(int)Buttons::ROTATE_BOARD] =
       Button({width_ * square_width_, (height_ - 1) * square_height_,
               square_height_, square_width_});
-  std::string directory_path = "../gui/assets/";
   buttons_[(int)Buttons::ROTATE_BOARD].SetImage(directory_path +
                                                 "board_rotation.ppm");
+
+  buttons_[(int)Buttons::CLEAN_HIGHLIGHT] =
+      Button({width_ * square_width_, (height_ - 2) * square_height_,
+              square_height_, square_width_});
+
+  buttons_[(int)Buttons::CLEAN_HIGHLIGHT].SetImage(directory_path +
+                                                   "highlight_clean.ppm");
 }
 
 void ChessBoardGui::DrawButtons() {
@@ -355,6 +362,9 @@ void ChessBoardGui::CheckButtonPress(int mouse_position_x,
   case Buttons::ROTATE_BOARD:
     RotateBoard();
     break;
+  case Buttons::CLEAN_HIGHLIGHT:
+    ClearHighlight();
+    break;
   }
 }
 void ChessBoardGui::CheckSquarePress(int x, int y) {
@@ -365,11 +375,10 @@ void ChessBoardGui::CheckSquarePress(int x, int y) {
   if (x >= width_ or y >= height_)
     return;
 
-
   if (current_orientation_ == WHITE_UP)
     highlighted_squares_.emplace_back(y * width_ + x, ORANGE);
   else
-    highlighted_squares_.emplace_back( (height_ - y - 1 ) * width_ + x , ORANGE);
+    highlighted_squares_.emplace_back((height_ - y - 1) * width_ + x, ORANGE);
 }
 
 void ChessBoardGui::HighlightSquares() {
@@ -384,7 +393,7 @@ void ChessBoardGui::HighlightSquares() {
       square = {w * square_width_, h * square_height_, square_width_,
                 square_height_};
     else
-      square = {w  * square_width_, (height_ - h -1 ) * square_height_,
+      square = {w * square_width_, (height_ - h - 1) * square_height_,
                 square_width_, square_height_};
 
     switch (i.second) {

@@ -45,6 +45,7 @@ enum Orientation {
 
 enum class Buttons{
   ROTATE_BOARD,
+  CLEAN_HIGHLIGHT,
   SIZE
 };
 
@@ -76,8 +77,6 @@ public:
 
   void DrawButtons();
 
-
-
   ~ChessBoardGui();
 
   bool active_ = true;
@@ -91,6 +90,7 @@ public:
   void CheckButtonPress(int mouse_position_x, int mouse_position_y);
   void CheckSquarePress(int mouse_position_x, int mouse_position_y);
 private:
+
   void HighlightSquares();
   void LoadButtons();
 
