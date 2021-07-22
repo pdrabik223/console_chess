@@ -14,6 +14,7 @@
 #include "chess_board.h"
 #include "move.h"
 
+#include <SDL_ttf.h>
 #include <chrono>
 #include <thread>
 #include <vector>
@@ -64,9 +65,16 @@ public:
 
   bool active_ = true;
 
+  static int square_height_; // in pixels
+  static int square_width_;  // in pixels
+
+  static int height_; // in squares
+  static int width_;  // in squares
+
 private:
-  void DrawToRenderer(SDL_Rect target_placement,
-                      PieceType pawn);
+  void DrawToRenderer(SDL_Rect target_placement, PieceType pawn);
+  std::string GenRankLabel(int y);
+  std::string GenFileLabel(int x);
 
 protected:
   ChessBoard local_board_;
@@ -78,6 +86,10 @@ protected:
   SDL_Renderer *renderer_;
 
   std::thread *window_thread_;
+
+  TTF_Font *sans_;
+
+  SDL_Event event_;
 
   Orientation current_orientation_;
 };

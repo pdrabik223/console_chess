@@ -4,6 +4,13 @@
 #include "chess_board_gui.h"
 #include "ppm_loader.h"
 #include <SDL_ttf.h>
+
+int ChessBoardGui::square_height_ = 64; // in pixels
+int ChessBoardGui::square_width_ = 64;  // in pixels
+
+int ChessBoardGui::height_ = 8; // in squares
+int ChessBoardGui::width_ = 8;  // in squares
+
 int Abs(int a) { return a < 0 ? -a : a; }
 
 static std::array<SDL_Surface *, (int)PieceType::SIZE - 1> images;
@@ -26,18 +33,30 @@ static void LoadImagesToMemory() {
     }
   }
 
-  LoadFromPpm(images[(int)PieceType::WHITE_PAWN], directory_path + "white_pawn.ppm");
-  LoadFromPpm(images[(int)PieceType::WHITE_NIGHT], directory_path + "white_knight.ppm");
-  LoadFromPpm(images[(int)PieceType::WHITE_BISHOP], directory_path + "white_bishop.ppm");
-  LoadFromPpm(images[(int)PieceType::WHITE_ROOK], directory_path + "white_rook.ppm");
-  LoadFromPpm(images[(int)PieceType::WHITE_QUEEN], directory_path + "white_queen.ppm");
-  LoadFromPpm(images[(int)PieceType::WHITE_KING], directory_path + "white_king.ppm");
-  LoadFromPpm(images[(int)PieceType::BLACK_PAWN], directory_path + "black_pawn.ppm");
-  LoadFromPpm(images[(int)PieceType::BLACK_NIGHT], directory_path + "black_knight.ppm");
-  LoadFromPpm(images[(int)PieceType::BLACK_BISHOP], directory_path + "black_bishop.ppm");
-  LoadFromPpm(images[(int)PieceType::BLACK_ROOK], directory_path + "black_rook.ppm");
-  LoadFromPpm(images[(int)PieceType::BLACK_QUEEN], directory_path + "black_queen.ppm");
-  LoadFromPpm(images[(int)PieceType::BLACK_KING], directory_path + "black_king.ppm");
+  LoadFromPpm(images[(int)PieceType::WHITE_PAWN],
+              directory_path + "white_pawn.ppm");
+  LoadFromPpm(images[(int)PieceType::WHITE_NIGHT],
+              directory_path + "white_knight.ppm");
+  LoadFromPpm(images[(int)PieceType::WHITE_BISHOP],
+              directory_path + "white_bishop.ppm");
+  LoadFromPpm(images[(int)PieceType::WHITE_ROOK],
+              directory_path + "white_rook.ppm");
+  LoadFromPpm(images[(int)PieceType::WHITE_QUEEN],
+              directory_path + "white_queen.ppm");
+  LoadFromPpm(images[(int)PieceType::WHITE_KING],
+              directory_path + "white_king.ppm");
+  LoadFromPpm(images[(int)PieceType::BLACK_PAWN],
+              directory_path + "black_pawn.ppm");
+  LoadFromPpm(images[(int)PieceType::BLACK_NIGHT],
+              directory_path + "black_knight.ppm");
+  LoadFromPpm(images[(int)PieceType::BLACK_BISHOP],
+              directory_path + "black_bishop.ppm");
+  LoadFromPpm(images[(int)PieceType::BLACK_ROOK],
+              directory_path + "black_rook.ppm");
+  LoadFromPpm(images[(int)PieceType::BLACK_QUEEN],
+              directory_path + "black_queen.ppm");
+  LoadFromPpm(images[(int)PieceType::BLACK_KING],
+              directory_path + "black_king.ppm");
 }
 
 void ChessBoardGui::ClearHighlight() {
@@ -46,6 +65,12 @@ void ChessBoardGui::ClearHighlight() {
 }
 
 ChessBoardGui::ChessBoardGui() : local_board_() {
+  window_ = nullptr; // all these will be initialized in thEvent Loop
+                     // sdl requires that the initialization accrues in the same
+                     // thread that usage
+                     // (but that's just my observation)
+  sans_ = nullptr;
+  renderer_ = nullptr;
 
   // load piece's images from drive
   LoadImagesToMemory();
@@ -83,8 +108,16 @@ ChessBoardGui::~ChessBoardGui() {
 }
 
 void ChessBoardGui::ThEventLoop() {
+  TTF_Init();
+  // SDL_Init();
 
-  SDL_Event event;
+  sans_ = TTF_OpenFont("C:\\Users\\studio25\\Documents\\console_"
+                       "chess\\gui\\assets\\STIXTwoMath-Regular.ttf",
+                       16);
+
+  if (!sans_) {
+    std::cout << "the error: " << TTF_GetError();
+  }
 
   window_ = SDL_CreateWindow("chess",          // window title
                              100,              // initial x position
@@ -97,14 +130,19 @@ void ChessBoardGui::ThEventLoop() {
   renderer_ = SDL_CreateRenderer(window_, -1, SDL_RENDERER_PRESENTVSYNC);
 
   DrawSquares();
-  DrawPieces();
-
   SDL_RenderPresent(renderer_);
 
   while (1 < 2) {
-    SDL_WaitEvent(&event);
 
-    switch (event.type) {
+    DrawSquares();
+    LabelSquares();
+    DrawPieces();
+
+    SDL_RenderPresent(renderer_);
+
+    SDL_WaitEvent(&event_);
+
+    switch (event_.type) {
     case SDL_QUIT:
       active_ = false;
       return;
@@ -113,9 +151,6 @@ void ChessBoardGui::ThEventLoop() {
     case SDL_MOUSEBUTTONUP:
 
       RotateBoard();
-      DrawSquares();
-      DrawPieces();
-      SDL_RenderPresent(renderer_);
       break;
     }
 
@@ -129,11 +164,6 @@ void ChessBoardGui::DrawSquares() {
     for (int x = 0; x < 8; x++) {
       SDL_Rect square = {y * 64, x * 64, 64, 64};
 
-      // if (current_orientation_ == BLACK_UP)
-      //        if (x % 2 == 0 xor y % 2 == 0)
-      //          SDL_SetRenderDrawColor(renderer_, LIGHT_WHITE_COLOR);
-      //        else
-      //          SDL_SetRenderDrawColor(renderer_, LIGHT_BLACK_COLOR);
       if (x % 2 == 0 xor y % 2 == 0)
         SDL_SetRenderDrawColor(renderer_, LIGHT_BLACK_COLOR);
       else
@@ -191,24 +221,86 @@ void ChessBoardGui::DrawToRenderer(SDL_Rect target_placement, PieceType pawn) {
   if (images[(int)pawn] == NULL) {
     fprintf(stderr, "CreateRGBSurface failed: %s\n", SDL_GetError());
   }
-  SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer_, images[(int)pawn]);
+  SDL_Texture *texture =
+      SDL_CreateTextureFromSurface(renderer_, images[(int)pawn]);
 
-  if (texture == NULL) {
+  if (texture == nullptr) {
     fprintf(stderr, "CreateTextureFromSurface failed: %s\n", SDL_GetError());
   }
 
-  SDL_RenderCopy(renderer_, texture, NULL, &target_placement);
+  SDL_RenderCopy(renderer_, texture, nullptr, &target_placement);
   SDL_DestroyTexture(texture);
 }
-void ChessBoardGui::LabelSquares() {
 
-  TTF_Init();
-
-  TTF_Font *sans = TTF_OpenFont("gui/assets/STIXTwoMath-Regular.ttf", 16);
-
-  if (!sans)
-    std::cout << TTF_GetError();
-
-
+std::string ChessBoardGui::GenRankLabel(int y) {
+  if (current_orientation_ == WHITE_UP)
+    return std::to_string(y + 1);
+  else
+    return std::to_string(height_ - y);
 }
 
+std::string ChessBoardGui::GenFileLabel(int x) {
+  if (current_orientation_ == WHITE_UP)
+    return std::string(1, (char)('a' + x));
+  else
+    return std::string(1, (char)('a' + width_ - 1 - x));
+}
+
+void ChessBoardGui::LabelSquares() {
+
+  if (!sans_) {
+    std::cout << "the error: " << TTF_GetError();
+  }
+
+  int w = 4; // size of the label square
+  int h = 4; // size of the label square
+
+  // the coordinates point to the left bottom of the first board square
+
+  SDL_Rect label_square = {0, 64, w, h};
+
+  SDL_Color current_color;
+
+  for (int y = 0; y < height_; y++) { // vertical ones are 1 to 8
+
+    if (y % 2 == 0)
+
+      current_color = {LIGHT_BLACK_COLOR};
+    else
+      current_color = {LIGHT_WHITE_COLOR};
+
+    TTF_SizeText(sans_, GenRankLabel(y).c_str(), &w, &h);
+
+    label_square = {(h / 4),
+                    y * square_height_ + (square_height_ - h - (h / 6)), w, h};
+
+    SDL_RenderCopy(
+        renderer_,
+        SDL_CreateTextureFromSurface(
+            renderer_, TTF_RenderText_Solid(sans_, GenRankLabel(y).c_str(),
+                                            current_color)),
+        nullptr, &label_square);
+  }
+
+  for (int x = 0; x < width_; x++) { // vertical ones are 1 to 8
+
+    if (x % 2 == 0)
+      current_color = {LIGHT_WHITE_COLOR};
+    else
+      current_color = {LIGHT_BLACK_COLOR};
+
+    TTF_SizeText(sans_, GenFileLabel(x).c_str(), &w, &h);
+
+    label_square = {
+        x * square_width_ + square_width_ - w -
+            (w / 4), // down, right corner of the botom rank
+        (height_ - 1) * square_height_ + (square_height_ - h - (h / 6)), w, h};
+
+    SDL_RenderCopy(
+        renderer_,
+        SDL_CreateTextureFromSurface(
+            renderer_, TTF_RenderText_Solid(sans_, GenFileLabel(x).c_str(),
+                                            current_color)),
+        nullptr, &label_square);
+  }
+}
