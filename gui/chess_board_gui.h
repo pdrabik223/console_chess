@@ -11,6 +11,7 @@
 #include <SDL_video.h>
 //#include <SDL_ttf/SDL_ttf.h>
 
+#include "button.h"
 #include "chess_board.h"
 #include "move.h"
 
@@ -25,6 +26,7 @@
 #define LIGHT_BLACK_COLOR 74, 74, 74, 0
 #define BLUE_COLOR 0, 0, 255, 0
 #define RED_COLOR 255, 0, 0, 0
+
 enum GuiColor {
   WHITE,
   BLACK,
@@ -36,6 +38,11 @@ enum Orientation {
   WHITE_UP = true,
   BLACK_UP = false
 
+};
+
+enum class Buttons{
+  ROTATE_BOARD,
+  SIZE
 };
 
 class ChessBoardGui {
@@ -64,6 +71,8 @@ public:
 
   void DrawEvaluation();
 
+  void DrawButtons();
+
   ~ChessBoardGui();
 
   bool active_ = true;
@@ -75,6 +84,8 @@ public:
   static int width_;  // in squares
 
 private:
+  void LoadButtons();
+
   void DrawToRenderer(SDL_Rect target_placement, PieceType pawn);
   std::string GenRankLabel(int y);
   std::string GenFileLabel(int x);
@@ -84,6 +95,9 @@ protected:
 
   std::vector<std::pair<int, GuiColor>> highlighted_squares_;
   std::vector<std::pair<int, GuiColor>> highlighted_pieces_;
+
+  std::array<Button,(size_t)Buttons::SIZE> buttons_;
+
 
   SDL_Window *window_;
   SDL_Renderer *renderer_;

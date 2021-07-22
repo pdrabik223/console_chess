@@ -27,7 +27,7 @@ static void LoadImagesToMemory() {
     images[i] =
         SDL_CreateRGBSurface(0, 60, 60, 32, r_mask, g_mask, b_mask, a_mask);
 
-    if (images[i] == NULL) {
+    if (images[i] == nullptr) {
       fprintf(stderr, "SDL_CreateRGBSurface() failed: %s", SDL_GetError());
       exit(1);
     }
@@ -74,6 +74,7 @@ ChessBoardGui::ChessBoardGui() : local_board_() {
 
   // load piece's images from drive
   LoadImagesToMemory();
+  LoadButtons();
 
   current_orientation_ = WHITE_UP;
 
@@ -138,6 +139,7 @@ void ChessBoardGui::ThEventLoop() {
   while (1 < 2) {
 
     DrawSquares();
+    DrawButtons();
     LabelSquares();
     DrawPieces();
     DrawEvaluation();
@@ -287,7 +289,7 @@ void ChessBoardGui::DrawToRenderer(SDL_Rect target_placement, PieceType pawn) {
     fprintf(stderr, "CreateTextureFromSurface failed: %s\n", SDL_GetError());
   }
 
-  SDL_RenderCopy(renderer_, texture, nullptr, &target_placement);
+  SDL_RenderCopy(renderer_, texture, NULL, &target_placement);
   SDL_DestroyTexture(texture);
 }
 
@@ -316,7 +318,7 @@ void ChessBoardGui::DrawEvaluation() {
 
   std::string evaluation_text = std::to_string(local_board_.EvaluatePosition());
 
-  if (evaluation_text.size() >  5)
+  if (evaluation_text.size() > 5)
     evaluation_text = evaluation_text.substr(0, 5);
 
   TTF_SizeText(sans_, evaluation_text.c_str(), &evaluation_square.w,
@@ -328,4 +330,27 @@ void ChessBoardGui::DrawEvaluation() {
           renderer_, TTF_RenderText_Solid(sans_, evaluation_text.c_str(),
                                           evaluation_color)),
       nullptr, &evaluation_square);
+}
+
+void ChessBoardGui::LoadButtons() {
+
+  buttons_[(int)Buttons::ROTATE_BOARD] =
+      Button({width_ * square_width_, (height_ - 1) * square_height_,
+              square_height_, square_width_});
+  std::string directory_path = "../gui/assets/";
+  buttons_[(int)Buttons::ROTATE_BOARD].SetImage(directory_path +
+                                                "board_rotation.ppm");
+}
+void ChessBoardGui::DrawButtons() {
+  for (const auto &i : buttons_) {
+    SDL_Texture *texture =
+        SDL_CreateTextureFromSurface(renderer_, i.GetImage());
+
+    if (texture == nullptr) {
+      fprintf(stderr, "CreateTextureFromSurface failed: %s\n", SDL_GetError());
+    }
+
+    SDL_RenderCopy(renderer_, texture, NULL, &i.GetPosition());
+    SDL_DestroyTexture(texture);
+  }
 }
