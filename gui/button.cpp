@@ -5,7 +5,7 @@
 #include "button.h"
 
 #include <string>
-Button::~Button() { delete image_; }
+Button::~Button() { SDL_FreeSurface(image_); }
 
 const SDL_Rect &Button::GetPosition() const { return position_; }
 
@@ -39,9 +39,13 @@ void Button::SetImage(std::string image_path) {
     exit(1);
   }
 }
-bool Button::DetectPress(SDL_Rect cursor_position) {
-  if (cursor_position.x >= position_.x and cursor_position.y >= position_.y and
-      cursor_position.w < position_.w and cursor_position.h < position_.h)
+bool Button::DetectPress(int mouse_position_x, int mouse_position_y) {
+
+  int relative_x = mouse_position_x - position_.x;
+  int relative_y = mouse_position_y - position_.y;
+
+  if (relative_x >= 0 and relative_y >= 0 and relative_x < position_.w and
+      relative_y < position_.h)
     return true;
   else
     return false;

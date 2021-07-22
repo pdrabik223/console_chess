@@ -14,7 +14,7 @@ public:
 
   Button(const SDL_Rect &position);
 
-  bool DetectPress(SDL_Rect cursor_position);
+  bool DetectPress(int mouse_position_x, int mouse_position_y);
 
   void SetImage(std::string image_path);
 
