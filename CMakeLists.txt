@@ -30,7 +30,8 @@ set(WIN_CONSOLE
 set(GUI
         gui/chess_board_gui.h gui/chess_board_gui.cpp
         gui/ppm_loader.cpp
-        gui/file_exception.h)
+        gui/file_exception.h
+        gui/button.h gui/button.cpp)
 
 add_executable(admin
         executables/admin_chess.cpp
