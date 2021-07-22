@@ -24,14 +24,17 @@
 #define LIGHT_WHITE_COLOR 200, 200, 200, 0
 #define BLACK_COLOR 0, 0, 0, 0
 #define LIGHT_BLACK_COLOR 74, 74, 74, 0
+#define ORANGE_COLOR 216,122,21,0
+#define LIGHT_ORANGE_COLOR 216,151,86,0
 #define BLUE_COLOR 0, 0, 255, 0
 #define RED_COLOR 255, 0, 0, 0
 
-enum GuiColor {
+enum  GuiColor {
   WHITE,
   BLACK,
+  ORANGE,
   BLUE,
-  RED
+    RED
 
 };
 enum Orientation {
@@ -73,6 +76,8 @@ public:
 
   void DrawButtons();
 
+
+
   ~ChessBoardGui();
 
   bool active_ = true;
@@ -84,8 +89,9 @@ public:
   static int width_;  // in squares
 
   void CheckButtonPress(int mouse_position_x, int mouse_position_y);
-
+  void CheckSquarePress(int mouse_position_x, int mouse_position_y);
 private:
+  void HighlightSquares();
   void LoadButtons();
 
   void DrawToRenderer(SDL_Rect target_placement, PieceType pawn);

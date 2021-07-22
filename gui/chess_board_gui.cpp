@@ -158,6 +158,7 @@ void ChessBoardGui::ThEventLoop() {
 
       int x, y;
       SDL_GetMouseState(&x, &y);
+      CheckSquarePress(x, y);
       CheckButtonPress(x, y);
       break;
     }
@@ -179,28 +180,7 @@ void ChessBoardGui::DrawSquares() {
 
       SDL_RenderFillRect(renderer_, &square);
     }
-
-  for (auto &c : highlighted_squares_) {
-
-    SDL_Rect square = {c.first / 8, c.first % 8, 64, 64};
-
-    switch (c.second) {
-    case WHITE:
-      SDL_SetRenderDrawColor(renderer_, WHITE_COLOR);
-      break;
-    case BLACK:
-      SDL_SetRenderDrawColor(renderer_, BLACK_COLOR);
-      break;
-    case BLUE:
-      SDL_SetRenderDrawColor(renderer_, BLUE_COLOR);
-      break;
-    case RED:
-      SDL_SetRenderDrawColor(renderer_, RED_COLOR);
-      break;
-    }
-    SDL_SetRenderDrawColor(renderer_, 255, 255, 255, 0);
-    SDL_RenderFillRect(renderer_, &square);
-  }
+  HighlightSquares();
 }
 
 void ChessBoardGui::LabelSquares() {
@@ -263,6 +243,7 @@ void ChessBoardGui::DrawPieces() {
 
   for (int y = 0; y < 8; y++) {
     for (int x = 0; x < 8; x++) {
+
       DrawToRenderer({x * 64 + 2, y * 64 + 2, 60, 60},
                      local_board_.GetElement(Abs(y - flip), x).GetPieceType());
     }
@@ -292,7 +273,7 @@ void ChessBoardGui::DrawToRenderer(SDL_Rect target_placement, PieceType pawn) {
   }
 
   SDL_RenderCopy(renderer_, texture, NULL, &target_placement);
- // SDL_DestroyTexture(texture);
+  // SDL_DestroyTexture(texture);
 }
 
 std::string ChessBoardGui::GenRankLabel(int y) {
@@ -363,7 +344,8 @@ void ChessBoardGui::CheckButtonPress(int mouse_position_x,
   int pressed_button_id = 0;
 
   for (; pressed_button_id < (int)Buttons::SIZE; pressed_button_id++)
-    if (buttons_[pressed_button_id].DetectPress(mouse_position_x, mouse_position_y))
+    if (buttons_[pressed_button_id].DetectPress(mouse_position_x,
+                                                mouse_position_y))
       break;
 
   if (pressed_button_id == (int)Buttons::SIZE)
@@ -373,5 +355,48 @@ void ChessBoardGui::CheckButtonPress(int mouse_position_x,
   case Buttons::ROTATE_BOARD:
     RotateBoard();
     break;
+  }
+}
+void ChessBoardGui::CheckSquarePress(int x, int y) {
+
+  x /= square_width_;
+  y /= square_height_;
+
+  if (x >= width_ or y >= height_)
+    return;
+
+
+  if (current_orientation_ == WHITE_UP)
+    highlighted_squares_.emplace_back(y * width_ + x, ORANGE);
+  else
+    highlighted_squares_.emplace_back( (height_ - y - 1 ) * width_ + x , ORANGE);
+}
+
+void ChessBoardGui::HighlightSquares() {
+  SDL_Rect square;
+
+  for (auto i : highlighted_squares_) {
+
+    int h = i.first / width_;
+    int w = i.first % width_;
+
+    if (current_orientation_ == WHITE_UP)
+      square = {w * square_width_, h * square_height_, square_width_,
+                square_height_};
+    else
+      square = {w  * square_width_, (height_ - h -1 ) * square_height_,
+                square_width_, square_height_};
+
+    switch (i.second) {
+
+    case ORANGE:
+      if (w % 2 == 0 xor h % 2 == 0)
+        SDL_SetRenderDrawColor(renderer_, ORANGE_COLOR);
+      else
+        SDL_SetRenderDrawColor(renderer_, LIGHT_ORANGE_COLOR);
+
+      break;
+    }
+    SDL_RenderFillRect(renderer_, &square);
   }
 }
