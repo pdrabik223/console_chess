@@ -156,7 +156,9 @@ void ChessBoardGui::ThEventLoop() {
       break;
     case SDL_MOUSEBUTTONUP:
 
-      RotateBoard();
+      int x, y;
+      SDL_GetMouseState(&x, &y);
+      CheckButtonPress(x, y);
       break;
     }
 
@@ -285,12 +287,12 @@ void ChessBoardGui::DrawToRenderer(SDL_Rect target_placement, PieceType pawn) {
   SDL_Texture *texture =
       SDL_CreateTextureFromSurface(renderer_, images[(int)pawn]);
 
-  if (texture == nullptr) {
+  if (texture == NULL) {
     fprintf(stderr, "CreateTextureFromSurface failed: %s\n", SDL_GetError());
   }
 
   SDL_RenderCopy(renderer_, texture, NULL, &target_placement);
-  SDL_DestroyTexture(texture);
+ // SDL_DestroyTexture(texture);
 }
 
 std::string ChessBoardGui::GenRankLabel(int y) {
@@ -341,6 +343,7 @@ void ChessBoardGui::LoadButtons() {
   buttons_[(int)Buttons::ROTATE_BOARD].SetImage(directory_path +
                                                 "board_rotation.ppm");
 }
+
 void ChessBoardGui::DrawButtons() {
   for (const auto &i : buttons_) {
     SDL_Texture *texture =
@@ -352,5 +355,23 @@ void ChessBoardGui::DrawButtons() {
 
     SDL_RenderCopy(renderer_, texture, NULL, &i.GetPosition());
     SDL_DestroyTexture(texture);
+  }
+}
+
+void ChessBoardGui::CheckButtonPress(int mouse_position_x,
+                                     int mouse_position_y) {
+  int pressed_button_id = 0;
+
+  for (; pressed_button_id < (int)Buttons::SIZE; pressed_button_id++)
+    if (buttons_[pressed_button_id].DetectPress(mouse_position_x, mouse_position_y))
+      break;
+
+  if (pressed_button_id == (int)Buttons::SIZE)
+    return;
+
+  switch ((Buttons)pressed_button_id) {
+  case Buttons::ROTATE_BOARD:
+    RotateBoard();
+    break;
   }
 }

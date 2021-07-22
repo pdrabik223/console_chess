@@ -83,6 +83,8 @@ public:
   static int height_; // in squares
   static int width_;  // in squares
 
+  void CheckButtonPress(int mouse_position_x, int mouse_position_y);
+
 private:
   void LoadButtons();
 
