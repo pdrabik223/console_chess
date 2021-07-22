@@ -17,6 +17,7 @@ int main(int argc, char *argv[]) {
   ChessBoard game;
   ui.UpdateDisplay(game);
   ui.UpdateScreen();
+
   while (1 < 2) {
     char h;
     // std::cin>>h;

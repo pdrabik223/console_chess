@@ -95,7 +95,9 @@ bool ChessBoardGui::UpdateScreen() {
 
 void ChessBoardGui::UpdateDisplay(ChessBoard &board) {
   DrawSquares();
+  LabelSquares();
   local_board_ = board;
+  DrawPieces();
 }
 
 ChessBoardGui::~ChessBoardGui() {
@@ -114,6 +116,7 @@ void ChessBoardGui::ThEventLoop() {
   sans_ = TTF_OpenFont("C:\\Users\\studio25\\Documents\\console_"
                        "chess\\gui\\assets\\STIXTwoMath-Regular.ttf",
                        16);
+  TTF_SetFontStyle(sans_, TTF_STYLE_BOLD);
 
   if (!sans_) {
     std::cout << "the error: " << TTF_GetError();
@@ -137,6 +140,7 @@ void ChessBoardGui::ThEventLoop() {
     DrawSquares();
     LabelSquares();
     DrawPieces();
+    DrawEvaluation();
 
     SDL_RenderPresent(renderer_);
 
@@ -195,11 +199,59 @@ void ChessBoardGui::DrawSquares() {
   }
 }
 
-void ChessBoardGui::RotateBoard() {
-  if (current_orientation_ == WHITE_UP)
-    current_orientation_ = BLACK_UP;
-  else
-    current_orientation_ = WHITE_UP;
+void ChessBoardGui::LabelSquares() {
+
+  int w = 4; // size of the label square
+  int h = 4; // size of the label square
+
+  // the coordinates point to the left bottom of the first board square
+
+  SDL_Rect label_square = {0, 64, w, h};
+
+  SDL_Color current_color;
+
+  for (int y = 0; y < height_; y++) { // vertical ones are 1 to 8
+
+    if (y % 2 == 0)
+
+      current_color = {LIGHT_BLACK_COLOR};
+    else
+      current_color = {LIGHT_WHITE_COLOR};
+
+    TTF_SizeText(sans_, GenRankLabel(y).c_str(), &w, &h);
+
+    label_square = {(h / 4),
+                    y * square_height_ + (square_height_ - h - (h / 6)), w, h};
+
+    SDL_RenderCopy(
+        renderer_,
+        SDL_CreateTextureFromSurface(
+            renderer_, TTF_RenderText_Solid(sans_, GenRankLabel(y).c_str(),
+                                            current_color)),
+        nullptr, &label_square);
+  }
+
+  for (int x = 0; x < width_; x++) { // vertical ones are a to h
+
+    if (x % 2 == 0)
+      current_color = {LIGHT_WHITE_COLOR};
+    else
+      current_color = {LIGHT_BLACK_COLOR};
+
+    TTF_SizeText(sans_, GenFileLabel(x).c_str(), &w, &h);
+
+    label_square = {
+        x * square_width_ + square_width_ - w -
+            (w / 4), // down, right corner of the botom rank
+        (height_ - 1) * square_height_ + (square_height_ - h - (h / 6)), w, h};
+
+    SDL_RenderCopy(
+        renderer_,
+        SDL_CreateTextureFromSurface(
+            renderer_, TTF_RenderText_Solid(sans_, GenFileLabel(x).c_str(),
+                                            current_color)),
+        nullptr, &label_square);
+  }
 }
 
 void ChessBoardGui::DrawPieces() {
@@ -211,6 +263,13 @@ void ChessBoardGui::DrawPieces() {
                      local_board_.GetElement(Abs(y - flip), x).GetPieceType());
     }
   }
+}
+
+void ChessBoardGui::RotateBoard() {
+  if (current_orientation_ == WHITE_UP)
+    current_orientation_ = BLACK_UP;
+  else
+    current_orientation_ = WHITE_UP;
 }
 
 void ChessBoardGui::DrawToRenderer(SDL_Rect target_placement, PieceType pawn) {
@@ -246,61 +305,27 @@ std::string ChessBoardGui::GenFileLabel(int x) {
     return std::string(1, (char)('a' + width_ - 1 - x));
 }
 
-void ChessBoardGui::LabelSquares() {
-
-  if (!sans_) {
-    std::cout << "the error: " << TTF_GetError();
-  }
+void ChessBoardGui::DrawEvaluation() {
 
   int w = 4; // size of the label square
   int h = 4; // size of the label square
 
-  // the coordinates point to the left bottom of the first board square
+  SDL_Rect evaluation_square = {width_ * square_width_ + w, square_height_ - 10,
+                                w, h};
+  SDL_Color evaluation_color = {WHITE_COLOR};
 
-  SDL_Rect label_square = {0, 64, w, h};
+  std::string evaluation_text = std::to_string(local_board_.EvaluatePosition());
 
-  SDL_Color current_color;
+  if (evaluation_text.size() >  5)
+    evaluation_text = evaluation_text.substr(0, 5);
 
-  for (int y = 0; y < height_; y++) { // vertical ones are 1 to 8
+  TTF_SizeText(sans_, evaluation_text.c_str(), &evaluation_square.w,
+               &evaluation_square.h);
 
-    if (y % 2 == 0)
-
-      current_color = {LIGHT_BLACK_COLOR};
-    else
-      current_color = {LIGHT_WHITE_COLOR};
-
-    TTF_SizeText(sans_, GenRankLabel(y).c_str(), &w, &h);
-
-    label_square = {(h / 4),
-                    y * square_height_ + (square_height_ - h - (h / 6)), w, h};
-
-    SDL_RenderCopy(
-        renderer_,
-        SDL_CreateTextureFromSurface(
-            renderer_, TTF_RenderText_Solid(sans_, GenRankLabel(y).c_str(),
-                                            current_color)),
-        nullptr, &label_square);
-  }
-
-  for (int x = 0; x < width_; x++) { // vertical ones are 1 to 8
-
-    if (x % 2 == 0)
-      current_color = {LIGHT_WHITE_COLOR};
-    else
-      current_color = {LIGHT_BLACK_COLOR};
-
-    TTF_SizeText(sans_, GenFileLabel(x).c_str(), &w, &h);
-
-    label_square = {
-        x * square_width_ + square_width_ - w -
-            (w / 4), // down, right corner of the botom rank
-        (height_ - 1) * square_height_ + (square_height_ - h - (h / 6)), w, h};
-
-    SDL_RenderCopy(
-        renderer_,
-        SDL_CreateTextureFromSurface(
-            renderer_, TTF_RenderText_Solid(sans_, GenFileLabel(x).c_str(),
-                                            current_color)),
-        nullptr, &label_square);
-  }
+  SDL_RenderCopy(
+      renderer_,
+      SDL_CreateTextureFromSurface(
+          renderer_, TTF_RenderText_Solid(sans_, evaluation_text.c_str(),
+                                          evaluation_color)),
+      nullptr, &evaluation_square);
 }

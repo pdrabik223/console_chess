@@ -61,6 +61,9 @@ public:
   void RotateBoard();
 
   void LabelSquares();
+
+  void DrawEvaluation();
+
   ~ChessBoardGui();
 
   bool active_ = true;
