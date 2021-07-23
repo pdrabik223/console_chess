@@ -86,19 +86,27 @@ ChessBoardGui::ChessBoardGui() : local_board_() {
   // so that the variables can be filled in
   std::this_thread::sleep_for(std::chrono::milliseconds(500));
 }
+void ChessBoardGui::PushEvent(Events new_event) {}
 
-bool ChessBoardGui::UpdateScreen() {
-  if (not active_)
-    return false;
-  SDL_RenderPresent(renderer_);
-  return true;
+void ChessBoardGui::UpdateScreen() {
+  Uint32 myEventType = SDL_RegisterEvents(1);
+
+  if (myEventType != ((Uint32)-1)) {
+    SDL_Event event;
+    SDL_memset(&event, 0, sizeof(event)); /* or SDL_zero(event) */
+    event.type = myEventType;
+    event.user.code = (Sint32)(Events::UpdateScreen);
+    SDL_PushEvent(&event);
+  }
 }
 
-void ChessBoardGui::UpdateDisplay(ChessBoard &board) {
+void ChessBoardGui::UpdateDisplay() {
   DrawSquares();
+  DrawButtons();
   LabelSquares();
-  local_board_ = board;
   DrawPieces();
+  DrawEvaluation();
+  SDL_RenderPresent(renderer_);
 }
 
 ChessBoardGui::~ChessBoardGui() {
@@ -112,11 +120,11 @@ ChessBoardGui::~ChessBoardGui() {
 
 void ChessBoardGui::ThEventLoop() {
   TTF_Init();
-  // SDL_Init();
 
   sans_ = TTF_OpenFont("C:\\Users\\studio25\\Documents\\console_"
                        "chess\\gui\\assets\\STIXTwoMath-Regular.ttf",
                        16);
+
   TTF_SetFontStyle(sans_, TTF_STYLE_BOLD);
 
   if (!sans_) {
@@ -138,32 +146,36 @@ void ChessBoardGui::ThEventLoop() {
 
   while (1 < 2) {
 
-    DrawSquares();
-    DrawButtons();
-    LabelSquares();
-    DrawPieces();
-    DrawEvaluation();
-
-    SDL_RenderPresent(renderer_);
-
     SDL_WaitEvent(&event_);
-
     switch (event_.type) {
     case SDL_QUIT:
       active_ = false;
       return;
-    case SDL_MOUSEMOTION:
-      break;
     case SDL_MOUSEBUTTONUP:
-
       int x, y;
       SDL_GetMouseState(&x, &y);
       CheckSquarePress(x, y);
       CheckButtonPress(x, y);
+      UpdateDisplay();
+      break;
+    }
+    switch ((Events)event_.user.code) {
+    case Events::LoadBoard:
+      local_board_ = *(ChessBoard *)event_.user.data1;
+      delete (ChessBoard *)event_.user.data1;
+      break;
+    case Events::HighlightSquare:
+      highlighted_squares_.push_back({*(int *)event_.user.data1, {BLUE}});
+      break;
+    case Events::HighlightPiece:
+      highlighted_pieces_.push_back({*(int *)event_.user.data1, {BLUE}});
+      break;
+    case Events::UpdateScreen:
+      UpdateDisplay();
       break;
     }
 
-    std::this_thread::sleep_for(std::chrono::milliseconds(24));
+    // std::this_thread::sleep_for(std::chrono::milliseconds(24));
   }
 }
 
@@ -295,7 +307,11 @@ void ChessBoardGui::DrawEvaluation() {
   int w = 4; // size of the label square
   int h = 4; // size of the label square
 
-  SDL_Rect evaluation_square = {width_ * square_width_ + w, square_height_ - 10,
+  SDL_SetRenderDrawColor(renderer_, BLACK_COLOR);
+  SDL_RenderFillRect(renderer_,
+                     new SDL_Rect({width_ * square_width_ , 20, 64, 20}));
+
+  SDL_Rect evaluation_square = {width_ * square_width_ + w, 21,
                                 w, h};
   SDL_Color evaluation_color = {WHITE_COLOR};
 
@@ -400,10 +416,16 @@ void ChessBoardGui::HighlightSquares() {
     switch (i.second) {
 
     case ORANGE:
-      if (w % 2 == 0 xor h % 2 == 0)
-        SDL_SetRenderDrawColor(renderer_, ORANGE_COLOR);
-      else
+
+      if (current_orientation_ == WHITE_UP) {
+        if (w % 2 == 0 xor h % 2 == 0)
+          SDL_SetRenderDrawColor(renderer_, ORANGE_COLOR);
+        else
+          SDL_SetRenderDrawColor(renderer_, LIGHT_ORANGE_COLOR);
+      } else if (w % 2 == 0 xor h % 2 == 0)
         SDL_SetRenderDrawColor(renderer_, LIGHT_ORANGE_COLOR);
+      else
+        SDL_SetRenderDrawColor(renderer_, ORANGE_COLOR);
 
       break;
     }
@@ -451,5 +473,55 @@ void ChessBoardGui::AnimateMove(Move target) {
   for (int i = 0; i < number_of_key_frames; i++) {
     key_frames_positions.push_back({(int)(dx * i), (int)(dy * i), 60,
                                     60}); // 60, 60 <- piece image height, width
+  }
+}
+
+/// pushes new load board event on to event stack,
+/// to event.user.data field is assigned pointer to new board object
+/// after updating the board this new board must be deleted!
+
+void ChessBoardGui::LoadBoard(ChessBoard &board) {
+  Uint32 myEventType = SDL_RegisterEvents(1);
+
+  if (myEventType != ((Uint32)-1)) {
+    SDL_Event event;
+    SDL_memset(&event, 0, sizeof(event)); /* or SDL_zero(event) */
+    event.type = myEventType;
+    event.user.code = (Sint32)(Events::LoadBoard);
+    event.user.data1 = new ChessBoard(board);
+    SDL_PushEvent(&event);
+  }
+}
+
+/// pushes new HighlightSquare event onto event stack,
+/// to event.user.data field is assigned pointer to int* object
+/// after updating the board this object must be deleted!
+
+void ChessBoardGui::HighlightSquare(int square_position) {
+  Uint32 myEventType = SDL_RegisterEvents(1);
+
+  if (myEventType != ((Uint32)-1)) {
+    SDL_Event event;
+    SDL_memset(&event, 0, sizeof(event)); /* or SDL_zero(event) */
+    event.type = myEventType;
+    event.user.code = (Sint32)(Events::HighlightSquare);
+    event.user.data1 = new int(square_position);
+    SDL_PushEvent(&event);
+  }
+}
+
+/// pushes new HighlightSquare event onto event stack,
+/// to event.user.data field is assigned pointer to int* object
+/// after updating the board this object must be deleted!
+void ChessBoardGui::HighlightPiece(int piece_position) {
+  Uint32 myEventType = SDL_RegisterEvents(1);
+
+  if (myEventType != ((Uint32)-1)) {
+    SDL_Event event;
+    SDL_memset(&event, 0, sizeof(event)); /* or SDL_zero(event) */
+    event.type = myEventType;
+    event.user.code = (Sint32)(Events::HighlightPiece);
+    event.user.data1 = new int(piece_position);
+    SDL_PushEvent(&event);
   }
 }
