@@ -4,8 +4,7 @@
 
 #include "night.h"
 
-void Night::GenMoves(std::array<Piece *, 64> &board,
-                     unsigned int position,
+void Night::GenMoves(std::array<Piece *, 64> &board, unsigned int position,
                      std::vector<Move> &possible_moves) {
 
   /// the x part of position
@@ -17,61 +16,60 @@ void Night::GenMoves(std::array<Piece *, 64> &board,
   int nx = px;
   int ny = py;
 
-
   nx = px - 2; // px -2
   ny = py - 1;
   if (nx >= 0 and ny >= 0)
     if (board[CCord(nx, ny)]->IsEmpty() or
-        board[CCord(nx, ny)]->Color() not_eq  Color())
+        board[CCord(nx, ny)]->Color() not_eq Color())
       possible_moves.emplace_back(position, CCord(nx, ny));
 
   nx = px - 2;
   ny = py + 1;
   if (nx >= 0 and ny < B_WIDTH)
     if (board[CCord(nx, ny)]->IsEmpty() or
-        board[CCord(nx, ny)]->Color() not_eq  Color())
+        board[CCord(nx, ny)]->Color() not_eq Color())
       possible_moves.emplace_back(position, CCord(nx, ny));
 
   nx = px + 1;
   ny = py - 2;
   if (nx < B_WIDTH and ny >= 0)
     if (board[CCord(nx, ny)]->IsEmpty() or
-        board[CCord(nx, ny)]->Color() not_eq  Color())
+        board[CCord(nx, ny)]->Color() not_eq Color())
       possible_moves.emplace_back(position, CCord(nx, ny));
 
   nx = px - 1;
   ny = py - 2;
   if (nx >= 0 and ny >= 0)
     if (board[CCord(nx, ny)]->IsEmpty() or
-        board[CCord(nx, ny)]->Color() not_eq  Color())
+        board[CCord(nx, ny)]->Color() not_eq Color())
       possible_moves.emplace_back(position, CCord(nx, ny));
 
   nx = px + 1;
   ny = py - 2;
   if (nx < B_WIDTH and ny >= 0)
     if (board[CCord(nx, ny)]->IsEmpty() or
-        board[CCord(nx, ny)]->Color() not_eq  Color())
+        board[CCord(nx, ny)]->Color() not_eq Color())
       possible_moves.emplace_back(position, CCord(nx, ny));
 
   nx = px - 1;
   ny = py + 2;
   if (nx >= 0 and ny < B_WIDTH)
     if (board[CCord(nx, ny)]->IsEmpty() or
-        board[CCord(nx, ny)]->Color() not_eq  Color())
+        board[CCord(nx, ny)]->Color() not_eq Color())
       possible_moves.emplace_back(position, CCord(nx, ny));
 
   nx = px + 1;
   ny = py + 2;
   if (nx < B_WIDTH and ny < B_WIDTH)
     if (board[CCord(nx, ny)]->IsEmpty() or
-        board[CCord(nx, ny)]->Color() not_eq  Color())
+        board[CCord(nx, ny)]->Color() not_eq Color())
       possible_moves.emplace_back(position, CCord(nx, ny));
 
   nx = px + 2; // px -2
   ny = py - 1;
   if (nx < B_WIDTH and ny >= 0)
     if (board[CCord(nx, ny)]->IsEmpty() or
-        board[CCord(nx, ny)]->Color() not_eq  Color())
+        board[CCord(nx, ny)]->Color() not_eq Color())
       possible_moves.emplace_back(position, CCord(nx, ny));
 
   nx = px + 2;
@@ -82,4 +80,10 @@ void Night::GenMoves(std::array<Piece *, 64> &board,
       possible_moves.emplace_back(position, CCord(nx, ny));
 }
 void Night::SetMoved() { info_ |= 2; }
-PieceType Night::GetPieceType() { return Color() ? PieceType::WHITE_NIGHT : PieceType::BLACK_NIGHT; }
+PieceType Night::GetPieceType() {
+  return Color() ? PieceType::WHITE_NIGHT : PieceType::BLACK_NIGHT;
+}
+Night::Night(bool color) { info_ = color ? 1 : 0; }
+double Night::Value() const { return Color() ? 3 : -3; }
+Night::operator char() const { return Color() ? 'n' : 'N'; }
+unsigned char Night::Hash() const { return Color() ? 2 : 8; }

@@ -10,31 +10,16 @@ class Night : public Piece {
 public:
   Night() { info_ = P_BLACK; }
 
-  explicit Night(bool color) {
-    if (color)
-      info_ = 1;
-    else
-      info_ = 0;
-  }
+  explicit Night(bool color);
 
-  double Value() const override {
-    if (Color())
-      return 3;
-    else
-      return -3;
-  }
+  double Value() const override;
 
   Night(const Night &other) = default;
 
-  explicit operator char() const override {
-    if (Color())
-      return 'n';
-    else
-      return 'N';
-  }
+  explicit operator char() const override;
 
-  virtual Night *Clone() { return new Night(*this); };
-  unsigned char Hash() const { if(Color()) return 2; else return 8;};
+  Night *Clone() override { return new Night(*this); };
+  unsigned char Hash() const;;
   bool IsEmpty() override { return false; }
   bool Color() const override { return info_ bitand 1; }
   bool Moved() const override { return info_ bitand 2; }
