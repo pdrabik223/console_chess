@@ -19,7 +19,7 @@ int main(int argc, char *argv[]) {
   game.DoMove({10,18});
 
 
-  while(ui.){
+  while(true){
 
     Move temp = game.DoRandomMove(true);
     ui.ClearHighlight();
