@@ -15,16 +15,21 @@ int main(int argc, char *argv[]) {
   std::this_thread::sleep_for(std::chrono::seconds(1));
 
   ChessBoard game;
-  ui.UpdateDisplay(game);
-  ui.UpdateScreen();
 
-  while (1 < 2) {
-    char h;
-    // std::cin>>h;
+  game.DoMove({10,18});
+
+
+  while(true){
+    game.DoRandomMove(true);
+    ui.LoadBoard(game);
+    ui.UpdateScreen();
     std::this_thread::sleep_for(std::chrono::seconds(1));
-    ui.RotateBoard();
-    if (ui.UpdateScreen())
-      return 1;
+
+    game.DoRandomMove(false);
+    ui.LoadBoard(game);
+    ui.UpdateScreen();
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+
   }
 
   return 0;
