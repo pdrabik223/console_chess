@@ -35,7 +35,7 @@
 enum GuiColor { WHITE, BLACK, ORANGE, BLUE, RED };
 enum Orientation { WHITE_UP = true, BLACK_UP = false };
 
-enum class Buttons { ROTATE_BOARD, CLEAN_HIGHLIGHT, SIZE };
+enum class Buttons { ROTATE_BOARD, CLEAN_HIGHLIGHT, OPEN_MENU, SIZE };
 
 enum class Events {
   UPDATE_SCREEN,
@@ -94,6 +94,8 @@ private:
   void CheckSquarePress(int mouse_position_x, int mouse_position_y);
 
   void HighlightSquares();
+  void HighlightPieces();
+
   void LoadButtons();
 
   void DrawToRenderer(SDL_Rect target_placement, PieceType pawn);

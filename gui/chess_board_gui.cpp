@@ -538,3 +538,9 @@ void ChessBoardGui::HighlightPiece(int piece_position) {
   }
 }
 
+void ChessBoardGui::HighlightPieces() {
+
+//  for(auto i:highlighted_pieces_)
+
+
+}
