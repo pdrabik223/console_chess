@@ -8,6 +8,7 @@
 #include <string>
 
 class Move {
+
 public:
   Move() : from_(0), to_(0), evaluation_(0.0){};
 

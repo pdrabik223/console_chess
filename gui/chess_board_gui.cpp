@@ -367,6 +367,7 @@ void ChessBoardGui::CheckButtonPress(int mouse_position_x,
     break;
   }
 }
+
 void ChessBoardGui::CheckSquarePress(int x, int y) {
 
   x /= square_width_;
@@ -407,5 +408,48 @@ void ChessBoardGui::HighlightSquares() {
       break;
     }
     SDL_RenderFillRect(renderer_, &square);
+  }
+}
+
+void ChessBoardGui::AnimateMove(Move target) {
+
+  if (local_board_.GetElement(target.from_).IsEmpty())
+    return;
+
+  // length of one frame: 1/50s
+  std::chrono::milliseconds frame_time(20);
+
+  // whole time reserved for animation = 500ms
+  unsigned number_of_key_frames = 500 / 20;
+
+  // in squares
+  unsigned from_y = target.from_ / 8, from_x = target.from_ % 8;
+  unsigned to_y = target.to_ / 8, to_x = target.to_ % 8;
+
+  // convert to pixels
+
+  from_y *= square_height_;
+  from_x *= square_width_;
+  to_y *= square_height_;
+  to_x *= square_width_;
+
+  // generate key frames positions in equal spaces
+  // they're sum must add up to number_of_key_frames
+
+  // standard formula for distance between two points
+  double travel_distance = sqrt(pow(from_x - to_x, 2) + pow(from_y - to_y, 2));
+  // divide to get the distance in px between key frames
+  travel_distance /= number_of_key_frames;
+
+  std::vector<SDL_Rect> key_frames_positions;
+
+  double dx = (double)(from_x - to_x) / number_of_key_frames;
+  double dy = (double)(from_y - to_y) / number_of_key_frames;
+
+  key_frames_positions.reserve(number_of_key_frames);
+
+  for (int i = 0; i < number_of_key_frames; i++) {
+    key_frames_positions.push_back({(int)(dx * i), (int)(dy * i), 60,
+                                    60}); // 60, 60 <- piece image height, width
   }
 }

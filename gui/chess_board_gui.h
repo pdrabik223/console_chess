@@ -24,6 +24,8 @@
 #define LIGHT_WHITE_COLOR 200, 200, 200, 0
 #define BLACK_COLOR 0, 0, 0, 0
 #define LIGHT_BLACK_COLOR 74, 74, 74, 0
+
+
 #define ORANGE_COLOR 216,122,21,0
 #define LIGHT_ORANGE_COLOR 216,151,86,0
 #define BLUE_COLOR 0, 0, 255, 0
@@ -34,7 +36,7 @@ enum  GuiColor {
   BLACK,
   ORANGE,
   BLUE,
-    RED
+  RED
 
 };
 enum Orientation {
@@ -117,6 +119,8 @@ protected:
   SDL_Event event_;
 
   Orientation current_orientation_;
+
+  unsigned animation_time_ = 500; // in milliseconds
 };
 
 #endif // CONSOLE_CHESS_GUI_CHESS_BOARD_GUI_H_
