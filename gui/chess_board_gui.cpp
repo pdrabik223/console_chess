@@ -66,7 +66,7 @@ void ChessBoardGui::ClearHighlight() {
     SDL_Event event;
     SDL_memset(&event, 0, sizeof(event)); /* or SDL_zero(event) */
     event.type = myEventType;
-    event.user.code = (Sint32)(Events::ClearHighlight);
+    event.user.code = (Sint32)(Events::CLEAR_HIGHLIGHT);
     SDL_PushEvent(&event);
   }
 }
@@ -101,7 +101,7 @@ void ChessBoardGui::UpdateScreen() {
     SDL_Event event;
     SDL_memset(&event, 0, sizeof(event)); /* or SDL_zero(event) */
     event.type = myEventType;
-    event.user.code = (Sint32)(Events::UpdateScreen);
+    event.user.code = (Sint32)(Events::UPDATE_SCREEN);
     SDL_PushEvent(&event);
   }
 }
@@ -166,20 +166,20 @@ void ChessBoardGui::ThEventLoop() {
       break;
     }
     switch ((Events)event_.user.code) {
-    case Events::LoadBoard:
+    case Events::LOAD_BOARD:
       local_board_ = *(ChessBoard *)event_.user.data1;
       delete (ChessBoard *)event_.user.data1;
       break;
-    case Events::HighlightSquare:
+    case Events::HIGHLIGHT_SQUARE:
       highlighted_squares_.push_back({*(int *)event_.user.data1, {BLUE}});
       break;
-    case Events::HighlightPiece:
+    case Events::HIGHLIGHT_PIECE:
       highlighted_pieces_.push_back({*(int *)event_.user.data1, {BLUE}});
       break;
-    case Events::UpdateScreen:
+    case Events::UPDATE_SCREEN:
       UpdateDisplay();
       break;
-    case Events::ClearHighlight:
+    case Events::CLEAR_HIGHLIGHT:
       highlighted_squares_.clear();
       highlighted_pieces_.clear();
       break;
@@ -500,13 +500,13 @@ void ChessBoardGui::LoadBoard(ChessBoard &board) {
     SDL_Event event;
     SDL_memset(&event, 0, sizeof(event)); /* or SDL_zero(event) */
     event.type = myEventType;
-    event.user.code = (Sint32)(Events::LoadBoard);
+    event.user.code = (Sint32)(Events::LOAD_BOARD);
     event.user.data1 = new ChessBoard(board);
     SDL_PushEvent(&event);
   }
 }
 
-/// pushes new HighlightSquare event onto event stack,
+/// pushes new HIGHLIGHT_SQUARE event onto event stack,
 /// to event.user.data field is assigned pointer to int* object
 /// after updating the board this object must be deleted!
 
@@ -516,13 +516,13 @@ void ChessBoardGui::HighlightSquare(int square_position) {
     SDL_Event event;
     SDL_memset(&event, 0, sizeof(event)); /* or SDL_zero(event) */
     event.type = myEventType;
-    event.user.code = (Sint32)(Events::HighlightSquare);
+    event.user.code = (Sint32)(Events::HIGHLIGHT_SQUARE);
     event.user.data1 = new int(square_position);
     SDL_PushEvent(&event);
   }
 }
 
-/// pushes new HighlightSquare event onto event stack,
+/// pushes new HIGHLIGHT_SQUARE event onto event stack,
 /// to event.user.data field is assigned pointer to int* object
 /// after updating the board this object must be deleted!
 void ChessBoardGui::HighlightPiece(int piece_position) {
@@ -532,7 +532,7 @@ void ChessBoardGui::HighlightPiece(int piece_position) {
     SDL_Event event;
     SDL_memset(&event, 0, sizeof(event)); /* or SDL_zero(event) */
     event.type = myEventType;
-    event.user.code = (Sint32)(Events::HighlightPiece);
+    event.user.code = (Sint32)(Events::HIGHLIGHT_PIECE);
     event.user.data1 = new int(piece_position);
     SDL_PushEvent(&event);
   }

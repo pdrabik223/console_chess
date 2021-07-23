@@ -37,14 +37,19 @@ enum Orientation { WHITE_UP = true, BLACK_UP = false };
 
 enum class Buttons { ROTATE_BOARD, CLEAN_HIGHLIGHT, SIZE };
 
-enum class Events { UpdateScreen, LoadBoard, HighlightSquare, HighlightPiece, ClearHighlight };
+enum class Events {
+  UPDATE_SCREEN,
+  LOAD_BOARD,
+  HIGHLIGHT_SQUARE,
+  HIGHLIGHT_PIECE,
+  CLEAR_HIGHLIGHT
+};
 
 class ChessBoardGui {
 public:
   ChessBoardGui();
 
-
-  void UpdateScreen();
+  static void UpdateScreen();
 
   static void LoadBoard(ChessBoard &board);
 
@@ -57,7 +62,6 @@ public:
   ~ChessBoardGui();
 
 private:
-
   ChessBoardGui &operator=(const ChessBoardGui &other);
 
   void UpdateDisplay();

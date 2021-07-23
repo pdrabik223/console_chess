@@ -11,4 +11,4 @@ GR8 what now
 |**castle**|I have a plan<br>one good night and it will be done|we have basic move done and working<br> so other moves are extension of simple one|I need to remember whether castle move has has been done|
 |**en passant**|nightmare|not even the ground work|remember last move made<br>or detect if en passant can be made|
 |**better png**|not at all|we are doing it a bit|it's separate thing it can be done anytime|
-|** threads**|easy|ui is ready to accept new inputs| nothing, but this way of speeding up calculations doesn't really work in a long run|
+|**threads**|easy|ui is ready to accept new inputs| nothing, but this way of speeding up calculations doesn't really work in a long run|
