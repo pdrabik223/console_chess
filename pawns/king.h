@@ -11,28 +11,13 @@ class King : public Piece {
 public:
   King() { info_ = P_BLACK; }
 
-  explicit King(bool color) {
-    if (color)
-      info_ = 1;
-    else
-      info_ = 0;
-  }
+  explicit King(bool color);
 
   King(const King &other) = default;
 
-  double Value() const override {
-    if (Color())
-      return 1000;
-    else
-      return -1000;
-  }
+  double Value() const override;
 
-  explicit operator char() const override {
-    if (Color())
-      return 'k';
-    else
-      return 'K';
-  }
+  explicit operator char() const override;
 
   virtual King *Clone() { return new King(*this); };
   bool IsEmpty() override;
@@ -40,12 +25,7 @@ public:
   bool Moved() const override;
   void SetMoved() override;
   PieceType GetPieceType() override;
-  unsigned char Hash() const {
-    if (Color())
-      return 6;
-    else
-      return 12;
-  };
+  unsigned char Hash() const;
 
   void GenMoves(std::array<Piece *, 64> &board, unsigned position,
                 std::vector<Move> &possible_moves) override;

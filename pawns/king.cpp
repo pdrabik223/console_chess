@@ -17,7 +17,6 @@ void King::GenMoves(std::array<Piece *, 64> &board, unsigned position,
 
   unsigned last_move = 0;
 
-
   nx = px - 1;
   ny = py - 1;
   if (nx >= 0 and ny >= 0)
@@ -78,4 +77,11 @@ bool King::IsEmpty() { return false; }
 bool King::Color() const { return info_ bitand 1; }
 bool King::Moved() const { return info_ bitand 2; }
 void King::SetMoved() { info_ |= 2; }
-PieceType King::GetPieceType() { return Color() ? PieceType::WHITE_KING : PieceType::BLACK_KING; }
+PieceType King::GetPieceType() {
+  return Color() ? PieceType::WHITE_KING : PieceType::BLACK_KING;
+}
+
+King::operator char() const { return Color() ? 'k' : 'K'; }
+double King::Value() const { return Color() ? 1000 : -1000; }
+unsigned char King::Hash() const { return Color() ? 6 : 12; }
+King::King(bool color) { info_ = color ? 1 : 0; }
