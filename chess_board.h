@@ -34,6 +34,9 @@ public:
   Piece *&operator[](unsigned position);
 
   void DoMove(const Move &target);
+  void DoRandomMove(bool color);
+
+
   void TransposeChessboard(ChessBoard &output_board, const Move &target);
 
   double EvaluatePosition();

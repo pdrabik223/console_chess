@@ -423,3 +423,10 @@ double ChessBoard::AlfaBetaMinMaxTranspositionTable(
     return current_evaluation;
   }
 }
+void ChessBoard::DoRandomMove(bool color) {
+
+  std::vector<Move> move_buffer;
+  GenAllPossibleMoves(color, move_buffer);
+  int move_id = rand() % move_buffer.size();
+  DoMove(move_buffer[move_id]);
+}
