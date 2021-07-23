@@ -26,7 +26,10 @@
 
 #define ORANGE_COLOR 216, 122, 21, 0
 #define LIGHT_ORANGE_COLOR 216, 151, 86, 0
-#define BLUE_COLOR 0, 0, 255, 0
+
+#define BLUE_COLOR 27, 91, 229, 0
+#define LIGHT_BLUE_COLOR 126, 158, 229, 0
+
 #define RED_COLOR 255, 0, 0, 0
 
 enum GuiColor { WHITE, BLACK, ORANGE, BLUE, RED };
@@ -34,11 +37,12 @@ enum Orientation { WHITE_UP = true, BLACK_UP = false };
 
 enum class Buttons { ROTATE_BOARD, CLEAN_HIGHLIGHT, SIZE };
 
-enum class Events { UpdateScreen, LoadBoard, HighlightSquare, HighlightPiece };
+enum class Events { UpdateScreen, LoadBoard, HighlightSquare, HighlightPiece, ClearHighlight };
 
 class ChessBoardGui {
 public:
   ChessBoardGui();
+
 
   void UpdateScreen();
 
@@ -46,12 +50,13 @@ public:
 
   static void HighlightSquare(int square_position);
 
+  static void ClearHighlight();
+
   void HighlightPiece(int piece_position);
 
   ~ChessBoardGui();
 
 private:
-  void PushEvent(Events new_event);
 
   ChessBoardGui &operator=(const ChessBoardGui &other);
 
@@ -62,8 +67,6 @@ private:
   void DrawSquares();
 
   void DrawPieces();
-
-  void ClearHighlight();
 
   void ThEventLoop();
 

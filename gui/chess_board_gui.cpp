@@ -60,8 +60,15 @@ static void LoadImagesToMemory() {
 }
 
 void ChessBoardGui::ClearHighlight() {
-  highlighted_squares_.clear();
-  highlighted_pieces_.clear();
+  Uint32 myEventType = SDL_RegisterEvents(1);
+
+  if (myEventType != ((Uint32)-1)) {
+    SDL_Event event;
+    SDL_memset(&event, 0, sizeof(event)); /* or SDL_zero(event) */
+    event.type = myEventType;
+    event.user.code = (Sint32)(Events::ClearHighlight);
+    SDL_PushEvent(&event);
+  }
 }
 
 ChessBoardGui::ChessBoardGui() : local_board_() {
@@ -86,7 +93,6 @@ ChessBoardGui::ChessBoardGui() : local_board_() {
   // so that the variables can be filled in
   std::this_thread::sleep_for(std::chrono::milliseconds(500));
 }
-void ChessBoardGui::PushEvent(Events new_event) {}
 
 void ChessBoardGui::UpdateScreen() {
   Uint32 myEventType = SDL_RegisterEvents(1);
@@ -172,6 +178,10 @@ void ChessBoardGui::ThEventLoop() {
       break;
     case Events::UpdateScreen:
       UpdateDisplay();
+      break;
+    case Events::ClearHighlight:
+      highlighted_squares_.clear();
+      highlighted_pieces_.clear();
       break;
     }
 
@@ -309,10 +319,9 @@ void ChessBoardGui::DrawEvaluation() {
 
   SDL_SetRenderDrawColor(renderer_, BLACK_COLOR);
   SDL_RenderFillRect(renderer_,
-                     new SDL_Rect({width_ * square_width_ , 20, 64, 20}));
+                     new SDL_Rect({width_ * square_width_, 20, 64, 20}));
 
-  SDL_Rect evaluation_square = {width_ * square_width_ + w, 21,
-                                w, h};
+  SDL_Rect evaluation_square = {width_ * square_width_ + w, 21, w, h};
   SDL_Color evaluation_color = {WHITE_COLOR};
 
   std::string evaluation_text = std::to_string(local_board_.EvaluatePosition());
@@ -417,17 +426,21 @@ void ChessBoardGui::HighlightSquares() {
 
     case ORANGE:
 
-      if (current_orientation_ == WHITE_UP) {
-        if (w % 2 == 0 xor h % 2 == 0)
-          SDL_SetRenderDrawColor(renderer_, ORANGE_COLOR);
-        else
-          SDL_SetRenderDrawColor(renderer_, LIGHT_ORANGE_COLOR);
-      } else if (w % 2 == 0 xor h % 2 == 0)
+      if ((current_orientation_ == WHITE_UP) xor (w % 2 == 0 xor h % 2 == 0))
         SDL_SetRenderDrawColor(renderer_, LIGHT_ORANGE_COLOR);
       else
         SDL_SetRenderDrawColor(renderer_, ORANGE_COLOR);
 
       break;
+    case BLUE:
+
+      if ((current_orientation_ == WHITE_UP) xor (w % 2 == 0 xor h % 2 == 0))
+        SDL_SetRenderDrawColor(renderer_, LIGHT_BLUE_COLOR);
+      else
+        SDL_SetRenderDrawColor(renderer_, BLUE_COLOR);
+
+      break;
+
     }
     SDL_RenderFillRect(renderer_, &square);
   }
@@ -499,7 +512,6 @@ void ChessBoardGui::LoadBoard(ChessBoard &board) {
 
 void ChessBoardGui::HighlightSquare(int square_position) {
   Uint32 myEventType = SDL_RegisterEvents(1);
-
   if (myEventType != ((Uint32)-1)) {
     SDL_Event event;
     SDL_memset(&event, 0, sizeof(event)); /* or SDL_zero(event) */
@@ -525,3 +537,4 @@ void ChessBoardGui::HighlightPiece(int piece_position) {
     SDL_PushEvent(&event);
   }
 }
+

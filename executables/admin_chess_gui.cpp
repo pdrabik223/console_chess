@@ -19,13 +19,23 @@ int main(int argc, char *argv[]) {
   game.DoMove({10,18});
 
 
-  while(true){
-    game.DoRandomMove(true);
+  while(ui.){
+
+    Move temp = game.DoRandomMove(true);
+    ui.ClearHighlight();
+    ui.HighlightSquare(temp.from_);
+    ui.HighlightSquare(temp.to_);
+
     ui.LoadBoard(game);
     ui.UpdateScreen();
     std::this_thread::sleep_for(std::chrono::seconds(1));
 
-    game.DoRandomMove(false);
+
+    temp = game.DoRandomMove(false);
+    ui.ClearHighlight();
+    ui.HighlightSquare(temp.from_);
+    ui.HighlightSquare(temp.to_);
+
     ui.LoadBoard(game);
     ui.UpdateScreen();
     std::this_thread::sleep_for(std::chrono::seconds(1));
