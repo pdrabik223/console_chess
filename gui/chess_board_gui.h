@@ -15,10 +15,10 @@
 #include <thread>
 #include <vector>
 
+#include "arrow.h"
 #include "button.h"
 #include "chess_board.h"
 #include "move.h"
-
 
 /// there's no prettier way
 /// unpack SDL_Color to it's r,b,g values
@@ -29,8 +29,9 @@
 /// there's no prettier way
 /// create lighter version of a given color and
 /// unpack SDL_Color to it's r,b,g values
-#define TO_UI8_LIGHT(x)                                                              \
-  Light(ChessBoardGui::colors_[(int)x]).r, Light(ChessBoardGui::colors_[(int)x]).g,          \
+#define TO_UI8_LIGHT(x)                                                        \
+  Light(ChessBoardGui::colors_[(int)x]).r,                                     \
+      Light(ChessBoardGui::colors_[(int)x]).g,                                 \
       Light(ChessBoardGui::colors_[(int)x]).b, 0
 
 SDL_Color Light(SDL_Color target, unsigned char lightning_level = 60);
@@ -57,6 +58,8 @@ enum class Events {
   HIGHLIGHT_SQUARE,
   HIGHLIGHT_PIECE,
   HIGHLIGHT_W_COLOR,
+  /// display arrow
+  HIGHLIGHT_MOVE,
   CLEAR_HIGHLIGHT
 };
 
@@ -66,6 +69,7 @@ public:
 
   static void UpdateScreen();
 
+  /// user accessible board modification
   static void LoadBoard(ChessBoard &board);
 
   static void HighlightSquare(int square_position);
@@ -74,6 +78,8 @@ public:
 
   static void ClearHighlight();
 
+  static void HighlightMove(Move target, unsigned size = 6, GuiColor color = GuiColor::YELLOW);
+
   void HighlightPiece(int piece_position);
 
   ~ChessBoardGui();
@@ -81,25 +87,33 @@ public:
 private:
   ChessBoardGui &operator=(const ChessBoardGui &other);
 
+  /// main loop
+  void ThEventLoop();
+  /// refresh screen function
   void UpdateDisplay();
 
+  void RotateBoard();
+
+  /// draw to renderer
   void AnimateMove(Move animate);
 
   void DrawSquares();
 
   void DrawPieces();
 
-  void ThEventLoop();
-
-  void RotateBoard();
-
-  void LabelSquares();
+  void DrawLabels();
 
   void DrawEvaluation();
 
   void DrawButtons();
 
-  bool active_ = true;
+  void DrawArrows();
+
+  void DrawHighlightedSquares();
+
+  void DrawHighlightedPieces();
+
+  void DrawPieceToRenderer(SDL_Rect target_placement, PieceType pawn);
 
   static int square_height_; // in pixels
   static int square_width_;  // in pixels
@@ -107,21 +121,16 @@ private:
   static int height_; // in squares
   static int width_;  // in squares
 
-  static void LoadImagesToMemory();
-  static void LoadColorsToMemory();
-
   static std::array<SDL_Surface *, (int)PieceType::SIZE - 1> images_;
   static std::array<SDL_Color, (int)GuiColor::SIZE> colors_;
 
+  static void LoadImagesToMemory();
+  static void LoadColorsToMemory();
+  void LoadButtonsToMemory();
+
+
   void CheckButtonPress(int mouse_position_x, int mouse_position_y);
   void CheckSquarePress(int mouse_position_x, int mouse_position_y);
-
-  void HighlightSquares();
-  void HighlightPieces();
-
-  void LoadButtons();
-
-  void DrawToRenderer(SDL_Rect target_placement, PieceType pawn);
 
   std::string GenRankLabel(int y);
   std::string GenFileLabel(int x);
@@ -131,10 +140,12 @@ protected:
 
   std::vector<std::pair<int, GuiColor>> highlighted_squares_;
   std::vector<std::pair<int, GuiColor>> highlighted_pieces_;
+  std::vector<Arrow> arrows_;
 
   std::array<Button, (size_t)Buttons::SIZE> buttons_;
 
   SDL_Window *window_;
+
   SDL_Renderer *renderer_;
 
   std::thread *window_thread_;
