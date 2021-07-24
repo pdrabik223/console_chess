@@ -21,6 +21,7 @@
 
 #define WHITE_COLOR 255, 255, 255, 0
 #define LIGHT_WHITE_COLOR 200, 200, 200, 0
+
 #define BLACK_COLOR 0, 0, 0, 0
 #define LIGHT_BLACK_COLOR 74, 74, 74, 0
 
@@ -30,9 +31,20 @@
 #define BLUE_COLOR 27, 91, 229, 0
 #define LIGHT_BLUE_COLOR 126, 158, 229, 0
 
-#define RED_COLOR 255, 0, 0, 0
+#define GREEN_COLOR 91, 226, 13, 0
+#define LIGHT_GREEN_COLOR 147, 221, 104, 0
 
-enum GuiColor { WHITE, BLACK, ORANGE, BLUE, RED };
+#define PINK_COLOR 224, 13, 129, 0
+#define LIGHT_PINK_COLOR 219, 89, 161, 0
+
+#define RED_COLOR 219, 17, 20, 0
+#define LIGHT_RED_COLOR 219, 81, 83, 0
+
+#define YELLOW_COLOR 216, 193, 19, 0
+#define LIGHT_YELLOW_COLOR 216, 201, 82, 0
+
+enum GuiColor { WHITE, BLACK, ORANGE, BLUE, RED, PINK, GREEN, YELLOW };
+
 enum Orientation { WHITE_UP = true, BLACK_UP = false };
 
 enum class Buttons { ROTATE_BOARD, CLEAN_HIGHLIGHT, OPEN_MENU, SIZE };
@@ -42,6 +54,8 @@ enum class Events {
   LOAD_BOARD,
   HIGHLIGHT_SQUARE,
   HIGHLIGHT_PIECE,
+  HIGHLIGHT_MOVE,
+  HIGHLIGHT_W_COLOR,
   CLEAR_HIGHLIGHT
 };
 
@@ -52,6 +66,10 @@ public:
   static void UpdateScreen();
 
   static void LoadBoard(ChessBoard &board);
+
+  static void HighlightMove(Move move_to_highlight);
+
+  static void HighlightMove(Move move_to_highlight, GuiColor color);
 
   static void HighlightSquare(int square_position);
 
@@ -108,6 +126,7 @@ protected:
 
   std::vector<std::pair<int, GuiColor>> highlighted_squares_;
   std::vector<std::pair<int, GuiColor>> highlighted_pieces_;
+  int no_highlighted_moves_ = 0;
 
   std::array<Button, (size_t)Buttons::SIZE> buttons_;
 

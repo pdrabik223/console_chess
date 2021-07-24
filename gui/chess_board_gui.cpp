@@ -182,7 +182,18 @@ void ChessBoardGui::ThEventLoop() {
     case Events::CLEAR_HIGHLIGHT:
       highlighted_squares_.clear();
       highlighted_pieces_.clear();
+      no_highlighted_moves_ = 0;
       break;
+    case Events::HIGHLIGHT_MOVE:
+
+      no_highlighted_moves_ =
+          no_highlighted_moves_ == 5 ? 0 : no_highlighted_moves_;
+
+      highlighted_pieces_.emplace_back(*(int *)event_.user.data1,
+                                       GuiColor(no_highlighted_moves_ + 3));
+      highlighted_pieces_.emplace_back(*(int *)event_.user.data2,
+                                       GuiColor(no_highlighted_moves_ + 3));
+      no_highlighted_moves_++;
     }
 
     // std::this_thread::sleep_for(std::chrono::milliseconds(24));
@@ -360,10 +371,7 @@ void ChessBoardGui::LoadButtons() {
       Button({width_ * square_width_, (height_ - 3) * square_height_,
               square_height_, square_width_});
 
-  buttons_[(int)Buttons::OPEN_MENU].SetImage(directory_path +
-      "menu.ppm");
-
-
+  buttons_[(int)Buttons::OPEN_MENU].SetImage(directory_path + "menu.ppm");
 }
 
 void ChessBoardGui::DrawButtons() {
@@ -447,10 +455,34 @@ void ChessBoardGui::HighlightSquares() {
         SDL_SetRenderDrawColor(renderer_, LIGHT_BLUE_COLOR);
       else
         SDL_SetRenderDrawColor(renderer_, BLUE_COLOR);
-
       break;
 
+    case RED:
+      if ((current_orientation_ == WHITE_UP) xor (w % 2 == 0 xor h % 2 == 0))
+        SDL_SetRenderDrawColor(renderer_, LIGHT_RED_COLOR);
+      else
+        SDL_SetRenderDrawColor(renderer_, RED_COLOR);
+      break;
+    case PINK:
+      if ((current_orientation_ == WHITE_UP) xor (w % 2 == 0 xor h % 2 == 0))
+        SDL_SetRenderDrawColor(renderer_, LIGHT_PINK_COLOR);
+      else
+        SDL_SetRenderDrawColor(renderer_, PINK_COLOR);
+      break;
+    case GREEN:
+      if ((current_orientation_ == WHITE_UP) xor (w % 2 == 0 xor h % 2 == 0))
+        SDL_SetRenderDrawColor(renderer_, LIGHT_GREEN_COLOR);
+      else
+        SDL_SetRenderDrawColor(renderer_, GREEN_COLOR);
+      break;
+    case YELLOW:
+      if ((current_orientation_ == WHITE_UP) xor (w % 2 == 0 xor h % 2 == 0))
+        SDL_SetRenderDrawColor(renderer_, LIGHT_YELLOW_COLOR);
+      else
+        SDL_SetRenderDrawColor(renderer_, YELLOW_COLOR);
+      break;
     }
+
     SDL_RenderFillRect(renderer_, &square);
   }
 }
@@ -549,7 +581,33 @@ void ChessBoardGui::HighlightPiece(int piece_position) {
 
 void ChessBoardGui::HighlightPieces() {
 
-//  for(auto i:highlighted_pieces_)
+  //  for(auto i:highlighted_pieces_)
+}
 
+void ChessBoardGui::HighlightMove(Move move_to_highlight) {
+  Uint32 myEventType = SDL_RegisterEvents(1);
+
+  if (myEventType != ((Uint32)-1)) {
+    SDL_Event event;
+    SDL_memset(&event, 0, sizeof(event)); /* or SDL_zero(event) */
+    event.type = myEventType;
+    event.user.code = (Sint32)(Events::HIGHLIGHT_MOVE);
+    event.user.data1 = new int(move_to_highlight.from_);
+    event.user.data2 = new int(move_to_highlight.to_);
+    SDL_PushEvent(&event);
+  }
+}
+void ChessBoardGui::HighlightMove(Move move_to_highlight, GuiColor color) {
+  Uint32 myEventType = SDL_RegisterEvents(1);
+
+  if (myEventType != ((Uint32)-1)) {
+    SDL_Event event;
+    SDL_memset(&event, 0, sizeof(event)); /* or SDL_zero(event) */
+    event.type = myEventType;
+    event.user.code = (Sint32)(Events::HIGHLIGHT_W_COLOR);
+    event.user.data1 = new Move(move_to_highlight);
+    event.user.data2 = new int((int)color);
+    SDL_PushEvent(&event);
+  }
 
 }
