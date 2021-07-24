@@ -15,7 +15,7 @@ int Abs(int a) { return a < 0 ? -a : a; }
 
 std::array<SDL_Surface *, (int)PieceType::SIZE - 1> ChessBoardGui::images_;
 
- void ChessBoardGui::LoadImagesToMemory() {
+void ChessBoardGui::LoadImagesToMemory() {
   std::string directory_path = "../gui/assets/";
 
   Uint32 r_mask = 0xff000000;
@@ -59,6 +59,19 @@ std::array<SDL_Surface *, (int)PieceType::SIZE - 1> ChessBoardGui::images_;
               directory_path + "black_king.ppm");
 }
 
+std::array<SDL_Color, (int)GuiColor::SIZE> ChessBoardGui::colors_;
+
+void ChessBoardGui::LoadColorsToMemory() {
+  ChessBoardGui::colors_[(int)GuiColor::WHITE] = SDL_Color({200, 200, 200, 0});
+  ChessBoardGui::colors_[(int)GuiColor::BLACK] = SDL_Color({0, 0, 0, 0});
+  ChessBoardGui::colors_[(int)GuiColor::ORANGE] = SDL_Color({216, 122, 21, 0});
+  ChessBoardGui::colors_[(int)GuiColor::BLUE] = SDL_Color({27, 91, 229, 0});
+  ChessBoardGui::colors_[(int)GuiColor::RED] = SDL_Color({219, 17, 20, 0});
+  ChessBoardGui::colors_[(int)GuiColor::PINK] = SDL_Color({224, 13, 129, 0});
+  ChessBoardGui::colors_[(int)GuiColor::GREEN] = SDL_Color({91, 226, 13, 0});
+  ChessBoardGui::colors_[(int)GuiColor::YELLOW] = SDL_Color({216, 193, 19, 0});
+}
+
 void ChessBoardGui::ClearHighlight() {
   Uint32 myEventType = SDL_RegisterEvents(1);
 
@@ -81,6 +94,7 @@ ChessBoardGui::ChessBoardGui() : local_board_() {
 
   // load piece's images from drive
   LoadImagesToMemory();
+  LoadColorsToMemory();
   LoadButtons();
 
   current_orientation_ = WHITE_UP;
@@ -171,11 +185,13 @@ void ChessBoardGui::ThEventLoop() {
       delete (ChessBoard *)event_.user.data1;
       break;
     case Events::HIGHLIGHT_SQUARE:
-      highlighted_squares_.emplace_back(*(int *)event_.user.data1, GuiColor::BLUE);
+      highlighted_squares_.emplace_back(*(int *)event_.user.data1,
+                                        GuiColor::BLUE);
       delete (int *)event_.user.data1;
       break;
     case Events::HIGHLIGHT_PIECE:
-      highlighted_pieces_.emplace_back(*(int *)event_.user.data1, GuiColor::BLUE);
+      highlighted_pieces_.emplace_back(*(int *)event_.user.data1,
+                                       GuiColor::BLUE);
       delete (int *)event_.user.data1;
       break;
     case Events::UPDATE_SCREEN:
@@ -194,6 +210,7 @@ void ChessBoardGui::ThEventLoop() {
     }
   }
 }
+
 void ChessBoardGui::DrawSquares() {
 
   for (int y = 0; y < 8; y++)
@@ -201,9 +218,9 @@ void ChessBoardGui::DrawSquares() {
       SDL_Rect square = {y * 64, x * 64, 64, 64};
 
       if (x % 2 == 0 xor y % 2 == 0)
-        SDL_SetRenderDrawColor(renderer_, LIGHT_BLACK_COLOR);
+        SDL_SetRenderDrawColor(renderer_, TO_UI8_LIGHT(GuiColor::BLACK));
       else
-        SDL_SetRenderDrawColor(renderer_, LIGHT_WHITE_COLOR);
+        SDL_SetRenderDrawColor(renderer_, TO_UI8(GuiColor::WHITE));
 
       SDL_RenderFillRect(renderer_, &square);
     }
@@ -224,10 +241,9 @@ void ChessBoardGui::LabelSquares() {
   for (int y = 0; y < height_; y++) { // vertical ones are 1 to 8
 
     if (y % 2 == 0)
-
-      current_color = {LIGHT_BLACK_COLOR};
+      current_color = Light(ChessBoardGui::colors_[(int)GuiColor::BLACK]);
     else
-      current_color = {LIGHT_WHITE_COLOR};
+      current_color = ChessBoardGui::colors_[(int)GuiColor::WHITE];
 
     TTF_SizeText(sans_, GenRankLabel(y).c_str(), &w, &h);
 
@@ -244,24 +260,24 @@ void ChessBoardGui::LabelSquares() {
 
   for (int x = 0; x < width_; x++) { // vertical ones are a to h
 
-    if (x % 2 == 0)
-      current_color = {LIGHT_WHITE_COLOR};
-    else
-      current_color = {LIGHT_BLACK_COLOR};
+	if (x % 2 == 0)
+	  current_color = ChessBoardGui::colors_[(int)GuiColor::WHITE];
+	else
+	  current_color = Light(ChessBoardGui::colors_[(int)GuiColor::BLACK]);
 
-    TTF_SizeText(sans_, GenFileLabel(x).c_str(), &w, &h);
+	TTF_SizeText(sans_, GenFileLabel(x).c_str(), &w, &h);
 
-    label_square = {
-        x * square_width_ + square_width_ - w -
-            (w / 4), // down, right corner of the botom rank
-        (height_ - 1) * square_height_ + (square_height_ - h - (h / 6)), w, h};
+	label_square = {
+		x * square_width_ + square_width_ - w -
+			(w / 4), // down, right corner of the botom rank
+		(height_ - 1) * square_height_ + (square_height_ - h - (h / 6)), w, h};
 
-    SDL_RenderCopy(
-        renderer_,
-        SDL_CreateTextureFromSurface(
-            renderer_, TTF_RenderText_Solid(sans_, GenFileLabel(x).c_str(),
-                                            current_color)),
-        nullptr, &label_square);
+	SDL_RenderCopy(
+		renderer_,
+		SDL_CreateTextureFromSurface(
+			renderer_, TTF_RenderText_Solid(sans_, GenFileLabel(x).c_str(),
+											current_color)),
+		nullptr, &label_square);
   }
 }
 
@@ -292,8 +308,8 @@ void ChessBoardGui::DrawToRenderer(SDL_Rect target_placement, PieceType pawn) {
   if (ChessBoardGui::images_[(int)pawn] == NULL) {
     fprintf(stderr, "CreateRGBSurface failed: %s\n", SDL_GetError());
   }
-  SDL_Texture *texture =
-      SDL_CreateTextureFromSurface(renderer_, ChessBoardGui::images_[(int)pawn]);
+  SDL_Texture *texture = SDL_CreateTextureFromSurface(
+      renderer_, ChessBoardGui::images_[(int)pawn]);
 
   if (texture == NULL) {
     fprintf(stderr, "CreateTextureFromSurface failed: %s\n", SDL_GetError());
@@ -322,12 +338,12 @@ void ChessBoardGui::DrawEvaluation() {
   int w = 4; // size of the label square
   int h = 4; // size of the label square
 
-  SDL_SetRenderDrawColor(renderer_, BLACK_COLOR);
+  SDL_SetRenderDrawColor(renderer_, TO_UI8(GuiColor::BLACK));
   SDL_RenderFillRect(renderer_,
                      new SDL_Rect({width_ * square_width_, 20, 64, 20}));
 
   SDL_Rect evaluation_square = {width_ * square_width_ + w, 21, w, h};
-  SDL_Color evaluation_color = {WHITE_COLOR};
+
 
   std::string evaluation_text = std::to_string(local_board_.EvaluatePosition());
 
@@ -341,7 +357,7 @@ void ChessBoardGui::DrawEvaluation() {
       renderer_,
       SDL_CreateTextureFromSurface(
           renderer_, TTF_RenderText_Solid(sans_, evaluation_text.c_str(),
-                                          evaluation_color)),
+										  ChessBoardGui::colors_[(int)GuiColor::WHITE])),
       nullptr, &evaluation_square);
 }
 
@@ -415,7 +431,8 @@ void ChessBoardGui::CheckSquarePress(int x, int y) {
   if (current_orientation_ == WHITE_UP)
     highlighted_squares_.emplace_back(y * width_ + x, GuiColor::ORANGE);
   else
-    highlighted_squares_.emplace_back((height_ - y - 1) * width_ + x, GuiColor::ORANGE);
+    highlighted_squares_.emplace_back((height_ - y - 1) * width_ + x,
+                                      GuiColor::ORANGE);
 }
 
 void ChessBoardGui::HighlightSquares() {
@@ -433,52 +450,11 @@ void ChessBoardGui::HighlightSquares() {
       square = {w * square_width_, (height_ - h - 1) * square_height_,
                 square_width_, square_height_};
 
-    switch (i.second) {
+	if ((current_orientation_ == WHITE_UP) xor (w % 2 == 0 xor h % 2 == 0))
+	  SDL_SetRenderDrawColor(renderer_,  TO_UI8_LIGHT(i.second));
+	else
+	  SDL_SetRenderDrawColor(renderer_,  TO_UI8(i.second));
 
-    case GuiColor::ORANGE:
-
-      if ((current_orientation_ == WHITE_UP) xor (w % 2 == 0 xor h % 2 == 0))
-
-        SDL_SetRenderDrawColor(renderer_, Light({ORANGE_COLOR}).r,
-                               Light({ORANGE_COLOR}).g, Light({ORANGE_COLOR}).b,
-                               0);
-      else
-        SDL_SetRenderDrawColor(renderer_, ORANGE_COLOR);
-
-      break;
-    case GuiColor::BLUE:
-
-      if ((current_orientation_ == WHITE_UP) xor (w % 2 == 0 xor h % 2 == 0))
-        SDL_SetRenderDrawColor(renderer_, LIGHT_BLUE_COLOR);
-      else
-        SDL_SetRenderDrawColor(renderer_, BLUE_COLOR);
-      break;
-
-    case GuiColor::RED:
-      if ((current_orientation_ == WHITE_UP) xor (w % 2 == 0 xor h % 2 == 0))
-        SDL_SetRenderDrawColor(renderer_, LIGHT_RED_COLOR);
-      else
-        SDL_SetRenderDrawColor(renderer_, RED_COLOR);
-      break;
-    case GuiColor::PINK:
-      if ((current_orientation_ == WHITE_UP) xor (w % 2 == 0 xor h % 2 == 0))
-        SDL_SetRenderDrawColor(renderer_, LIGHT_PINK_COLOR);
-      else
-        SDL_SetRenderDrawColor(renderer_, PINK_COLOR);
-      break;
-    case GuiColor::GREEN:
-      if ((current_orientation_ == WHITE_UP) xor (w % 2 == 0 xor h % 2 == 0))
-        SDL_SetRenderDrawColor(renderer_, LIGHT_GREEN_COLOR);
-      else
-        SDL_SetRenderDrawColor(renderer_, GREEN_COLOR);
-      break;
-    case GuiColor::YELLOW:
-      if ((current_orientation_ == WHITE_UP) xor (w % 2 == 0 xor h % 2 == 0))
-        SDL_SetRenderDrawColor(renderer_, LIGHT_YELLOW_COLOR);
-      else
-        SDL_SetRenderDrawColor(renderer_, YELLOW_COLOR);
-      break;
-    }
 
     SDL_RenderFillRect(renderer_, &square);
   }
@@ -593,6 +569,7 @@ void ChessBoardGui::HighlightPieces() {
 
   //  for(auto i:highlighted_pieces_)
 }
+
 SDL_Color Light(SDL_Color target, unsigned char lightning_level) {
   Uint16 light_r = target.r;
   Uint16 light_g = target.g;

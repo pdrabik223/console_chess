@@ -19,33 +19,33 @@
 #include "chess_board.h"
 #include "move.h"
 
-#define WHITE_COLOR 255, 255, 255, 0
-#define LIGHT_WHITE_COLOR 200, 200, 200, 0
 
-#define BLACK_COLOR 0, 0, 0, 0
-#define LIGHT_BLACK_COLOR 74, 74, 74, 0
+/// there's no prettier way
+/// unpack SDL_Color to it's r,b,g values
+#define TO_UI8(x)                                                              \
+  ChessBoardGui::colors_[(int)x].r, ChessBoardGui::colors_[(int)x].g,          \
+      ChessBoardGui::colors_[(int)x].b, 0
 
-#define ORANGE_COLOR 216, 122, 21, 0
-#define LIGHT_ORANGE_COLOR 216, 151, 86, 0
-
-#define BLUE_COLOR 27, 91, 229, 0
-#define LIGHT_BLUE_COLOR 126, 158, 229, 0
-
-#define GREEN_COLOR 91, 226, 13, 0
-#define LIGHT_GREEN_COLOR 147, 221, 104, 0
-
-#define PINK_COLOR 224, 13, 129, 0
-#define LIGHT_PINK_COLOR 219, 89, 161, 0
-
-#define RED_COLOR 219, 17, 20, 0
-#define LIGHT_RED_COLOR 219, 81, 83, 0
-
-#define YELLOW_COLOR 216, 193, 19, 0
-#define LIGHT_YELLOW_COLOR 216, 201, 82, 0
+/// there's no prettier way
+/// create lighter version of a given color and
+/// unpack SDL_Color to it's r,b,g values
+#define TO_UI8_LIGHT(x)                                                              \
+  Light(ChessBoardGui::colors_[(int)x]).r, Light(ChessBoardGui::colors_[(int)x]).g,          \
+      Light(ChessBoardGui::colors_[(int)x]).b, 0
 
 SDL_Color Light(SDL_Color target, unsigned char lightning_level = 60);
 
-enum class GuiColor { WHITE, BLACK, ORANGE, BLUE, RED, PINK, GREEN, YELLOW, SIZE };
+enum class GuiColor {
+  WHITE,
+  BLACK,
+  ORANGE,
+  BLUE,
+  RED,
+  PINK,
+  GREEN,
+  YELLOW,
+  SIZE
+};
 
 enum Orientation { WHITE_UP = true, BLACK_UP = false };
 
@@ -62,7 +62,6 @@ enum class Events {
 
 class ChessBoardGui {
 public:
-
   ChessBoardGui();
 
   static void UpdateScreen();
@@ -109,9 +108,10 @@ private:
   static int width_;  // in squares
 
   static void LoadImagesToMemory();
+  static void LoadColorsToMemory();
 
   static std::array<SDL_Surface *, (int)PieceType::SIZE - 1> images_;
-  static std::array<SDL_Surface *, (int)GuiColor::SIZE - 1> colors_;
+  static std::array<SDL_Color, (int)GuiColor::SIZE> colors_;
 
   void CheckButtonPress(int mouse_position_x, int mouse_position_y);
   void CheckSquarePress(int mouse_position_x, int mouse_position_y);
@@ -125,8 +125,6 @@ private:
 
   std::string GenRankLabel(int y);
   std::string GenFileLabel(int x);
-
-
 
 protected:
   ChessBoard local_board_;

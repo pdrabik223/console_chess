@@ -4,6 +4,7 @@
 
 #include "admin_gui.h"
 AdminGui::AdminGui() {}
+
 Move AdminGui::MinMaxAll(int depth, bool color, int threads) {
   auto t_1 = std::chrono::steady_clock::now();
   std::vector<Move> move_buffer;
