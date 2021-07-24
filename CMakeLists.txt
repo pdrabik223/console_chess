@@ -31,6 +31,7 @@ set(GUI
         gui/chess_board_gui.h gui/chess_board_gui.cpp
         gui/ppm_loader.cpp
         gui/file_exception.h
+        gui/arrow.h gui/arrow.cpp
         gui/button.h gui/button.cpp)
 
 add_executable(admin
