@@ -62,6 +62,7 @@ enum class Events {
 
 class ChessBoardGui {
 public:
+
   ChessBoardGui();
 
   static void UpdateScreen();
@@ -107,6 +108,10 @@ private:
   static int height_; // in squares
   static int width_;  // in squares
 
+  static void LoadImagesToMemory();
+
+  static std::array<SDL_Surface *, (int)PieceType::SIZE - 1> images_;
+
   void CheckButtonPress(int mouse_position_x, int mouse_position_y);
   void CheckSquarePress(int mouse_position_x, int mouse_position_y);
 
@@ -119,6 +124,8 @@ private:
 
   std::string GenRankLabel(int y);
   std::string GenFileLabel(int x);
+
+
 
 protected:
   ChessBoard local_board_;
