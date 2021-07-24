@@ -172,11 +172,11 @@ void ChessBoardGui::ThEventLoop() {
       break;
     case Events::HIGHLIGHT_SQUARE:
       highlighted_squares_.emplace_back(*(int *)event_.user.data1, BLUE);
-      delete (int*)event_.user.data1;
+      delete (int *)event_.user.data1;
       break;
     case Events::HIGHLIGHT_PIECE:
       highlighted_pieces_.emplace_back(*(int *)event_.user.data1, BLUE);
-      delete (int*)event_.user.data1;
+      delete (int *)event_.user.data1;
       break;
     case Events::UPDATE_SCREEN:
       UpdateDisplay();
@@ -188,8 +188,8 @@ void ChessBoardGui::ThEventLoop() {
     case Events::HIGHLIGHT_W_COLOR:
       highlighted_pieces_.emplace_back(*(int *)event_.user.data1,
                                        *(GuiColor *)event_.user.data2);
-      delete (int*)event_.user.data1;
-      delete (GuiColor*)event_.user.data2;
+      delete (int *)event_.user.data1;
+      delete (GuiColor *)event_.user.data2;
       break;
     }
   }
@@ -438,7 +438,10 @@ void ChessBoardGui::HighlightSquares() {
     case ORANGE:
 
       if ((current_orientation_ == WHITE_UP) xor (w % 2 == 0 xor h % 2 == 0))
-        SDL_SetRenderDrawColor(renderer_, LIGHT_ORANGE_COLOR);
+
+        SDL_SetRenderDrawColor(renderer_, Light({ORANGE_COLOR}).r,
+                               Light({ORANGE_COLOR}).g, Light({ORANGE_COLOR}).b,
+                               0);
       else
         SDL_SetRenderDrawColor(renderer_, ORANGE_COLOR);
 
@@ -589,4 +592,21 @@ void ChessBoardGui::HighlightPiece(int piece_position) {
 void ChessBoardGui::HighlightPieces() {
 
   //  for(auto i:highlighted_pieces_)
+}
+SDL_Color Light(SDL_Color target, unsigned char lightning_level) {
+  Uint16 light_r = target.r;
+  Uint16 light_g = target.g;
+  Uint16 light_b = target.b;
+
+  light_r += lightning_level;
+  if (light_r > 255)
+    light_r = 255;
+  light_g += lightning_level;
+  if (light_g > 255)
+    light_g = 255;
+  light_b += lightning_level;
+  if (light_b > 255)
+    light_b = 255;
+
+  return {(Uint8)light_r, (Uint8)light_g, (Uint8)light_b, 0};
 }

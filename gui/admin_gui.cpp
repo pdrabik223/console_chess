@@ -9,7 +9,7 @@ Move AdminGui::MinMaxAll(int depth, bool color, int threads) {
   std::vector<Move> move_buffer;
   game_.GenAllPossibleMoves(color, move_buffer);
 
-  DisplayMoves(move_buffer, color);
+//  DisplayMoves(move_buffer);
 
   for (auto &i : move_buffer) {
     ChessBoard i_board(game_);
@@ -24,11 +24,12 @@ Move AdminGui::MinMaxAll(int depth, bool color, int threads) {
   std::cout << "elapsed time: ";
   std::cout << std::to_string(elapsed_time) << " ms\n";
 
-  DisplayBestMoves(move_buffer, color); // he sorts move_buffer
+  // DisplayBestMoves(move_buffer); // he sorts move_buffer
   return move_buffer.front();
 }
 void AdminGui::DisplayBestMoves(std::vector<Move> &move_buffer) {
   for (auto i : move_buffer) {
-    gui_handle_.HighlightMove(i);
+    gui_handle_.HighlightSquare(i.from_);
+    gui_handle_.HighlightSquare(i.to_);
   }
 }
