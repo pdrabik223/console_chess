@@ -45,7 +45,7 @@
 
 SDL_Color Light(SDL_Color target, unsigned char lightning_level = 60);
 
-enum GuiColor { WHITE, BLACK, ORANGE, BLUE, RED, PINK, GREEN, YELLOW };
+enum class GuiColor { WHITE, BLACK, ORANGE, BLUE, RED, PINK, GREEN, YELLOW, SIZE };
 
 enum Orientation { WHITE_UP = true, BLACK_UP = false };
 
@@ -111,6 +111,7 @@ private:
   static void LoadImagesToMemory();
 
   static std::array<SDL_Surface *, (int)PieceType::SIZE - 1> images_;
+  static std::array<SDL_Surface *, (int)GuiColor::SIZE - 1> colors_;
 
   void CheckButtonPress(int mouse_position_x, int mouse_position_y);
   void CheckSquarePress(int mouse_position_x, int mouse_position_y);

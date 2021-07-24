@@ -171,11 +171,11 @@ void ChessBoardGui::ThEventLoop() {
       delete (ChessBoard *)event_.user.data1;
       break;
     case Events::HIGHLIGHT_SQUARE:
-      highlighted_squares_.emplace_back(*(int *)event_.user.data1, BLUE);
+      highlighted_squares_.emplace_back(*(int *)event_.user.data1, GuiColor::BLUE);
       delete (int *)event_.user.data1;
       break;
     case Events::HIGHLIGHT_PIECE:
-      highlighted_pieces_.emplace_back(*(int *)event_.user.data1, BLUE);
+      highlighted_pieces_.emplace_back(*(int *)event_.user.data1, GuiColor::BLUE);
       delete (int *)event_.user.data1;
       break;
     case Events::UPDATE_SCREEN:
@@ -413,9 +413,9 @@ void ChessBoardGui::CheckSquarePress(int x, int y) {
     return;
 
   if (current_orientation_ == WHITE_UP)
-    highlighted_squares_.emplace_back(y * width_ + x, ORANGE);
+    highlighted_squares_.emplace_back(y * width_ + x, GuiColor::ORANGE);
   else
-    highlighted_squares_.emplace_back((height_ - y - 1) * width_ + x, ORANGE);
+    highlighted_squares_.emplace_back((height_ - y - 1) * width_ + x, GuiColor::ORANGE);
 }
 
 void ChessBoardGui::HighlightSquares() {
@@ -435,7 +435,7 @@ void ChessBoardGui::HighlightSquares() {
 
     switch (i.second) {
 
-    case ORANGE:
+    case GuiColor::ORANGE:
 
       if ((current_orientation_ == WHITE_UP) xor (w % 2 == 0 xor h % 2 == 0))
 
@@ -446,7 +446,7 @@ void ChessBoardGui::HighlightSquares() {
         SDL_SetRenderDrawColor(renderer_, ORANGE_COLOR);
 
       break;
-    case BLUE:
+    case GuiColor::BLUE:
 
       if ((current_orientation_ == WHITE_UP) xor (w % 2 == 0 xor h % 2 == 0))
         SDL_SetRenderDrawColor(renderer_, LIGHT_BLUE_COLOR);
@@ -454,25 +454,25 @@ void ChessBoardGui::HighlightSquares() {
         SDL_SetRenderDrawColor(renderer_, BLUE_COLOR);
       break;
 
-    case RED:
+    case GuiColor::RED:
       if ((current_orientation_ == WHITE_UP) xor (w % 2 == 0 xor h % 2 == 0))
         SDL_SetRenderDrawColor(renderer_, LIGHT_RED_COLOR);
       else
         SDL_SetRenderDrawColor(renderer_, RED_COLOR);
       break;
-    case PINK:
+    case GuiColor::PINK:
       if ((current_orientation_ == WHITE_UP) xor (w % 2 == 0 xor h % 2 == 0))
         SDL_SetRenderDrawColor(renderer_, LIGHT_PINK_COLOR);
       else
         SDL_SetRenderDrawColor(renderer_, PINK_COLOR);
       break;
-    case GREEN:
+    case GuiColor::GREEN:
       if ((current_orientation_ == WHITE_UP) xor (w % 2 == 0 xor h % 2 == 0))
         SDL_SetRenderDrawColor(renderer_, LIGHT_GREEN_COLOR);
       else
         SDL_SetRenderDrawColor(renderer_, GREEN_COLOR);
       break;
-    case YELLOW:
+    case GuiColor::YELLOW:
       if ((current_orientation_ == WHITE_UP) xor (w % 2 == 0 xor h % 2 == 0))
         SDL_SetRenderDrawColor(renderer_, LIGHT_YELLOW_COLOR);
       else
