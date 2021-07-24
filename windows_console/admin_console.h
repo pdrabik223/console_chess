@@ -2,17 +2,17 @@
 // Created by studio25 on 18.06.2021.
 //
 
-#ifndef CONSOLE_CHESS_WINDOWS_CONSOLE_ADMIN_H_
-#define CONSOLE_CHESS_WINDOWS_CONSOLE_ADMIN_H_
+#ifndef CONSOLE_CHESS_WINDOWS_CONSOLE_ADMIN_CONSOLE_H_
+#define CONSOLE_CHESS_WINDOWS_CONSOLE_ADMIN_CONSOLE_H_
 
 #include "chess_board.h"
 #include <vector>
 #include <windows_console/scml.h>
 #include "full_command.h"
 
-class Admin {
+class AdminConsole {
 public:
-  Admin();
+  AdminConsole();
 
 private:
   Move MinMaxAll(int depth, bool color, int threads);
@@ -38,4 +38,4 @@ private:
   void Load();
 };
 
-#endif // CONSOLE_CHESS_WINDOWS_CONSOLE_ADMIN_H_
+#endif // CONSOLE_CHESS_WINDOWS_CONSOLE_ADMIN_CONSOLE_H_

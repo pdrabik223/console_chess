@@ -2,12 +2,12 @@
 // Created by studio25 on 18.06.2021.
 //
 
-#include "admin.h"
+#include "admin_console.h"
 #include <algorithm>
 #include <cassert>
 #include <conio.h>
 
-Admin::Admin() : game_(), console_handle_() {
+AdminConsole::AdminConsole() : game_(), console_handle_() {
 
   console_handle_.UpdateDisplay(game_);
   full_command user_input;
@@ -105,7 +105,7 @@ Admin::Admin() : game_(), console_handle_() {
 quit:;
 }
 
-void Admin::Help() {
+void AdminConsole::Help() {
   console_handle_.SetMessage(
       L"help is coming\n"
       "add [color][piece][position]    : creates new [piece] in "
@@ -126,9 +126,10 @@ void Admin::Help() {
       "minmax [position][depth]        : minmax but with target\n");
 }
 
-void Admin::ShowPossible() {
+void AdminConsole::ShowPossible() {
 
   std::vector<Move> white_move_buffer;
+
   game_.GenAllPossibleMoves(P_WHITE, white_move_buffer);
   for (auto &i : white_move_buffer)
     game_.EvaluateMove(i);
@@ -164,7 +165,7 @@ void Admin::ShowPossible() {
   }
 }
 
-void Admin::AddPiece(full_command input) {
+void AdminConsole::AddPiece(full_command input) {
 
   switch (input.data[1]) {
   case 'p':
@@ -188,7 +189,7 @@ void Admin::AddPiece(full_command input) {
   }
 }
 
-void Admin::ShowPossible(int position) {
+void AdminConsole::ShowPossible(int position) {
   console_handle_.SetBackgroundColor(position / 8, position % 8,
                                      col::LIGHT_PURPLE);
   std::vector<Move> move_buffer;
@@ -200,7 +201,7 @@ void Admin::ShowPossible(int position) {
   DisplayMoves(move_buffer, game_.GetElement(position).Color());
 }
 
-void Admin::MinMax(int depth, int position, int threads) {
+void AdminConsole::MinMax(int depth, int position, int threads) {
 
   console_handle_.SetBackgroundColor(position / 8, position % 8,
                                      col::LIGHT_PURPLE);
@@ -228,7 +229,7 @@ void Admin::MinMax(int depth, int position, int threads) {
   DisplayBestMoves(move_buffer, game_.GetElement(position).Color());
 }
 
-Move Admin::MinMaxAll(int depth, bool color, int threads) {
+Move AdminConsole::MinMaxAll(int depth, bool color, int threads) {
 
   auto t_1 = std::chrono::steady_clock::now();
   std::vector<Move> move_buffer;
@@ -253,7 +254,7 @@ Move Admin::MinMaxAll(int depth, bool color, int threads) {
   return move_buffer.front();
 }
 
-void Admin::MakeEmFight(std::vector<int> settings) {
+void AdminConsole::MakeEmFight(std::vector<int> settings) {
 
   int white_algorytm = settings[0];
   int black_algorytm = settings[3];
@@ -309,7 +310,7 @@ void Admin::MakeEmFight(std::vector<int> settings) {
   }
 }
 
-Move Admin::AlfaBetaMinMaxAll(int depth, bool color, int threads) {
+Move AdminConsole::AlfaBetaMinMaxAll(int depth, bool color, int threads) {
   auto t_1 = std::chrono::steady_clock::now();
   std::vector<Move> move_buffer;
   game_.GenAllPossibleMoves(color, move_buffer);
@@ -334,7 +335,7 @@ Move Admin::AlfaBetaMinMaxAll(int depth, bool color, int threads) {
   return move_buffer.front();
 }
 
-void Admin::AlfaBetaMinMax(int depth, int position, int threads) {
+void AdminConsole::AlfaBetaMinMax(int depth, int position, int threads) {
 
   console_handle_.SetBackgroundColor(position / 8, position % 8,
                                      col::LIGHT_PURPLE);
@@ -361,7 +362,7 @@ void Admin::AlfaBetaMinMax(int depth, int position, int threads) {
   DisplayBestMoves(move_buffer, game_.GetElement(position).Color());
 }
 
-void Admin::DisplayMoves(std::vector<Move> &move_buffer, bool color) {
+void AdminConsole::DisplayMoves(std::vector<Move> &move_buffer, bool color) {
 
   std::sort(move_buffer.begin(), move_buffer.end());
 
@@ -377,7 +378,7 @@ void Admin::DisplayMoves(std::vector<Move> &move_buffer, bool color) {
   }
 }
 
-void Admin::DisplayBestMoves(std::vector<Move> &move_buffer, bool color) {
+void AdminConsole::DisplayBestMoves(std::vector<Move> &move_buffer, bool color) {
   std::sort(move_buffer.begin(), move_buffer.end());
   if (color)
     std::reverse(move_buffer.begin(), move_buffer.end());
@@ -392,14 +393,14 @@ void Admin::DisplayBestMoves(std::vector<Move> &move_buffer, bool color) {
   }
 }
 
-void Admin::Load() {
+void AdminConsole::Load() {
 
   std::string path = "../positions/";
   path += console_handle_.GetLine();
   game_.LoadPosition(path);
 }
 
-Move Admin::AlfaBetaMinMaxWTranspositionTableAll(int depth, bool color,
+Move AdminConsole::AlfaBetaMinMaxWTranspositionTableAll(int depth, bool color,
                                                  int threads) {
   auto t_1 = std::chrono::steady_clock::now();
   std::vector<Move> move_buffer;
@@ -427,7 +428,7 @@ Move Admin::AlfaBetaMinMaxWTranspositionTableAll(int depth, bool color,
   return move_buffer.front();
 }
 
-void Admin::AlfaBetaMinMaxWTranspositionTable(int depth, int position,
+void AdminConsole::AlfaBetaMinMaxWTranspositionTable(int depth, int position,
                                               int threads) {
   console_handle_.SetBackgroundColor(position / 8, position % 8,
                                      col::LIGHT_PURPLE);

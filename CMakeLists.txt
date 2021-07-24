@@ -39,7 +39,8 @@ add_executable(admin
         move.h move.cpp
         ${PAWNS}
         ${WIN_CONSOLE}
-        windows_console/admin.cpp windows_console/admin.h)
+        Admin.h Admin.cpp
+        windows_console/admin_console.cpp windows_console/admin_console.h)
 
 add_executable(admin_gui
         executables/admin_chess_gui.cpp
@@ -47,6 +48,7 @@ add_executable(admin_gui
         move.h move.cpp
         ${PAWNS}
         ${GUI}
+        Admin.h Admin.cpp
         gui/admin_gui.h gui/admin_gui.cpp)
 
 target_link_libraries(admin_gui
