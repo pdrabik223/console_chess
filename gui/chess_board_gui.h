@@ -54,7 +54,6 @@ enum class Events {
   LOAD_BOARD,
   HIGHLIGHT_SQUARE,
   HIGHLIGHT_PIECE,
-  HIGHLIGHT_MOVE,
   HIGHLIGHT_W_COLOR,
   CLEAR_HIGHLIGHT
 };
@@ -67,11 +66,9 @@ public:
 
   static void LoadBoard(ChessBoard &board);
 
-  static void HighlightMove(Move move_to_highlight);
-
-  static void HighlightMove(Move move_to_highlight, GuiColor color);
-
   static void HighlightSquare(int square_position);
+
+  static void HighlightSquare(int square_position, GuiColor color);
 
   static void ClearHighlight();
 
@@ -126,7 +123,6 @@ protected:
 
   std::vector<std::pair<int, GuiColor>> highlighted_squares_;
   std::vector<std::pair<int, GuiColor>> highlighted_pieces_;
-  int no_highlighted_moves_ = 0;
 
   std::array<Button, (size_t)Buttons::SIZE> buttons_;
 
@@ -141,7 +137,6 @@ protected:
 
   Orientation current_orientation_;
 
-  unsigned animation_time_ = 500; // in milliseconds
 };
 
 #endif // CONSOLE_CHESS_GUI_CHESS_BOARD_GUI_H_
