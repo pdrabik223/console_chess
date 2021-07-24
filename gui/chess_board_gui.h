@@ -43,6 +43,24 @@
 #define YELLOW_COLOR 216, 193, 19, 0
 #define LIGHT_YELLOW_COLOR 216, 201, 82, 0
 
+SDL_Color Light(SDL_Color target, unsigned char lightening_level = 60) {
+  Uint16 light_r = target.r;
+  Uint16 light_g = target.g;
+  Uint16 light_b = target.b;
+
+  light_r += lightening_level;
+  if (light_r > 255)
+    light_r = 255;
+  light_g += lightening_level;
+  if (light_g > 255)
+    light_g = 255;
+  light_b += lightening_level;
+  if (light_b > 255)
+    light_b = 255;
+
+  return {(Uint8)light_r, (Uint8)light_g, (Uint8)light_b, 0};
+}
+
 enum GuiColor { WHITE, BLACK, ORANGE, BLUE, RED, PINK, GREEN, YELLOW };
 
 enum Orientation { WHITE_UP = true, BLACK_UP = false };
@@ -136,7 +154,6 @@ protected:
   SDL_Event event_;
 
   Orientation current_orientation_;
-
 };
 
 #endif // CONSOLE_CHESS_GUI_CHESS_BOARD_GUI_H_
