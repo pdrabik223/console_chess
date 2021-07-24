@@ -8,6 +8,7 @@
 #include "ppm_loader.h"
 #include <SDL_surface.h>
 #include <string>
+
 class Button {
 public:
   Button():position_({0, 0, 0, 0}),image_(nullptr){};
