@@ -7,7 +7,7 @@
 #include "chess_board.h"
 #include <vector>
 #include <windows.h>
-#include <windows_console/admin.h>
+#include <windows_console/admin_console.h>
 
 int main() {
 
