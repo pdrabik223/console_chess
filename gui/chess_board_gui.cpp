@@ -326,8 +326,8 @@ void ChessBoardGui::DrawEvaluation() {
 
   std::string evaluation_text = std::to_string(local_board_.EvaluatePosition());
 
-  if (evaluation_text.size() > 5)
-    evaluation_text = evaluation_text.substr(0, 5);
+  if (evaluation_text.size() > 6)
+    evaluation_text = evaluation_text.substr(0, 6);
 
   TTF_SizeText(sans_, evaluation_text.c_str(), &evaluation_square.w,
                &evaluation_square.h);
@@ -354,7 +354,16 @@ void ChessBoardGui::LoadButtons() {
               square_height_, square_width_});
 
   buttons_[(int)Buttons::CLEAN_HIGHLIGHT].SetImage(directory_path +
+
                                                    "highlight_clean.ppm");
+  buttons_[(int)Buttons::OPEN_MENU] =
+      Button({width_ * square_width_, (height_ - 3) * square_height_,
+              square_height_, square_width_});
+
+  buttons_[(int)Buttons::OPEN_MENU].SetImage(directory_path +
+      "menu.ppm");
+
+
 }
 
 void ChessBoardGui::DrawButtons() {
