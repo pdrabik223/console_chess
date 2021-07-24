@@ -22,9 +22,9 @@ int main(int argc, char *argv[]) {
   while(true){
 
     Move temp = game.DoRandomMove(true);
-  //  ui.ClearHighlight();
-   // ui.HighlightSquare(temp.from_);
-  //  ui.HighlightSquare(temp.to_);
+   // ui.ClearHighlight();
+    ui.HighlightSquare(temp.from_);
+    ui.HighlightSquare(temp.to_);
 
     ui.LoadBoard(game);
     ui.UpdateScreen();
@@ -32,9 +32,9 @@ int main(int argc, char *argv[]) {
 
 
     temp = game.DoRandomMove(false);
- //   ui.ClearHighlight();
-   // ui.HighlightSquare(temp.from_);
-   // ui.HighlightSquare(temp.to_);
+  //  ui.ClearHighlight();
+    ui.HighlightSquare(temp.from_);
+    ui.HighlightSquare(temp.to_);
 
     ui.LoadBoard(game);
     ui.UpdateScreen();
