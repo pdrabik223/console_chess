@@ -10,6 +10,7 @@
 #include <SDL_render.h>
 #include <SDL_surface.h>
 #include <vector>
+#include <ciso646>
 struct Coord {
   Coord(unsigned int x, unsigned int y);
   Coord();
@@ -26,7 +27,8 @@ public:
   Arrow(const Coord &from, const Coord &to, const SDL_Color &color,
         unsigned int size);
 
-  void DisplayArrow(SDL_Renderer *renderer_,bool flip_axis, unsigned window_height);
+  void DisplayArrow(SDL_Renderer *renderer,bool flip_axis, unsigned window_height);
+
 
 private:
   ///
@@ -35,8 +37,7 @@ private:
   /// \return points generating semicircle
   std::vector<Coord> GenSemicircle(Coord middle_point,Coord relation);
 
-  std::vector<Coord> GenArmsPoints(Coord middle_point,Coord relation);
-
+  std::vector<Coord> GenArmsPoints(Coord from_point,Coord to_point);
 
   static double FindAngle(const Coord &p0, const Coord &p1, const Coord &p2);
 
