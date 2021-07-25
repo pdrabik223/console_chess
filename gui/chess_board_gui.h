@@ -78,7 +78,7 @@ public:
 
   static void ClearHighlight();
 
-  static void HighlightMove(Move target, unsigned size = 6, GuiColor color = GuiColor::YELLOW);
+  static void HighlightMove(Move target, unsigned size = 10, GuiColor color = GuiColor::RED);
 
   void HighlightPiece(int piece_position);
 

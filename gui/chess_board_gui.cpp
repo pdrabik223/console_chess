@@ -586,16 +586,16 @@ void ChessBoardGui::HighlightMove(Move target, unsigned size, GuiColor color) {
   Uint32 myEventType = SDL_RegisterEvents(1);
 
   Coord arrow_from;
-  arrow_from.x = (target.from_ * square_width_) / width_;
+  arrow_from.x = (target.from_ / width_) * square_width_;
   arrow_from.x += 32; // to land in the middle of square
-  arrow_from.y = (target.from_ * square_height_) / height_;
+  arrow_from.y = (target.from_ % width_) * square_height_;
   arrow_from.y += 32; // to land in the middle of square
 
   Coord arrow_to;
 
-  arrow_to.x = (target.to_ * square_width_) / width_;
+  arrow_to.x = (target.to_ / width_) * square_width_;
   arrow_to.x += 32; // to land in the middle of square
-  arrow_to.y = (target.from_ * square_height_) / height_;
+  arrow_to.y = (target.to_ % width_) * square_height_;
   arrow_to.y += 32; // to land in the middle of square
 
   if (myEventType != ((Uint32)-1)) {
