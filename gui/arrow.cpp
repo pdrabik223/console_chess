@@ -5,11 +5,13 @@
 #include "arrow.h"
 #include <cassert>
 #include <cmath>
+#include <iostream>
 Coord::Coord(unsigned int x, unsigned int y) : x(x), y(y) {}
 bool Coord::operator==(const Coord &rhs) const {
   return x == rhs.x && y == rhs.y;
 }
 bool Coord::operator!=(const Coord &rhs) const { return !(rhs == *this); }
+Coord::Coord() : x(0), y(0) {}
 
 Arrow::Arrow(const Coord &from, const Coord &to, const SDL_Color &color,
              unsigned int size)
@@ -19,30 +21,46 @@ Arrow::Arrow(const Coord &from, const Coord &to, const SDL_Color &color,
   arm_angle_ = 45;
 }
 
-void Arrow::DisplayArrow(SDL_Renderer *renderer_) {
+void Arrow::DisplayArrow(SDL_Renderer *renderer_, bool flip_axis,
+                         unsigned window_height) {
 
   // arrow body
 
-  for(auto i:GenSemicircle(from_,to_))
+  Coord temp_from = from_;
+  Coord temp_to = to_;
 
+  if (flip_axis) {
+    temp_from.y = window_height - temp_from.y;
+    temp_to.y = window_height - temp_to.y;
+  }
 
+  std::vector<Coord> from_semicircle = GenSemicircle(temp_from, temp_to);
+  std::vector<Coord> to_semicircle = GenSemicircle(temp_to, temp_from);
+  // assert(from_semicircle.size() == to_semicircle.size());
 
-  SDL_RenderDrawLine(renderer_, from_.x, from_.y, to_.x, to_.y);
+  SDL_SetRenderDrawColor(renderer_, color_.r, color_.g, color_.b, color_.a);
+  // I thing these need to be sorted first
+  auto range = to_semicircle.size() < from_semicircle.size()
+                   ? to_semicircle.size()
+                   : from_semicircle.size();
+  for (int i = 0; i < range; i++) {
+    SDL_RenderDrawLine(renderer_, from_semicircle[i].x, from_semicircle[i].y,
+                       to_semicircle[i].x, to_semicircle[i].y);
+  }
 }
 
-
-
 std::vector<Coord> Arrow::GenSemicircle(Coord middle_point, Coord relation) {
-
   assert(middle_point != relation);
+
   // 1. generate circle around the middle_point
   std::vector<Coord> solution;
   std::vector<Coord> full_circle(GenCircle(middle_point));
 
+  std::cout << " " << full_circle.size() << std::endl;
   // 2. filter all points that create angle
   // relation-middle_point-questioned_point < 90°
   for (auto point : full_circle)
-    if (FindAngle(relation, middle_point, point) >= 90)
+    if (FindAngle(relation, middle_point, point) >= (double)(3.141527 / 2))
       solution.emplace_back(point);
 
   return solution;
@@ -81,7 +99,6 @@ std::vector<Coord> Arrow::GenCircle(Coord middle_point) {
 }
 std::vector<Coord> Arrow::GenArmsPoints(Coord middle_point, Coord relation) {
   std::vector<Coord> solution;
-
 
   solution.emplace_back(cos(arm_angle_) * arm_length,
                         sin(arm_angle_) * arm_length);

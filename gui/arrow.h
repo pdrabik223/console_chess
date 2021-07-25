@@ -12,7 +12,7 @@
 #include <vector>
 struct Coord {
   Coord(unsigned int x, unsigned int y);
-
+  Coord();
   bool operator==(const Coord &rhs) const;
   bool operator!=(const Coord &rhs) const;
   unsigned x, y;
@@ -26,7 +26,7 @@ public:
   Arrow(const Coord &from, const Coord &to, const SDL_Color &color,
         unsigned int size);
 
-  void DisplayArrow(SDL_Renderer *renderer_);
+  void DisplayArrow(SDL_Renderer *renderer_,bool flip_axis, unsigned window_height);
 
 private:
   ///
@@ -54,6 +54,7 @@ protected:
   /// the angle between arms of an arrow and it's body
   /// described in   Degrees  <0,360>
   double arm_angle_;
+
 
 };
 

@@ -125,6 +125,7 @@ void ChessBoardGui::UpdateDisplay() {
   DrawButtons();
   DrawLabels();
   DrawPieces();
+  DrawArrows();
   DrawEvaluation();
   SDL_RenderPresent(renderer_);
 }
@@ -208,7 +209,9 @@ void ChessBoardGui::ThEventLoop() {
       delete (int *)event_.user.data1;
       delete (GuiColor *)event_.user.data2;
       break;
+
     case Events::HIGHLIGHT_MOVE:
+
       arrows_.emplace_back(*(Arrow *)event_.user.data1);
       delete (Arrow *)event_.user.data1;
       break;
@@ -300,7 +303,13 @@ void ChessBoardGui::DrawPieces() {
 }
 
 void ChessBoardGui::DrawArrows() {
+  if (!arrows_.empty()) {
 
+    std::cout << "now";
+  }
+  for (auto i : arrows_)
+    i.DisplayArrow(renderer_, current_orientation_ == BLACK_UP,
+                   height_ * square_height_);
 }
 
 void ChessBoardGui::RotateBoard() {
@@ -576,13 +585,26 @@ void ChessBoardGui::HighlightMove(Move target, unsigned size, GuiColor color) {
 
   Uint32 myEventType = SDL_RegisterEvents(1);
 
+  Coord arrow_from;
+  arrow_from.x = (target.from_ * square_width_) / width_;
+  arrow_from.x += 32; // to land in the middle of square
+  arrow_from.y = (target.from_ * square_height_) / height_;
+  arrow_from.y += 32; // to land in the middle of square
+
+  Coord arrow_to;
+
+  arrow_to.x = (target.to_ * square_width_) / width_;
+  arrow_to.x += 32; // to land in the middle of square
+  arrow_to.y = (target.from_ * square_height_) / height_;
+  arrow_to.y += 32; // to land in the middle of square
+
   if (myEventType != ((Uint32)-1)) {
     SDL_Event event;
     SDL_memset(&event, 0, sizeof(event)); /* or SDL_zero(event) */
     event.type = myEventType;
     event.user.code = (Sint32)(Events::HIGHLIGHT_MOVE);
-    event.user.data1 = new Arrow({target.from_ / 8, target.from_ % 8},
-                                 {target.to_ / 8, target.to_ % 8}, colors_[(int)color], size);
+    event.user.data1 =
+        new Arrow(arrow_from, arrow_to, colors_[(int)color], size);
     SDL_PushEvent(&event);
   }
 }

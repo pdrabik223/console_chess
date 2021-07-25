@@ -23,9 +23,7 @@ int main(int argc, char *argv[]) {
 
     Move temp = game.DoRandomMove(true);
    // ui.ClearHighlight();
-    ui.HighlightSquare(temp.from_);
-    ui.HighlightSquare(temp.to_);
-
+    ui.HighlightMove(temp);
     ui.LoadBoard(game);
     ui.UpdateScreen();
     std::this_thread::sleep_for(std::chrono::seconds(1));
@@ -33,8 +31,8 @@ int main(int argc, char *argv[]) {
 
     temp = game.DoRandomMove(false);
   //  ui.ClearHighlight();
-    ui.HighlightSquare(temp.from_);
-    ui.HighlightSquare(temp.to_);
+    ui.HighlightMove(temp);
+
 
     ui.LoadBoard(game);
     ui.UpdateScreen();
