@@ -72,16 +72,25 @@ void ChessBoardGui::LoadColorsToMemory() {
   ChessBoardGui::colors_[(int)GuiColor::YELLOW] = SDL_Color({216, 193, 19, 0});
 }
 
-void ChessBoardGui::ClearHighlight() {
+void ChessBoardGui::PushCustomEvent(Events event_id, void *data1, void *data2) {
+
   Uint32 myEventType = SDL_RegisterEvents(1);
 
   if (myEventType != ((Uint32)-1)) {
     SDL_Event event;
     SDL_memset(&event, 0, sizeof(event)); /* or SDL_zero(event) */
-    event.type = myEventType;
-    event.user.code = (Sint32)(Events::CLEAR_HIGHLIGHT);
+    event.type = SDL_USEREVENT;
+    event.user.code = (Sint32)event_id;
+    if (data1)
+      event.user.data1 = data1;
+    if (data2)
+      event.user.data2 = data2;
     SDL_PushEvent(&event);
   }
+}
+void ChessBoardGui::ClearHighlight() {
+  PushCustomEvent(Events::CLEAR_HIGHLIGHT);
+  UpdateScreen();
 }
 
 ChessBoardGui::ChessBoardGui() : local_board_() {
@@ -105,20 +114,10 @@ ChessBoardGui::ChessBoardGui() : local_board_() {
 
   // that's why we wait here half a second
   // so that the variables can be filled in
-  std::this_thread::sleep_for(std::chrono::milliseconds(500));
+  //  std::this_thread::sleep_for(std::chrono::milliseconds(500));
 }
 
-void ChessBoardGui::UpdateScreen() {
-  Uint32 myEventType = SDL_RegisterEvents(1);
-
-  if (myEventType != ((Uint32)-1)) {
-    SDL_Event event;
-    SDL_memset(&event, 0, sizeof(event)); /* or SDL_zero(event) */
-    event.type = myEventType;
-    event.user.code = (Sint32)(Events::UPDATE_SCREEN);
-    SDL_PushEvent(&event);
-  }
-}
+void ChessBoardGui::UpdateScreen() { PushCustomEvent(Events::UPDATE_SCREEN); }
 
 void ChessBoardGui::UpdateDisplay() {
   DrawSquares();
@@ -169,58 +168,62 @@ void ChessBoardGui::ThEventLoop() {
   while (1 < 2) {
 
     SDL_WaitEvent(&event_);
+
     switch (event_.type) {
     case SDL_QUIT:
 
       return;
     case SDL_MOUSEBUTTONUP:
+
       int x, y;
       SDL_GetMouseState(&x, &y);
       CheckSquarePress(x, y);
       CheckButtonPress(x, y);
       UpdateDisplay();
       break;
-    }
-    switch ((Events)event_.user.code) {
-    case Events::LOAD_BOARD:
-      local_board_ = *(ChessBoard *)event_.user.data1;
-      delete (ChessBoard *)event_.user.data1;
-      break;
-    case Events::HIGHLIGHT_SQUARE:
-      highlighted_squares_.emplace_back(*(int *)event_.user.data1,
-                                        GuiColor::BLUE);
-      delete (int *)event_.user.data1;
-      break;
-    case Events::HIGHLIGHT_PIECE:
-      highlighted_pieces_.emplace_back(*(int *)event_.user.data1,
-                                       GuiColor::BLUE);
-      delete (int *)event_.user.data1;
-      break;
-    case Events::UPDATE_SCREEN:
-      UpdateDisplay();
-      break;
-    case Events::CLEAR_HIGHLIGHT:
-      highlighted_squares_.clear();
-      highlighted_pieces_.clear();
-      arrows_.clear();
-      break;
-    case Events::HIGHLIGHT_W_COLOR:
-      highlighted_pieces_.emplace_back(*(int *)event_.user.data1,
-                                       *(GuiColor *)event_.user.data2);
-      delete (int *)event_.user.data1;
-      delete (GuiColor *)event_.user.data2;
-      break;
+    case SDL_USEREVENT:
+      switch ((Events)event_.user.code) {
+      case Events::LOAD_BOARD:
 
-    case Events::HIGHLIGHT_ARROW:
-      arrows_.emplace_back(*(Arrow *)event_.user.data1);
-      delete (Arrow *)event_.user.data1;
-      break;
-    case Events::HIGHLIGHT_CIRCLE:
-      circles_.emplace_back(*(Circle *)event_.user.data1);
-      delete (Circle *)event_.user.data1;
-      break;
+        local_board_ = *(ChessBoard *)event_.user.data1;
+        delete (ChessBoard *)event_.user.data1;
+        break;
+      case Events::HIGHLIGHT_SQUARE:
+        highlighted_squares_.emplace_back(*(int *)event_.user.data1,
+                                          GuiColor::BLUE);
+        delete (int *)event_.user.data1;
+        break;
+      case Events::HIGHLIGHT_PIECE:
+        highlighted_pieces_.emplace_back(*(int *)event_.user.data1,
+                                         GuiColor::BLUE);
+        delete (int *)event_.user.data1;
+        break;
+      case Events::UPDATE_SCREEN:
+        UpdateDisplay();
+        break;
+      case Events::CLEAR_HIGHLIGHT:
+        highlighted_squares_.clear();
+        highlighted_pieces_.clear();
+        arrows_.clear();
+        circles_.clear();
+        break;
+      case Events::HIGHLIGHT_W_COLOR:
 
+        highlighted_pieces_.emplace_back(*(int *)event_.user.data1,
+                                         *(GuiColor *)event_.user.data2);
+        delete (int *)event_.user.data1;
+        delete (GuiColor *)event_.user.data2;
+        break;
 
+      case Events::HIGHLIGHT_ARROW:
+        arrows_.emplace_back(*(Arrow *)event_.user.data1);
+        delete (Arrow *)event_.user.data1;
+        break;
+      case Events::HIGHLIGHT_CIRCLE:
+        circles_.emplace_back(*(Circle *)event_.user.data1);
+        delete (Circle *)event_.user.data1;
+        break;
+      }
     }
   }
 }
@@ -317,9 +320,8 @@ void ChessBoardGui::DrawArrows() {
 void ChessBoardGui::DrawCircles() {
   for (auto i : circles_)
     i.DisplayCircle(renderer_, current_orientation_ == BLACK_UP,
-                   height_ * square_height_);
+                    height_ * square_height_);
 }
-
 
 void ChessBoardGui::RotateBoard() {
   if (current_orientation_ == WHITE_UP)
@@ -534,65 +536,27 @@ void ChessBoardGui::AnimateMove(Move target) {
 /// to event.user.data field is assigned pointer to new board object
 /// after updating the board this new board must be deleted!
 void ChessBoardGui::LoadBoard(ChessBoard &board) {
-  Uint32 myEventType = SDL_RegisterEvents(1);
-
-  if (myEventType != ((Uint32)-1)) {
-    SDL_Event event;
-    SDL_memset(&event, 0, sizeof(event)); /* or SDL_zero(event) */
-    event.type = myEventType;
-    event.user.code = (Sint32)(Events::LOAD_BOARD);
-    event.user.data1 = new ChessBoard(board);
-    SDL_PushEvent(&event);
-  }
+  PushCustomEvent(Events::LOAD_BOARD,  new ChessBoard(board));
 }
 
 /// pushes new HIGHLIGHT_SQUARE event onto event stack,
 /// to event.user.data field is assigned pointer to int* object
 /// after updating the board this object must be deleted!
-void ChessBoardGui::HighlightSquare(int square_position) {
-  Uint32 myEventType = SDL_RegisterEvents(1);
-  if (myEventType != ((Uint32)-1)) {
-    SDL_Event event;
-    SDL_memset(&event, 0, sizeof(event)); /* or SDL_zero(event) */
-    event.type = myEventType;
-    event.user.code = (Sint32)(Events::HIGHLIGHT_SQUARE);
-    event.user.data1 = new int(square_position);
-    SDL_PushEvent(&event);
-  }
-}
 
 void ChessBoardGui::HighlightSquare(int square_position, GuiColor color) {
-  Uint32 myEventType = SDL_RegisterEvents(1);
-  if (myEventType != ((Uint32)-1)) {
-    SDL_Event event;
-    SDL_memset(&event, 0, sizeof(event)); /* or SDL_zero(event) */
-    event.type = myEventType;
-    event.user.code = (Sint32)(Events::HIGHLIGHT_W_COLOR);
-    event.user.data2 = new int(square_position);
-    event.user.data2 = new GuiColor(color);
-    SDL_PushEvent(&event);
-  }
+  PushCustomEvent(Events::HIGHLIGHT_SQUARE, new int(square_position),
+                  new GuiColor(color));
 }
 
 /// pushes new HIGHLIGHT_SQUARE event onto event stack,
 /// to event.user.data field is assigned pointer to int* object
 /// after updating the board this object must be deleted!
 void ChessBoardGui::HighlightPiece(int piece_position) {
-  Uint32 myEventType = SDL_RegisterEvents(1);
-
-  if (myEventType != ((Uint32)-1)) {
-    SDL_Event event;
-    SDL_memset(&event, 0, sizeof(event)); /* or SDL_zero(event) */
-    event.type = myEventType;
-    event.user.code = (Sint32)(Events::HIGHLIGHT_PIECE);
-    event.user.data1 = new int(piece_position);
-    SDL_PushEvent(&event);
-  }
+  PushCustomEvent(Events::HIGHLIGHT_PIECE, new int(piece_position));
 }
 
-void ChessBoardGui::HighlightMove(Move target, unsigned size, GuiColor color) {
-
-  Uint32 myEventType = SDL_RegisterEvents(1);
+void ChessBoardGui::HighlightMove(Move target, GuiColor color,
+                                  unsigned int size) {
 
   Coord arrow_from;
   arrow_from.x = (target.from_ / width_) * square_width_;
@@ -607,40 +571,32 @@ void ChessBoardGui::HighlightMove(Move target, unsigned size, GuiColor color) {
   arrow_to.y = (target.to_ % width_) * square_height_;
   arrow_to.y += 32; // to land in the middle of square
 
-  if (myEventType != ((Uint32)-1)) {
-    SDL_Event event;
-    SDL_memset(&event, 0, sizeof(event)); /* or SDL_zero(event) */
-    event.type = myEventType;
-    event.user.code = (Sint32)(Events::HIGHLIGHT_ARROW);
-    event.user.data1 =
-        new Arrow(arrow_from, arrow_to, colors_[(int)color], size);
-    SDL_PushEvent(&event);
-  }
+    PushCustomEvent(Events::HIGHLIGHT_ARROW, new Arrow(arrow_from, arrow_to, colors_[(int)color], size));
 }
 
 void ChessBoardGui::DrawHighlightedPieces() {
 
   //  for(auto i:highlighted_pieces_)
 }
-void ChessBoardGui::HighlightCircle(int target, unsigned int size,
-                                    GuiColor color) {
-  Uint32 myEventType = SDL_RegisterEvents(1);
 
+void ChessBoardGui::HighlightCircle(int target, GuiColor color,
+                                    unsigned int size) {
   Coord position;
   position.x = (target / width_) * square_width_;
   position.x += 32; // to land in the middle of square
   position.y = (target % width_) * square_height_;
   position.y += 32; // to land in the middle of square
 
+  PushCustomEvent(Events::HIGHLIGHT_CIRCLE, new Circle(position, colors_[(int)color], size, size / 4));
+
+}
+void ChessBoardGui::ExitGui() {
+  Uint32 myEventType = SDL_RegisterEvents(1);
   SDL_Event event;
   SDL_memset(&event, 0, sizeof(event)); /* or SDL_zero(event) */
-  event.type = myEventType;
-  event.user.code = (Sint32)(Events::HIGHLIGHT_CIRCLE);
-  event.user.data1 =
-      new Circle(position,colors_[(int)color], size, size/4);
+  event.type = SDL_QUIT;
   SDL_PushEvent(&event);
 }
-
 
 SDL_Color Light(SDL_Color target, unsigned char lightning_level) {
   Uint16 light_r = target.r;

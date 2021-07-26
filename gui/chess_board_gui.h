@@ -74,23 +74,27 @@ public:
   /// user accessible board modification
   static void LoadBoard(ChessBoard &board);
 
-  static void HighlightSquare(int square_position);
-
-  static void HighlightSquare(int square_position, GuiColor color);
+  static void HighlightSquare(int square_position, GuiColor color = GuiColor::ORANGE);
 
   static void ClearHighlight();
 
-  static void HighlightMove(Move target, unsigned size = 10, GuiColor color = GuiColor::RED);
+  static void HighlightMove(Move target, GuiColor color = GuiColor::RED,
+                            unsigned int size = 10);
 
-  static void HighlightCircle(int position, unsigned size = 30, GuiColor color = GuiColor::PINK);
+  static void HighlightCircle(int target, GuiColor color = GuiColor::PINK,
+                              unsigned int size = 30);
 
 
   void HighlightPiece(int piece_position);
 
   ~ChessBoardGui();
 
+  void ExitGui();
+
 private:
   ChessBoardGui &operator=(const ChessBoardGui &other);
+
+  static void ChessBoardGui::PushCustomEvent(Events event_id,void* data1 = nullptr, void* data2 = nullptr);
 
   /// main loop
   void ThEventLoop();
@@ -113,6 +117,7 @@ private:
   void DrawButtons();
 
   void DrawArrows();
+
   void DrawCircles();
 
   void DrawHighlightedSquares();
