@@ -15,8 +15,7 @@ enum class Task {
   ADD_PIECE,
   ADD_ALL,
   DELETE_PIECE,
-  DELL_ALL, // todo finish them
-  //  i have 6 h of sleep to cath
+  DELL_ALL,
   SHOW_MOVES,
   SHOW_ALL,
   MINMAX,
