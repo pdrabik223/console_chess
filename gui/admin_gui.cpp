@@ -5,11 +5,13 @@
 #include "admin_gui.h"
 AdminGui::AdminGui() : game_(), gui_handle_() {
   gui_handle_.LoadBoard(game_);
-  gui_handle_.UpdateScreen();
+
   full_command user_input;
   std::string input;
 
   while (1 < 2) {
+    gui_handle_.UpdateScreen();
+
     getline(std::cin, input);
     user_input.FromString(input);
 
@@ -20,12 +22,18 @@ AdminGui::AdminGui() : game_(), gui_handle_() {
           {(unsigned)user_input.data[0], (unsigned)user_input.data[1]});
       gui_handle_.LoadBoard(game_);
 
-      gui_handle_.HighlightCircle(user_input.data[0], GuiColor::YELLOW, 30);
-      gui_handle_.HighlightCircle(user_input.data[1], GuiColor::YELLOW, 30);
-
-      gui_handle_.UpdateScreen();
+      gui_handle_.HighlightSquare(user_input.data[0], GuiColor::YELLOW);
+      gui_handle_.HighlightCircle(user_input.data[1], GuiColor::YELLOW);
       break;
-
+    case Task::SHOW_ALL:
+      ShowPossible();
+      break;
+    case Task::SHOW_MOVES:
+      ShowPossible(user_input.data[0]);
+      break;
+    case Task::HELP:
+      Help();
+      break;
     case Task::QUIT:
       goto quit;
     }
@@ -57,18 +65,19 @@ Move AdminGui::MinMaxAll(int depth, bool color, int threads) {
   // DisplayBestMoves(move_buffer); // he sorts move_buffer
   return move_buffer.front();
 }
+
 void AdminGui::DisplayMoves(std::vector<Move> &move_buffer, bool color) {
   std::sort(move_buffer.begin(), move_buffer.end());
 
   if (color)
     std::reverse(move_buffer.begin(), move_buffer.end());
 
-  for (auto &move : move_buffer) {
+  for (const auto &move : move_buffer) {
     if (move == move_buffer.front()) {
-      gui_handle_.HighlightCircle(move.from_, GuiColor::RED, 30);
+      gui_handle_.HighlightSquare(move.from_, GuiColor::RED);
       gui_handle_.HighlightCircle(move.to_, GuiColor::RED, 30);
     } else {
-      gui_handle_.HighlightCircle(move.from_, GuiColor::YELLOW, 30);
+      gui_handle_.HighlightSquare(move.from_, GuiColor::YELLOW);
       gui_handle_.HighlightCircle(move.to_, GuiColor::YELLOW, 30);
     }
   }
@@ -82,9 +91,57 @@ void AdminGui::DisplayBestMoves(std::vector<Move> &move_buffer, bool color) {
 
   for (auto &move : move_buffer) {
     if (move == move_buffer.front()) {
-      gui_handle_.HighlightCircle(move.from_, GuiColor::RED, 30);
+      gui_handle_.HighlightSquare(move.from_, GuiColor::RED);
       gui_handle_.HighlightCircle(move.to_, GuiColor::RED, 30);
     } else
       return;
   }
+}
+void AdminGui::Help() {
+  printf("help is coming\n"
+      "add [color][piece][position]    : creates new [piece] in "
+      "[position]\n"
+      "add all                         : returns the chessboard to "
+      "original "
+      "[position]\n"
+      "del [position]                  : removes piece from [position]\n"
+      "del all                         : removes all pieces\n"
+      "show [position]                 : shows moves that are possible "
+      "to be made\n"
+      "                                  by the piece under [position]\n"
+      "quit                            : quit the program\n"
+      "move [from][to]                 : moves chosen by "
+      "[from] piece to square selected by [to] \n"
+      "minmax all [color][depth]       : minmax\n"
+      "minmax [position][depth]        : minmax but with target\n");
+}
+void AdminGui::ShowPossible(int position) {
+  std::vector<Move> move_buffer;
+
+  game_.GetElement(position).GenMoves(game_.plane_, position, move_buffer);
+  for (auto &i : move_buffer)
+    game_.EvaluateMove(i);
+
+  DisplayMoves(move_buffer, game_.GetElement(position).Color());
+}
+void AdminGui::ShowPossible() {
+  std::vector<Move> white_move_buffer;
+
+  game_.GenAllPossibleMoves(P_WHITE, white_move_buffer);
+
+  for (auto &i : white_move_buffer)
+    game_.EvaluateMove(i);
+
+  std::vector<Move> black_move_buffer;
+  game_.GenAllPossibleMoves(P_BLACK, black_move_buffer);
+
+  for (auto &i : black_move_buffer)
+    game_.EvaluateMove(i);
+
+  printf("white moves count: %ld\n",white_move_buffer.size());
+
+  DisplayMoves(white_move_buffer,P_WHITE);
+
+  printf("black moves count: %ld\n",black_move_buffer.size());
+  DisplayMoves(black_move_buffer,P_BLACK);
 }
