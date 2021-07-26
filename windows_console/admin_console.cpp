@@ -16,7 +16,9 @@ AdminConsole::AdminConsole() : game_(), console_handle_() {
   //commands.emplace_back("abminmaxtt all white 3");
 
   while (1 < 2) {
+
     console_handle_.UpdateScreen();
+
     if (!commands.empty()) {
       user_input.FromString(commands.front());
       commands.erase(commands.begin());

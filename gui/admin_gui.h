@@ -14,8 +14,6 @@ class AdminGui {
 public:
   AdminGui();
 
-
-
 private:
   Move MinMaxAll(int depth, bool color, int threads);
   void MinMax(int depth, int position, int threads);
@@ -31,7 +29,7 @@ private:
   void ShowPossible(int position);
   void AddPiece(full_command input);
   void DisplayMoves( std::vector<Move> &move_buffer, bool color);
-  void DisplayBestMoves(std::vector<Move> &move_buffer);
+  void DisplayBestMoves(std::vector<Move> &move_buffer, bool color);
 
   void MakeEmFight(std::vector<int> settings);
 

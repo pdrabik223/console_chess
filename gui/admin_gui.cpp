@@ -3,14 +3,43 @@
 //
 
 #include "admin_gui.h"
-AdminGui::AdminGui() {}
+AdminGui::AdminGui() : game_(), gui_handle_() {
+  gui_handle_.LoadBoard(game_);
+  gui_handle_.UpdateScreen();
+  full_command user_input;
+  std::string input;
+
+  while (1 < 2) {
+    getline(std::cin, input);
+    user_input.FromString(input);
+
+    switch (user_input.comm) {
+
+    case Task::MOVE:
+      game_.DoMove(
+          {(unsigned)user_input.data[0], (unsigned)user_input.data[1]});
+      gui_handle_.LoadBoard(game_);
+
+      gui_handle_.HighlightCircle(user_input.data[0], GuiColor::YELLOW, 30);
+      gui_handle_.HighlightCircle(user_input.data[1], GuiColor::YELLOW, 30);
+
+      gui_handle_.UpdateScreen();
+      break;
+
+    case Task::QUIT:
+      goto quit;
+    }
+  }
+quit:
+  gui_handle_.ExitGui();
+}
 
 Move AdminGui::MinMaxAll(int depth, bool color, int threads) {
   auto t_1 = std::chrono::steady_clock::now();
   std::vector<Move> move_buffer;
   game_.GenAllPossibleMoves(color, move_buffer);
 
-//  DisplayMoves(move_buffer);
+  //  DisplayMoves(move_buffer);
 
   for (auto &i : move_buffer) {
     ChessBoard i_board(game_);
@@ -28,9 +57,34 @@ Move AdminGui::MinMaxAll(int depth, bool color, int threads) {
   // DisplayBestMoves(move_buffer); // he sorts move_buffer
   return move_buffer.front();
 }
-void AdminGui::DisplayBestMoves(std::vector<Move> &move_buffer) {
-  for (auto i : move_buffer) {
-    gui_handle_.HighlightSquare(i.from_);
-    gui_handle_.HighlightSquare(i.to_);
+void AdminGui::DisplayMoves(std::vector<Move> &move_buffer, bool color) {
+  std::sort(move_buffer.begin(), move_buffer.end());
+
+  if (color)
+    std::reverse(move_buffer.begin(), move_buffer.end());
+
+  for (auto &move : move_buffer) {
+    if (move == move_buffer.front()) {
+      gui_handle_.HighlightCircle(move.from_, GuiColor::RED, 30);
+      gui_handle_.HighlightCircle(move.to_, GuiColor::RED, 30);
+    } else {
+      gui_handle_.HighlightCircle(move.from_, GuiColor::YELLOW, 30);
+      gui_handle_.HighlightCircle(move.to_, GuiColor::YELLOW, 30);
+    }
+  }
+}
+
+void AdminGui::DisplayBestMoves(std::vector<Move> &move_buffer, bool color) {
+  std::sort(move_buffer.begin(), move_buffer.end());
+
+  if (color)
+    std::reverse(move_buffer.begin(), move_buffer.end());
+
+  for (auto &move : move_buffer) {
+    if (move == move_buffer.front()) {
+      gui_handle_.HighlightCircle(move.from_, GuiColor::RED, 30);
+      gui_handle_.HighlightCircle(move.to_, GuiColor::RED, 30);
+    } else
+      return;
   }
 }
