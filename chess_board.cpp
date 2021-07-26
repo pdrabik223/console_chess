@@ -360,13 +360,12 @@ unsigned int ChessBoard::Hash() {
   return sum;
 }
 
-double ChessBoard::AlfaBetaMinMaxTranspositionTable(
+double ChessBoard::AlfaBetaNegaMaxTranspositionTable(
     ChessBoard &target, int depth, double alfa, double beta, bool color,
     std::map<size_t, double> &transposition_table) {
 
   size_t current_hash = Hash();
 
-  std::wcout << L"size:" << transposition_table.size();
   if (transposition_table.find(current_hash) != transposition_table.end())
     return transposition_table[current_hash];
 
@@ -377,19 +376,21 @@ double ChessBoard::AlfaBetaMinMaxTranspositionTable(
   if (depth == 0 || Abs(current_evaluation) > 900)
     return current_evaluation;
 
+  int int_color = color? 1:-1;
+
   if (color) { // for white
 
     current_evaluation = -1000;
 
     std::vector<Move> move_buffer;
-    GenAllPossibleMoves(P_WHITE, move_buffer);
+    GenAllPossibleMoves(color, move_buffer);
 
     for (auto &move : move_buffer) {
       ChessBoard m_board(*this);
       TransposeChessboard(m_board, move);
 
-      move.evaluation_ = target.AlfaBetaMinMaxTranspositionTable(
-          m_board, depth - 1, alfa, beta, P_BLACK, transposition_table);
+      move.evaluation_ = target.AlfaBetaNegaMaxTranspositionTable(
+          m_board, depth - 1, alfa, beta, !color, transposition_table);
 
       current_evaluation = Max(move.evaluation_, current_evaluation);
 
@@ -411,7 +412,7 @@ double ChessBoard::AlfaBetaMinMaxTranspositionTable(
       ChessBoard m_board(*this);
       TransposeChessboard(m_board, move);
 
-      move.evaluation_ = target.AlfaBetaMinMaxTranspositionTable(
+      move.evaluation_ = target.AlfaBetaNegaMaxTranspositionTable(
           m_board, depth - 1, alfa, beta, P_WHITE, transposition_table);
 
       current_evaluation = Min(move.evaluation_, current_evaluation);

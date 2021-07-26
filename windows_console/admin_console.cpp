@@ -414,7 +414,7 @@ Move AdminConsole::AlfaBetaMinMaxWTranspositionTableAll(int depth, bool color,
   for (auto &i : move_buffer) {
     ChessBoard i_board(game_);
     game_.TransposeChessboard(i_board, i);
-    i.evaluation_ = game_.AlfaBetaMinMaxTranspositionTable(
+    i.evaluation_ = game_.AlfaBetaNegaMaxTranspositionTable(
         i_board, depth, -1000, 1000, color, t_table);
   }
 
@@ -443,7 +443,7 @@ void AdminConsole::AlfaBetaMinMaxWTranspositionTable(int depth, int position,
   for (auto &i : move_buffer) {
     ChessBoard i_board(game_);
     game_.TransposeChessboard(i_board, i);
-    i.evaluation_ = game_.AlfaBetaMinMaxTranspositionTable(
+    i.evaluation_ = game_.AlfaBetaNegaMaxTranspositionTable(
         i_board, depth, -1000, 1000, game_.GetElement(position).Color(),
         t_table);
   }

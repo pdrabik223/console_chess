@@ -47,7 +47,7 @@ public:
   double AlfaBetaMinMax(ChessBoard &target, int depth, double alfa, double beta,
                         bool color);
 
-  double AlfaBetaMinMaxTranspositionTable(ChessBoard &target, int depth, double alfa, double beta,
+  double AlfaBetaNegaMaxTranspositionTable(ChessBoard &target, int depth, double alfa, double beta,
                                           bool color,
       std::map<size_t, double> &transposition_table);
 
