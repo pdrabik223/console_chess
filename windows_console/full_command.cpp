@@ -115,6 +115,8 @@ full_command full_command::Add(std::string &line) {
     data.push_back(1);
     return {Task::ADD_PIECE, data};
   }
+  printf("command error");
+  return {Task::NONE};
 }
 
 full_command full_command::Del(std::string &line) {
@@ -126,6 +128,10 @@ full_command full_command::Del(std::string &line) {
 
   std::vector<int> data;
   data.push_back(ChessToInt(line));
+  if (data.front() == -1) {
+    printf("command error");
+    return {Task::NONE};
+  }
 
   return {Task::DELETE_PIECE, data};
 }
@@ -139,7 +145,10 @@ full_command full_command::Show(std::string &line) {
   std::vector<int> data;
   data.push_back(ChessToInt(line));
 
-  return {Task::SHOW_MOVES, data};
+  if (data.front() != -1)
+    return {Task::SHOW_MOVES, data};
+  printf("command error");
+  return {Task::NONE};
 }
 
 full_command full_command::MinMax(std::string &line) {
@@ -159,7 +168,10 @@ full_command full_command::MinMax(std::string &line) {
       data.push_back(1);
     else if (line.substr(0, 5) == "black")
       data.push_back(0);
-
+    else {
+      printf("command error");
+      return {Task::NONE};
+    }
     EraseTillSpace(line);
     data.push_back(std::stoi(line));
     temp.data = data;
@@ -167,6 +179,11 @@ full_command full_command::MinMax(std::string &line) {
   } else {
     temp.comm = Task::MINMAX;
     data.push_back(ChessToInt(line));
+
+    if (data.front() == -1) {
+      printf("command error");
+      return {Task::NONE};
+    }
 
     EraseTillSpace(line);
     data.push_back(std::stoi(line));
@@ -192,7 +209,10 @@ full_command full_command::AlphaBetaMinMax(std::string &line) {
       data.push_back(1);
     else if (line.substr(0, 5) == "black")
       data.push_back(0);
-
+    else {
+      printf("command error");
+      return {Task::NONE};
+    }
     EraseTillSpace(line);
     data.push_back(std::stoi(line));
     temp.data = data;
@@ -200,6 +220,11 @@ full_command full_command::AlphaBetaMinMax(std::string &line) {
   } else {
     temp.comm = Task::ALFA_BETA_MINMAX;
     data.push_back(ChessToInt(line));
+
+    if (data.front() == -1) {
+      printf("command error");
+      return {Task::NONE};
+    }
 
     EraseTillSpace(line);
     data.push_back(std::stoi(line));
@@ -226,6 +251,10 @@ full_command::AlphaBetaMinMaxTranspositionTable(std::string &line) {
       data.push_back(1);
     else if (line.substr(0, 5) == "black")
       data.push_back(0);
+    else {
+      printf("command error");
+      return {Task::NONE};
+    }
 
     EraseTillSpace(line);
     data.push_back(std::stoi(line));
@@ -234,6 +263,11 @@ full_command::AlphaBetaMinMaxTranspositionTable(std::string &line) {
   } else {
     temp.comm = Task::ALFA_BETA_MINMAX_W_TRANSPOSITION_TABLE;
     data.push_back(ChessToInt(line));
+    if (data.front() == -1) {
+      printf("command error");
+      return {Task::NONE};
+    }
+
 
     EraseTillSpace(line);
     data.push_back(std::stoi(line));
@@ -248,7 +282,15 @@ full_command full_command::Move(std::string &line) {
 
   std::vector<int> data;
   data.push_back(ChessToInt(line));
+  if (data[0] == -1) {
+    printf("command error");
+    return {Task::NONE};
+  }
   data.push_back(ChessToInt(line));
+  if (data[1] == -1) {
+    printf("command error");
+    return {Task::NONE};
+  }
   return {Task::MOVE, data};
 }
 
@@ -267,7 +309,11 @@ full_command full_command::Fight(std::string &line) {
     data.push_back((int)Task::ALFA_BETA_MINMAX);
     data.push_back(std::stoi(line));
     EraseTillSpace(line);
+  }else {
+    printf("command error");
+    return {Task::NONE};
   }
+
   data.push_back(1); // threads
   /// black brain
   if (line.substr(0, 6) == "minmax") {
@@ -280,6 +326,9 @@ full_command full_command::Fight(std::string &line) {
     data.push_back((int)Task::ALFA_BETA_MINMAX);
     data.push_back(std::stoi(line));
     EraseTillSpace(line);
+  }else {
+    printf("command error");
+    return {Task::NONE};
   }
 
   data.push_back(1); // threads
