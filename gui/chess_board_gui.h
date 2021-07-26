@@ -16,6 +16,7 @@
 #include <vector>
 
 #include "arrow.h"
+#include "circle.h"
 #include "button.h"
 #include "chess_board.h"
 #include "move.h"
@@ -59,7 +60,8 @@ enum class Events {
   HIGHLIGHT_PIECE,
   HIGHLIGHT_W_COLOR,
   /// display arrow
-  HIGHLIGHT_MOVE,
+  HIGHLIGHT_ARROW,
+  HIGHLIGHT_CIRCLE,
   CLEAR_HIGHLIGHT
 };
 
@@ -79,6 +81,9 @@ public:
   static void ClearHighlight();
 
   static void HighlightMove(Move target, unsigned size = 10, GuiColor color = GuiColor::RED);
+
+  static void HighlightCircle(int position, unsigned size = 30, GuiColor color = GuiColor::PINK);
+
 
   void HighlightPiece(int piece_position);
 
@@ -108,6 +113,7 @@ private:
   void DrawButtons();
 
   void DrawArrows();
+  void DrawCircles();
 
   void DrawHighlightedSquares();
 
@@ -141,6 +147,7 @@ protected:
   std::vector<std::pair<int, GuiColor>> highlighted_squares_;
   std::vector<std::pair<int, GuiColor>> highlighted_pieces_;
   std::vector<Arrow> arrows_;
+  std::vector<Circle> circles_;
 
   std::array<Button, (size_t)Buttons::SIZE> buttons_;
 

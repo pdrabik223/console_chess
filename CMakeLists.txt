@@ -32,6 +32,7 @@ set(GUI
         gui/ppm_loader.cpp
         gui/file_exception.h
         gui/arrow.h gui/arrow.cpp
+        gui/circle.h gui/circle.cpp
         gui/button.h gui/button.cpp)
 
 add_executable(admin

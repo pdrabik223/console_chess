@@ -125,6 +125,7 @@ void ChessBoardGui::UpdateDisplay() {
   DrawButtons();
   DrawLabels();
   DrawPieces();
+  DrawCircles();
   DrawArrows();
   DrawEvaluation();
   SDL_RenderPresent(renderer_);
@@ -210,11 +211,16 @@ void ChessBoardGui::ThEventLoop() {
       delete (GuiColor *)event_.user.data2;
       break;
 
-    case Events::HIGHLIGHT_MOVE:
-
+    case Events::HIGHLIGHT_ARROW:
       arrows_.emplace_back(*(Arrow *)event_.user.data1);
       delete (Arrow *)event_.user.data1;
       break;
+    case Events::HIGHLIGHT_CIRCLE:
+      circles_.emplace_back(*(Circle *)event_.user.data1);
+      delete (Circle *)event_.user.data1;
+      break;
+
+
     }
   }
 }
@@ -303,14 +309,17 @@ void ChessBoardGui::DrawPieces() {
 }
 
 void ChessBoardGui::DrawArrows() {
-  if (!arrows_.empty()) {
-
-    std::cout << "now";
-  }
   for (auto i : arrows_)
     i.DisplayArrow(renderer_, current_orientation_ == BLACK_UP,
                    height_ * square_height_);
 }
+
+void ChessBoardGui::DrawCircles() {
+  for (auto i : circles_)
+    i.DisplayCircle(renderer_, current_orientation_ == BLACK_UP,
+                   height_ * square_height_);
+}
+
 
 void ChessBoardGui::RotateBoard() {
   if (current_orientation_ == WHITE_UP)
@@ -602,7 +611,7 @@ void ChessBoardGui::HighlightMove(Move target, unsigned size, GuiColor color) {
     SDL_Event event;
     SDL_memset(&event, 0, sizeof(event)); /* or SDL_zero(event) */
     event.type = myEventType;
-    event.user.code = (Sint32)(Events::HIGHLIGHT_MOVE);
+    event.user.code = (Sint32)(Events::HIGHLIGHT_ARROW);
     event.user.data1 =
         new Arrow(arrow_from, arrow_to, colors_[(int)color], size);
     SDL_PushEvent(&event);
@@ -613,6 +622,25 @@ void ChessBoardGui::DrawHighlightedPieces() {
 
   //  for(auto i:highlighted_pieces_)
 }
+void ChessBoardGui::HighlightCircle(int target, unsigned int size,
+                                    GuiColor color) {
+  Uint32 myEventType = SDL_RegisterEvents(1);
+
+  Coord position;
+  position.x = (target / width_) * square_width_;
+  position.x += 32; // to land in the middle of square
+  position.y = (target % width_) * square_height_;
+  position.y += 32; // to land in the middle of square
+
+  SDL_Event event;
+  SDL_memset(&event, 0, sizeof(event)); /* or SDL_zero(event) */
+  event.type = myEventType;
+  event.user.code = (Sint32)(Events::HIGHLIGHT_CIRCLE);
+  event.user.data1 =
+      new Circle(position,colors_[(int)color], size, size/4);
+  SDL_PushEvent(&event);
+}
+
 
 SDL_Color Light(SDL_Color target, unsigned char lightning_level) {
   Uint16 light_r = target.r;
