@@ -15,14 +15,12 @@ public:
   AdminGui();
 
 private:
-  Move MinMaxAll(int depth, bool color, int threads);
-  void MinMax(int depth, int position, int threads);
 
   Move AlfaBetaMinMaxAll(int depth, bool color, int threads);
-  void AlfaBetaMinMax(int depth, int position, int threads);
+  Move AlfaBetaMinMax(int depth, int position, int threads);
 
   Move AlfaBetaMinMaxWTranspositionTableAll(int depth, bool color, int threads);
-  void AlfaBetaMinMaxWTranspositionTable(int depth, int position, int threads);
+  Move AlfaBetaMinMaxWTranspositionTable(int depth, int position, int threads);
 
   void Help();
   void ShowPossible();

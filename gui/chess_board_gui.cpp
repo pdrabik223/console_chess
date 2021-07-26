@@ -190,13 +190,15 @@ void ChessBoardGui::ThEventLoop() {
         break;
       case Events::HIGHLIGHT_SQUARE:
         highlighted_squares_.emplace_back(*(int *)event_.user.data1,
-                                          GuiColor::BLUE);
+                                          *(GuiColor *)event_.user.data2);
         delete (int *)event_.user.data1;
+        delete (GuiColor *)event_.user.data2;
         break;
       case Events::HIGHLIGHT_PIECE:
         highlighted_pieces_.emplace_back(*(int *)event_.user.data1,
-                                         GuiColor::BLUE);
+                                         *(GuiColor *)event_.user.data2);
         delete (int *)event_.user.data1;
+        delete (GuiColor *)event_.user.data2;
         break;
       case Events::UPDATE_SCREEN:
         UpdateDisplay();
