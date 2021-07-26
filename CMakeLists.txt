@@ -50,7 +50,7 @@ add_executable(admin_gui
         move.h move.cpp
         ${PAWNS}
         ${GUI}
-        Admin.h Admin.cpp
+        windows_console/full_command.cpp windows_console/full_command.h
         gui/admin_gui.h gui/admin_gui.cpp)
 
 target_link_libraries(admin_gui

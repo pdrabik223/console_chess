@@ -32,9 +32,6 @@ enum class Task {
 
 };
 
-struct full_command;
-
-full_command Parse(std::string &line);
 
 struct full_command {
   full_command() : comm(Task::NONE), data(){};
@@ -46,12 +43,13 @@ struct full_command {
   bool operator==(const Task &rhs) const { return comm == rhs; }
   bool operator!=(const Task &rhs) const { return rhs != comm; }
 
-
-
   void FromString(std::string line);
 
   Task comm;
   std::vector<int> data;
 };
+
+full_command Parse(std::string &line);
+
 
 #endif // CONSOLE_CHESS_WINDOWS_CONSOLE_FULL_COMMAND_H_
