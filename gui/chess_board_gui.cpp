@@ -357,10 +357,7 @@ std::string ChessBoardGui::GenRankLabel(int y) {
 }
 
 std::string ChessBoardGui::GenFileLabel(int x) {
-  if (current_orientation_ == WHITE_UP)
     return std::string(1, (char)('a' + x));
-  else
-    return std::string(1, (char)('a' + width_ - 1 - x));
 }
 
 void ChessBoardGui::DrawEvaluation() {

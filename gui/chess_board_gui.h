@@ -144,7 +144,7 @@ private:
   void CheckSquarePress(int mouse_position_x, int mouse_position_y);
 
   std::string GenRankLabel(int y);
-  std::string GenFileLabel(int x);
+  static std::string GenFileLabel(int x);
 
 protected:
   ChessBoard local_board_;
