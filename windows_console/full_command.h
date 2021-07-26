@@ -32,8 +32,8 @@ enum class Task {
 
 };
 
-
-struct full_command {
+class full_command {
+public:
   full_command() : comm(Task::NONE), data(){};
   full_command(Task t) : comm(t){};
 
@@ -45,11 +45,29 @@ struct full_command {
 
   void FromString(std::string line);
 
+private:
+  static full_command Add(std::string &line);
+
+  static full_command Del(std::string &line);
+
+  static full_command Show(std::string &line);
+
+  static full_command MinMax(std::string &line);
+
+  static full_command AlphaBetaMinMax(std::string &line);
+
+  static full_command AlphaBetaMinMaxTranspositionTable(std::string &line);
+
+  static full_command Move(std::string &line);
+
+  static full_command Fight(std::string &line);
+
+  full_command Parse(std::string &line);
+public:
   Task comm;
   std::vector<int> data;
 };
 
 full_command Parse(std::string &line);
-
 
 #endif // CONSOLE_CHESS_WINDOWS_CONSOLE_FULL_COMMAND_H_

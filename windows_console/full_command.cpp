@@ -45,7 +45,7 @@ int ChessToInt(std::string &coord) {
   }
 }
 
-full_command Add(std::string &line) {
+full_command full_command::Add(std::string &line) {
   line.erase(0, 3);
   EraseTillSpace(line);
   std::vector<int> data;
@@ -117,7 +117,7 @@ full_command Add(std::string &line) {
   }
 }
 
-full_command Del(std::string &line) {
+full_command full_command::Del(std::string &line) {
 
   EraseTillSpace(line);
 
@@ -130,7 +130,7 @@ full_command Del(std::string &line) {
   return {Task::DELETE_PIECE, data};
 }
 
-full_command Show(std::string &line) {
+full_command full_command::Show(std::string &line) {
   EraseTillSpace(line);
 
   if (line == "all")
@@ -142,7 +142,7 @@ full_command Show(std::string &line) {
   return {Task::SHOW_MOVES, data};
 }
 
-full_command MinMax(std::string &line) {
+full_command full_command::MinMax(std::string &line) {
 
   EraseTillSpace(line);
 
@@ -176,7 +176,7 @@ full_command MinMax(std::string &line) {
   return temp;
 }
 
-full_command AlphaBetaMinMax(std::string &line) {
+full_command full_command::AlphaBetaMinMax(std::string &line) {
   EraseTillSpace(line);
 
   full_command temp;
@@ -209,7 +209,8 @@ full_command AlphaBetaMinMax(std::string &line) {
   return temp;
 }
 
-full_command AlphaBetaMinMaxTranspositionTable(std::string &line) {
+full_command
+full_command::AlphaBetaMinMaxTranspositionTable(std::string &line) {
   EraseTillSpace(line);
 
   full_command temp;
@@ -242,7 +243,7 @@ full_command AlphaBetaMinMaxTranspositionTable(std::string &line) {
   return temp;
 }
 
-full_command Move(std::string &line) {
+full_command full_command::Move(std::string &line) {
   EraseTillSpace(line);
 
   std::vector<int> data;
@@ -251,7 +252,7 @@ full_command Move(std::string &line) {
   return {Task::MOVE, data};
 }
 
-full_command Fight(std::string &line) {
+full_command full_command::Fight(std::string &line) {
   EraseTillSpace(line);
   std::vector<int> data;
 
@@ -286,7 +287,7 @@ full_command Fight(std::string &line) {
   return {Task::EPIC_COMPUTER_FIGHT, data};
 }
 
-full_command Parse(std::string &line) {
+full_command full_command::Parse(std::string &line) {
 
   if (line == "help")
     return {Task::HELP};
