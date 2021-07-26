@@ -19,6 +19,7 @@ public:
 
   std::wstring IntToChess(unsigned position) const;
 
+  std::string IntToChessStr(unsigned position)const;
   /// \brief
   /// valid move is only that witch moves somewhere
   /// \return true if the move can be made, note that it doesn't check if the
@@ -34,9 +35,9 @@ public:
 
   explicit operator std::string() const {
     std::string temp = "from:\t";
-    temp += std::to_string(from_);
+    temp += IntToChessStr(from_);
     temp += " to:\t";
-    temp += std::to_string(to_);
+    temp += IntToChessStr(to_);
     temp += " evaluation:\t";
     temp += std::to_string(evaluation_);
     return temp;

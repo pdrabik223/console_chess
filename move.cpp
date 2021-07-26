@@ -12,6 +12,16 @@ std::wstring Move::IntToChess(unsigned position) const {
 
   return temp;
 }
+
+std::string Move::IntToChessStr(unsigned position) const {
+  unsigned number = position / 8;
+  unsigned letter = position % 8;
+  letter += 'a';
+
+  std::string temp = (char)letter + std::to_string(number + 1);
+
+  return temp;
+}
 bool Move::operator==(const Move &rhs) const {
   return evaluation_ == rhs.evaluation_;
 }
