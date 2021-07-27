@@ -94,11 +94,12 @@ double ChessBoard::EvaluatePosition() {
   double white_weight_of_move = 0.1;
   double black_weight_of_move = 0.1;
 
-  /// if next round is white to move we boost wite evaluation
-  //  if (move_counter_ % 2 == 0)
-  //    black_weight_of_move += 0.07;
-  //  else
-  //    white_weight_of_move += 0.07;
+  /// if next round is white to move we boost white evaluation
+  /// same for black
+  if (move_counter_ % 2 == 0) // it's currently white's move
+    black_weight_of_move += 0.07;
+  else
+    white_weight_of_move += 0.07;
 
   std::vector<Move> white_move_buffer;
   std::vector<Move> black_move_buffer;
@@ -108,11 +109,13 @@ double ChessBoard::EvaluatePosition() {
 
     if (plane_[i]->Color()) {
 
-      white_move_buffer.reserve(white_move_buffer.size() + 27);
+      if (white_move_buffer.capacity() < 27)
+        white_move_buffer.reserve(white_move_buffer.size() + 27);
       plane_[i]->GenMoves(plane_, i, white_move_buffer);
 
     } else {
-      black_move_buffer.reserve(black_move_buffer.size() + 27);
+      if (black_move_buffer.capacity() < 27)
+        black_move_buffer.reserve(black_move_buffer.size() + 27);
 
       plane_[i]->GenMoves(plane_, i, black_move_buffer);
     }
@@ -360,7 +363,7 @@ unsigned int ChessBoard::Hash() {
   return sum;
 }
 
-double ChessBoard::AlfaBetaNegaMaxTranspositionTable(
+double ChessBoard::AlfaBetaMInMaxTranspositionTable(
     ChessBoard &target, int depth, double alfa, double beta, bool color,
     std::map<size_t, double> &transposition_table) {
 
@@ -376,53 +379,48 @@ double ChessBoard::AlfaBetaNegaMaxTranspositionTable(
   if (depth == 0 || Abs(current_evaluation) > 900)
     return current_evaluation;
 
-  int int_color = color? 1:-1;
+  std::vector<Move> move_buffer;
+  GenAllPossibleMoves(color, move_buffer);
 
   if (color) { // for white
 
     current_evaluation = -1000;
 
-    std::vector<Move> move_buffer;
-    GenAllPossibleMoves(color, move_buffer);
-
     for (auto &move : move_buffer) {
       ChessBoard m_board(*this);
       TransposeChessboard(m_board, move);
 
-      move.evaluation_ = target.AlfaBetaNegaMaxTranspositionTable(
-          m_board, depth - 1, alfa, beta, !color, transposition_table);
+      move.evaluation_ = target.AlfaBetaMInMaxTranspositionTable(
+          m_board, depth - 1, alfa, beta, P_BLACK, transposition_table);
 
       current_evaluation = Max(move.evaluation_, current_evaluation);
 
+      alfa = Max(current_evaluation, alfa);
+
       if (current_evaluation >= beta)
         break;
-
-      alfa = Max(current_evaluation, alfa);
     }
-    transposition_table.insert({current_hash, current_evaluation});
-    return current_evaluation;
+
   } else { // for black
 
-    std::vector<Move> move_buffer;
     current_evaluation = 1000;
-
-    GenAllPossibleMoves(P_BLACK, move_buffer);
 
     for (auto &move : move_buffer) {
       ChessBoard m_board(*this);
       TransposeChessboard(m_board, move);
 
-      move.evaluation_ = target.AlfaBetaNegaMaxTranspositionTable(
+      move.evaluation_ = target.AlfaBetaMInMaxTranspositionTable(
           m_board, depth - 1, alfa, beta, P_WHITE, transposition_table);
 
       current_evaluation = Min(move.evaluation_, current_evaluation);
+
+      beta = Min(beta, current_evaluation);
       if (current_evaluation <= alfa)
         break;
-      beta = Min(beta, current_evaluation);
     }
-    transposition_table.insert({current_hash, current_evaluation});
-    return current_evaluation;
   }
+  transposition_table.insert({current_hash, current_evaluation});
+  return current_evaluation;
 }
 Move ChessBoard::DoRandomMove(bool color) {
 
