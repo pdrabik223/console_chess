@@ -37,7 +37,7 @@ public:
   Move DoRandomMove(bool color);
 
 
-  void TransposeChessboard(ChessBoard &output_board, const Move &target);
+  static void TransposeChessboard(ChessBoard &output_board, const Move &target);
 
   double EvaluatePosition();
   void EvaluateMove(Move &target);

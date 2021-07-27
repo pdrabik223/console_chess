@@ -111,6 +111,7 @@ double ChessBoard::EvaluatePosition() {
 
       if (white_move_buffer.capacity() < 27)
         white_move_buffer.reserve(white_move_buffer.size() + 27);
+
       plane_[i]->GenMoves(plane_, i, white_move_buffer);
 
     } else {
@@ -382,10 +383,9 @@ double ChessBoard::AlfaBetaMInMaxTranspositionTable(
   std::vector<Move> move_buffer;
   GenAllPossibleMoves(color, move_buffer);
 
-  if (color) { // for white
+  current_evaluation = color ? -1000 : 1000;
 
-    current_evaluation = -1000;
-
+  if (color) // for white
     for (auto &move : move_buffer) {
       ChessBoard m_board(*this);
       TransposeChessboard(m_board, move);
@@ -396,15 +396,10 @@ double ChessBoard::AlfaBetaMInMaxTranspositionTable(
       current_evaluation = Max(move.evaluation_, current_evaluation);
 
       alfa = Max(current_evaluation, alfa);
-
       if (current_evaluation >= beta)
         break;
     }
-
-  } else { // for black
-
-    current_evaluation = 1000;
-
+  else // for black
     for (auto &move : move_buffer) {
       ChessBoard m_board(*this);
       TransposeChessboard(m_board, move);
@@ -418,10 +413,11 @@ double ChessBoard::AlfaBetaMInMaxTranspositionTable(
       if (current_evaluation <= alfa)
         break;
     }
-  }
+
   transposition_table.insert({current_hash, current_evaluation});
   return current_evaluation;
 }
+
 Move ChessBoard::DoRandomMove(bool color) {
 
   std::vector<Move> move_buffer;
